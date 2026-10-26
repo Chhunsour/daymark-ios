@@ -85,6 +85,47 @@ final class DomainModelTests: XCTestCase {
         XCTAssertFalse(routine.isItemCompleted(itemId: item2.id, on: today))
     }
 
+    func testStandaloneHabitCompletionAndStreak() {
+        var habit = DaymarkRoutine(
+            title: "Make My Room",
+            checklist: [],
+            iconName: "bed.double.fill",
+            colorHex: "#EC4899",
+            frequencyText: "Everyday"
+        )
+
+        let calendar = Calendar.current
+        let today = Date()
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: today)!
+
+        XCTAssertFalse(habit.isFullyCompleted(on: today))
+        XCTAssertEqual(habit.currentStreakDays, 0)
+
+        // Mark completed today
+        habit.setRoutineCompleted(on: today, isCompleted: true)
+        XCTAssertTrue(habit.isFullyCompleted(on: today))
+        XCTAssertEqual(habit.currentStreakDays, 1)
+
+        // Mark completed yesterday
+        habit.setRoutineCompleted(on: yesterday, isCompleted: true)
+        XCTAssertTrue(habit.isFullyCompleted(on: yesterday))
+        XCTAssertEqual(habit.currentStreakDays, 2)
+
+        // Mark completed 2 days ago
+        habit.setRoutineCompleted(on: twoDaysAgo, isCompleted: true)
+        XCTAssertEqual(habit.currentStreakDays, 3)
+        XCTAssertGreaterThanOrEqual(habit.bestStreakDays, 3)
+
+        // Success rate should be positive
+        XCTAssertGreaterThan(habit.successRatePercentage(lastDays: 7), 40)
+
+        // History count should match requested
+        let history = habit.recentHistory(daysCount: 14)
+        XCTAssertEqual(history.count, 14)
+        XCTAssertTrue(history.last?.isCompleted == true)
+    }
+
     func testProjectMilestonesAndStatus() {
         let project = DaymarkProject(name: "Smile Media", colorHex: "#3B82F6")
         XCTAssertEqual(project.status, .active)

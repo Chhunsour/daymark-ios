@@ -63,7 +63,19 @@ public actor LocalDaymarkRepository: DaymarkRepository {
         // Load or seed Routines
         if fileManager.fileExists(atPath: routinesFile.path) {
             let data = try Data(contentsOf: routinesFile)
-            routinesCache = try JSONDecoder().decode([DaymarkRoutine].self, from: data)
+            routinesCache = (try? JSONDecoder().decode([DaymarkRoutine].self, from: data)) ?? []
+            // Merge in any new default habits (e.g. Make My Room, 1 Hour Reading)
+            let starters = SeedData.makeStarterRoutines()
+            var didMerge = false
+            for starter in starters {
+                if !routinesCache.contains(where: { $0.title == starter.title }) {
+                    routinesCache.append(starter)
+                    didMerge = true
+                }
+            }
+            if didMerge {
+                try? saveRoutinesToDisk()
+            }
         } else {
             routinesCache = SeedData.makeStarterRoutines()
             try saveRoutinesToDisk()

@@ -291,17 +291,23 @@ public struct TodayRoutinesQuickView: View {
 
     private func routineCard(routine: DaymarkRoutine) -> some View {
         let isDone = routine.isFullyCompleted(on: Date())
-        let iconName = routine.title.lowercased().contains("morning") ? "sun.max.fill" : "moon.stars.fill"
-        let iconColor = routine.title.lowercased().contains("morning") ? Color.dmAmber : Color.dmLilac
-        let iconBg = routine.title.lowercased().contains("morning") ? Color.dmAmberBg : Color.dmLilacBg
+        let color: Color = {
+            if let hex = routine.colorHex { return Color(hex: hex) }
+            if routine.title.lowercased().contains("room") { return Color(hex: "#EC4899") }
+            if routine.title.lowercased().contains("reading") { return Color.dmSky }
+            if routine.title.lowercased().contains("morning") { return Color.dmAmber }
+            if routine.title.lowercased().contains("exercise") { return Color.dmMint }
+            return Color.dmLilac
+        }()
+        let iconName = routine.iconName ?? (routine.title.lowercased().contains("morning") ? "sun.max.fill" : "moon.stars.fill")
 
         return VStack(alignment: .leading, spacing: DMSpacing.xs) {
             // Header Row
             HStack(spacing: DMSpacing.sm) {
                 DaymarkSquircleIcon(
                     iconName: iconName,
-                    backgroundColor: iconBg,
-                    iconColor: iconColor,
+                    backgroundColor: color.opacity(0.15),
+                    iconColor: color,
                     size: 38,
                     cornerRadius: 11,
                     iconSize: 17
@@ -311,11 +317,12 @@ public struct TodayRoutinesQuickView: View {
                     Text(routine.title)
                         .font(.system(size: 15, weight: .bold))
                         .foregroundColor(Color.dmTextPrimary)
+                        .strikethrough(isDone, color: Color.dmTextTertiary)
 
                     HStack(spacing: DMSpacing.xs + 2) {
-                        Text("Streak \(routine.currentStreakDays) days")
+                        Text("🔥 \(routine.currentStreakDays)d streak")
                             .font(.system(size: 11, weight: .semibold, design: .rounded))
-                            .foregroundColor(iconColor)
+                            .foregroundColor(color)
 
                         if let target = routine.targetTimeOfDay {
                             Text("•")
@@ -326,24 +333,46 @@ public struct TodayRoutinesQuickView: View {
                                 .font(.system(size: 11, weight: .medium, design: .rounded))
                                 .foregroundColor(Color.dmTextSecondary)
                         }
+
+                        if let freq = routine.frequencyText {
+                            Text("•")
+                                .font(.caption2)
+                                .foregroundColor(Color.dmTextTertiary)
+
+                            Text(freq)
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundColor(Color.dmTextSecondary)
+                        }
                     }
                 }
 
                 Spacer()
 
-                if isDone {
-                    HStack(spacing: 4) {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(Color.dmSuccess)
-                        Text("Done")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundColor(Color.dmSuccess)
+                // Circular Checkmark button for instant completion toggle
+                Button {
+                    let generator = UIImpactFeedbackGenerator(style: .medium)
+                    generator.impactOccurred()
+                    Task {
+                        try? await appState.toggleRoutine(id: routine.id, on: Date())
                     }
-                    .padding(.horizontal, 9)
-                    .padding(.vertical, 4)
-                    .background(Color.dmMintBg)
-                    .clipShape(Capsule())
+                } label: {
+                    ZStack {
+                        Circle()
+                            .stroke(isDone ? color : Color.dmBorder, lineWidth: isDone ? 2 : 1.5)
+                            .frame(width: 28, height: 28)
+
+                        if isDone {
+                            Circle()
+                                .fill(color)
+                                .frame(width: 28, height: 28)
+
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor(.white)
+                        }
+                    }
                 }
+                .buttonStyle(.plain)
             }
 
             // Checklist Items
@@ -361,7 +390,7 @@ public struct TodayRoutinesQuickView: View {
                             HStack(spacing: DMSpacing.sm) {
                                 Image(systemName: itemCompleted ? "checkmark.circle.fill" : "circle")
                                     .font(.system(size: 18))
-                                    .foregroundColor(itemCompleted ? Color.dmSuccess : Color.dmTextTertiary)
+                                    .foregroundColor(itemCompleted ? color : Color.dmTextTertiary)
 
                                 Text(item.title)
                                     .font(.system(size: 14, weight: itemCompleted ? .regular : .medium))
@@ -384,7 +413,7 @@ public struct TodayRoutinesQuickView: View {
         .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(isDone ? Color.dmSuccess.opacity(0.3) : Color.dmBorder.opacity(0.6), lineWidth: 0.6)
+                .stroke(isDone ? color.opacity(0.3) : Color.dmBorder.opacity(0.6), lineWidth: 0.6)
         )
         .shadow(color: Color.black.opacity(0.02), radius: 3, x: 0, y: 1)
     }

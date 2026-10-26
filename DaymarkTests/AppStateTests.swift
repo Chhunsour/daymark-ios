@@ -98,4 +98,27 @@ final class AppStateTests: XCTestCase {
         XCTAssertNil(resolved?.scheduledStartTime)
         XCTAssertNil(resolved?.scheduledEndTime)
     }
+
+    func testHabitTogglingAndScore() async throws {
+        // Starter routines should be seeded
+        XCTAssertFalse(appState.routines.isEmpty)
+        let total = appState.routines.count
+
+        // Find "Make My Room"
+        guard let makeRoom = appState.routines.first(where: { $0.title == "Make My Room" }) else {
+            XCTFail("Starter habit 'Make My Room' should exist")
+            return
+        }
+
+        let initialCompleted = appState.completedRoutinesTodayCount
+        try await appState.toggleRoutine(id: makeRoom.id, on: Date())
+
+        let afterCompleted = appState.completedRoutinesTodayCount
+        XCTAssertEqual(afterCompleted, initialCompleted + 1)
+        XCTAssertEqual(appState.habitScoreToday, (Double(afterCompleted) / Double(total)) * 10.0, accuracy: 0.01)
+
+        // Toggle back off
+        try await appState.toggleRoutine(id: makeRoom.id, on: Date())
+        XCTAssertEqual(appState.completedRoutinesTodayCount, initialCompleted)
+    }
 }

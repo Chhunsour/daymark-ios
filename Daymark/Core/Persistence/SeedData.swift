@@ -91,55 +91,128 @@ public struct SeedData: Sendable {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         formatter.timeZone = Calendar.current.timeZone
-        let todayKey = formatter.string(from: Date())
+        let calendar = Calendar.current
+        let today = Date()
 
+        func pastDateKey(offset: Int) -> String {
+            if let d = calendar.date(byAdding: .day, value: -offset, to: today) {
+                return formatter.string(from: d)
+            }
+            return formatter.string(from: today)
+        }
+
+        // 1. Make My Room (Everyday - User preferred habit)
+        let roomRoutineId = UUID()
+        var roomRecords: [String: Set<UUID>] = [:]
+        for day in 1...12 {
+            if day != 3 && day != 8 {
+                roomRecords[pastDateKey(offset: day)] = [roomRoutineId]
+            }
+        }
+        let makeRoom = DaymarkRoutine(
+            id: roomRoutineId,
+            title: "Make My Room",
+            description: "Tidy up bed, clear surfaces, and reset room for mental clarity.",
+            checklist: [],
+            targetTimeOfDay: "07:30",
+            recurrenceDays: [],
+            completionRecords: roomRecords,
+            iconName: "bed.double.fill",
+            colorHex: "#EC4899", // Rose Pink
+            frequencyText: "Everyday"
+        )
+
+        // 2. 1 Hour Reading (Everyday - User preferred habit)
+        let readingRoutineId = UUID()
+        var readingRecords: [String: Set<UUID>] = [:]
+        for day in 1...14 {
+            if day % 4 != 0 {
+                readingRecords[pastDateKey(offset: day)] = [readingRoutineId]
+            }
+        }
+        let reading = DaymarkRoutine(
+            id: readingRoutineId,
+            title: "1 Hour Reading",
+            description: "Deep reading on product engineering, business, and biographies.",
+            checklist: [],
+            targetTimeOfDay: "20:30",
+            recurrenceDays: [],
+            completionRecords: readingRecords,
+            iconName: "book.fill",
+            colorHex: "#3B82F6", // Royal Azure
+            frequencyText: "Everyday"
+        )
+
+        // 3. Morning Planning
         let morningItem1 = RoutineChecklistItem(title: "Confirm today's top 3-5 priorities")
         let morningItem2 = RoutineChecklistItem(title: "Check calendar for fixed meetings and commute")
         let morningItem3 = RoutineChecklistItem(title: "Triage unorganized Inbox captures (3 min)")
+        let morningId = UUID()
+        var morningRecords: [String: Set<UUID>] = [:]
+        for day in 0...14 {
+            if day != 5 {
+                morningRecords[pastDateKey(offset: day)] = [morningId, morningItem1.id, morningItem2.id, morningItem3.id]
+            }
+        }
+        let morning = DaymarkRoutine(
+            id: morningId,
+            title: "Morning Planning",
+            description: "Align focus and lock in today's highest leverage priorities.",
+            checklist: [morningItem1, morningItem2, morningItem3],
+            targetTimeOfDay: "08:15",
+            recurrenceDays: [],
+            completionRecords: morningRecords,
+            iconName: "sun.max.fill",
+            colorHex: "#F59E0B", // Warm Amber
+            frequencyText: "Everyday"
+        )
 
-        return [
-            DaymarkRoutine(
-                title: "Morning Planning",
-                description: "Align focus and lock in today's highest leverage priorities.",
-                checklist: [morningItem1, morningItem2, morningItem3],
-                targetTimeOfDay: "08:15",
-                recurrenceDays: [], // Daily
-                completionRecords: [todayKey: [morningItem1.id]]
-            ),
-            DaymarkRoutine(
-                title: "End-of-Day Review",
-                description: "Close out finished items and draft tomorrow's plan.",
-                checklist: [
-                    RoutineChecklistItem(title: "Check off all completed work"),
-                    RoutineChecklistItem(title: "Resolve missed or delayed tasks"),
-                    RoutineChecklistItem(title: "Preview tomorrow's schedule and priorities")
-                ],
-                targetTimeOfDay: "21:30",
-                recurrenceDays: [] // Daily
-            ),
-            DaymarkRoutine(
-                title: "Personal Maintenance",
-                description: "Physical health, mental clarity, and environment check.",
-                checklist: [
-                    RoutineChecklistItem(title: "Physical exercise or brisk walk"),
-                    RoutineChecklistItem(title: "Review daily personal cash flow"),
-                    RoutineChecklistItem(title: "Clear desk and reset workspace for tomorrow")
-                ],
-                targetTimeOfDay: "22:00",
-                recurrenceDays: []
-            ),
-            DaymarkRoutine(
-                title: "Weekly Review Preparation",
-                description: "High-level strategic audit across all ventures.",
-                checklist: [
-                    RoutineChecklistItem(title: "Review milestones for Smile Media, TovMuk, and SlidesClock"),
-                    RoutineChecklistItem(title: "Archive completed projects and prune backlog"),
-                    RoutineChecklistItem(title: "Set primary outcome for upcoming week")
-                ],
-                targetTimeOfDay: "18:00",
-                recurrenceDays: [6] // Saturday
-            )
-        ]
+        // 4. Physical Exercise (5 days per week)
+        let exerciseId = UUID()
+        var exerciseRecords: [String: Set<UUID>] = [:]
+        for day in 1...10 {
+            if day % 2 == 0 {
+                exerciseRecords[pastDateKey(offset: day)] = [exerciseId]
+            }
+        }
+        let exercise = DaymarkRoutine(
+            id: exerciseId,
+            title: "Physical Exercise",
+            description: "Workout, run, or active daily movement.",
+            checklist: [],
+            targetTimeOfDay: "17:30",
+            recurrenceDays: [2, 3, 4, 5, 6],
+            completionRecords: exerciseRecords,
+            iconName: "figure.run",
+            colorHex: "#10B981", // Mint
+            frequencyText: "5 days per week"
+        )
+
+        // 5. End-of-Day Review
+        let reviewItem1 = RoutineChecklistItem(title: "Check off all completed work")
+        let reviewItem2 = RoutineChecklistItem(title: "Resolve missed or delayed tasks")
+        let reviewItem3 = RoutineChecklistItem(title: "Preview tomorrow's schedule and priorities")
+        let reviewId = UUID()
+        var reviewRecords: [String: Set<UUID>] = [:]
+        for day in 1...14 {
+            if day % 3 != 0 {
+                reviewRecords[pastDateKey(offset: day)] = [reviewId, reviewItem1.id, reviewItem2.id, reviewItem3.id]
+            }
+        }
+        let review = DaymarkRoutine(
+            id: reviewId,
+            title: "End-of-Day Review",
+            description: "Close out finished items and draft tomorrow's plan.",
+            checklist: [reviewItem1, reviewItem2, reviewItem3],
+            targetTimeOfDay: "21:30",
+            recurrenceDays: [],
+            completionRecords: reviewRecords,
+            iconName: "moon.stars.fill",
+            colorHex: "#8B5CF6", // Velvet Lilac
+            frequencyText: "Everyday"
+        )
+
+        return [makeRoom, reading, morning, exercise, review]
     }
 
     public static func makeStarterTasks(for projects: [DaymarkProject]) -> [DaymarkTask] {

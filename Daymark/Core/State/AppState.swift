@@ -273,11 +273,62 @@ public final class AppState {
         }
     }
 
-    // MARK: - Routines
+    // MARK: - Routines & Habits
+    public var completedRoutinesTodayCount: Int {
+        let today = Date()
+        return routines.filter { $0.isFullyCompleted(on: today) }.count
+    }
+
+    public var habitScoreToday: Double {
+        guard !routines.isEmpty else { return 0 }
+        let completed = completedRoutinesTodayCount
+        return (Double(completed) / Double(routines.count)) * 10.0
+    }
+
+    public var habitCompletionRatioToday: Double {
+        guard !routines.isEmpty else { return 0 }
+        return Double(completedRoutinesTodayCount) / Double(routines.count)
+    }
+
+    public var totalCompletedHabitsAcrossAllTime: Int {
+        var count = 0
+        for routine in routines {
+            for (_, set) in routine.completionRecords {
+                if routine.checklist.isEmpty {
+                    if set.contains(routine.id) { count += 1 }
+                } else {
+                    if routine.checklist.allSatisfy({ set.contains($0.id) }) { count += 1 }
+                }
+            }
+        }
+        return count
+    }
+
+    public var averageSuccessRatePercentage: Double {
+        guard !routines.isEmpty else { return 0 }
+        let sum = routines.reduce(0.0) { $0 + Double($1.successRatePercentage(lastDays: 30)) }
+        return sum / Double(routines.count)
+    }
+
+    public var maxCurrentStreak: Int {
+        routines.map { $0.currentStreakDays }.max() ?? 0
+    }
+
+    public var maxBestStreak: Int {
+        routines.map { $0.bestStreakDays }.max() ?? 0
+    }
+
     public func toggleRoutineItem(routineId: UUID, itemId: UUID, on date: Date = Date()) async throws {
         guard let idx = routines.firstIndex(where: { $0.id == routineId }) else { return }
         let currentCompleted = routines[idx].isItemCompleted(itemId: itemId, on: date)
         routines[idx].setItemCompleted(itemId: itemId, on: date, isCompleted: !currentCompleted)
+        try await repository.saveRoutine(routines[idx])
+    }
+
+    public func toggleRoutine(id: UUID, on date: Date = Date()) async throws {
+        guard let idx = routines.firstIndex(where: { $0.id == id }) else { return }
+        let isDone = routines[idx].isFullyCompleted(on: date)
+        routines[idx].setRoutineCompleted(on: date, isCompleted: !isDone)
         try await repository.saveRoutine(routines[idx])
     }
 
@@ -288,6 +339,11 @@ public final class AppState {
         } else {
             routines.append(routine)
         }
+    }
+
+    public func deleteRoutine(id: UUID) async throws {
+        try await repository.deleteRoutine(id: id)
+        routines.removeAll { $0.id == id }
     }
 
     // MARK: - Projects & Milestones
