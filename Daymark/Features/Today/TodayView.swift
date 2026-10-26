@@ -10,7 +10,17 @@ public struct TodayView: View {
     @State private var showingMorningConfirmation: Bool = false
     @State private var showingSettings: Bool = false
 
-    public init() {}
+    public init() {
+        if CommandLine.arguments.contains("-ShowSettings") {
+            _showingSettings = State(initialValue: true)
+        } else if CommandLine.arguments.contains("-ShowQuickCapture") {
+            _showingQuickCapture = State(initialValue: true)
+        } else if CommandLine.arguments.contains("-ShowEveningReview") {
+            _showingEveningReview = State(initialValue: true)
+        } else if CommandLine.arguments.contains("-ShowMorningConfirmation") {
+            _showingMorningConfirmation = State(initialValue: true)
+        }
+    }
 
     public var body: some View {
         NavigationStack {

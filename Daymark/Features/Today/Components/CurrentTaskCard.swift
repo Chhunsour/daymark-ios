@@ -24,15 +24,22 @@ public struct CurrentTaskCard: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: DMSpacing.xs) {
+        VStack(alignment: .leading, spacing: DMSpacing.sm) {
             let isCurrentActive = appState.currentTask != nil
             let activeOrNextTask = appState.currentTask ?? appState.nextTask
 
+            // Top Status Bar
             HStack {
-                Text(isCurrentActive ? "IN PROGRESS" : "UP NEXT")
-                    .font(.dmCaptionBold)
-                    .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmHighlight)
-                    .tracking(0.8)
+                HStack(spacing: DMSpacing.xs) {
+                    Circle()
+                        .fill(isCurrentActive ? Color.dmAccent : Color.dmHighlight)
+                        .frame(width: 8, height: 8)
+
+                    Text(isCurrentActive ? "IN PROGRESS" : "UP NEXT")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmHighlight)
+                        .tracking(0.8)
+                }
 
                 Spacer()
 
@@ -55,35 +62,42 @@ public struct CurrentTaskCard: View {
                             .lineLimit(2)
                     }
 
-                    HStack(spacing: DMSpacing.sm) {
+                    // Metadata Row
+                    HStack(spacing: DMSpacing.md) {
                         if !timeFormatted.isEmpty {
                             Label(timeFormatted, systemImage: "clock")
                                 .font(.dmTime)
                                 .foregroundColor(Color.dmTextSecondary)
                         }
 
-                        Label("\(task.estimatedDurationMinutes)m", systemImage: "hourglass")
+                        Label("\(task.estimatedDurationMinutes) min", systemImage: "hourglass")
                             .font(.dmTime)
                             .foregroundColor(Color.dmTextSecondary)
 
                         Spacer()
+                    }
+                    .padding(.top, 2)
 
-                        // Task Action Buttons
-                        HStack(spacing: DMSpacing.xs) {
-                            if task.status == .inProgress {
-                                DaymarkButton(title: "Pause", icon: "pause.fill", style: .secondary) {
-                                    Task { try? await appState.pauseTask(task) }
-                                }
-                            } else {
-                                DaymarkButton(title: "Start", icon: "play.fill", style: .secondary) {
-                                    Task { try? await appState.startTask(task) }
-                                }
+                    // Actions Row with full comfortable width
+                    HStack(spacing: DMSpacing.sm) {
+                        if task.status == .inProgress {
+                            DaymarkButton(title: "Pause", icon: "pause.fill", style: .secondary) {
+                                Task { try? await appState.pauseTask(task) }
                             }
-
-                            DaymarkButton(title: "Done", icon: "checkmark", style: .primary) {
-                                Task { try? await appState.completeTask(task) }
+                            .fixedSize()
+                        } else {
+                            DaymarkButton(title: "Start Focus", icon: "play.fill", style: .secondary) {
+                                Task { try? await appState.startTask(task) }
                             }
+                            .fixedSize()
                         }
+
+                        DaymarkButton(title: "Complete", icon: "checkmark", style: .primary) {
+                            Task { try? await appState.completeTask(task) }
+                        }
+                        .fixedSize()
+
+                        Spacer()
                     }
                     .padding(.top, DMSpacing.xs)
                 }

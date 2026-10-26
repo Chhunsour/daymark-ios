@@ -75,8 +75,17 @@ public struct InboxView: View {
                     .background(Color.dmBackground)
                 }
 
-                // Tasks list or Empty state
-                if filteredInboxTasks.isEmpty {
+                // Tasks list or Empty state or Loading state
+                if appState.isLoading && appState.tasks.isEmpty {
+                    VStack {
+                        Spacer()
+                        ProgressView()
+                            .tint(Color.dmAccent)
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.dmBackground)
+                } else if filteredInboxTasks.isEmpty {
                     VStack {
                         Spacer()
                         EmptyStateView(

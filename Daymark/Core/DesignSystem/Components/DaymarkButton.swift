@@ -47,6 +47,7 @@ public struct DaymarkButton: View {
                 }
                 Text(title)
                     .font(.dmBodyBold)
+                    .lineLimit(1)
             }
             .padding(.horizontal, DMSpacing.md)
             .padding(.vertical, DMSpacing.sm + 2)

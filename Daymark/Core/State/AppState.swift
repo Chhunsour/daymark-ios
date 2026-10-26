@@ -43,6 +43,9 @@ public final class AppState {
     ) {
         self.repository = repository
         self.notificationManager = notificationManager
+        Task {
+            await self.loadData()
+        }
     }
 
     // MARK: - Data Loading
@@ -71,7 +74,6 @@ public final class AppState {
 
     public var todayTasks: [DaymarkTask] {
         let calendar = Calendar.current
-        let today = Date()
         return tasks.filter { task in
             if task.status == .completed {
                 if let completedAt = task.completedAt {
@@ -105,11 +107,9 @@ public final class AppState {
     }
 
     public var currentTask: DaymarkTask? {
-        // Active inProgress task takes top precedence
         if let inProgress = tasks.first(where: { $0.status == .inProgress }) {
             return inProgress
         }
-        // Next, task scheduled for right now
         let now = Date()
         return plannedTasksToday.first { task in
             guard let start = task.scheduledStartTime, let end = task.scheduledEndTime else { return false }
@@ -193,7 +193,6 @@ public final class AppState {
     }
 
     public func startTask(_ task: DaymarkTask) async throws {
-        // Pause any other in-progress task
         for i in 0..<tasks.count {
             if tasks[i].status == .inProgress && tasks[i].id != task.id {
                 tasks[i].pause()
@@ -240,7 +239,6 @@ public final class AppState {
         var updated = task
         switch action {
         case .rescheduleToday:
-            // Move into today's unscheduled list so the user can slot it
             updated.scheduledStartTime = nil
             updated.scheduledEndTime = nil
             updated.status = .planned
@@ -248,7 +246,6 @@ public final class AppState {
         case .moveToInbox:
             updated.unschedule()
         case .dismiss:
-            // Keep original timestamps, but clear missed state to inbox
             updated.status = .inbox
         }
         try await saveTask(updated)
@@ -339,7 +336,6 @@ public final class AppState {
         self.scheduleProfile = profile
     }
 
-    // Helper for project calculations
     public func completedTasksCount(for projectId: UUID) -> Int {
         tasks.filter { $0.projectId == projectId && $0.status == .completed }.count
     }
