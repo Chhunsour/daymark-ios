@@ -28,19 +28,19 @@ public struct ProjectsView: View {
                         HStack(alignment: .top) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Active Workspaces")
-                                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                                    .font(.system(size: 13, weight: .bold, design: .rounded))
                                     .foregroundColor(Color.dmLilac)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 3)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
                                     .background(Color.white)
                                     .clipShape(Capsule())
 
                                 Text("Mastering projects with focus")
-                                    .font(.system(size: 20, weight: .bold))
+                                    .font(.system(size: 22, weight: .bold))
                                     .foregroundColor(Color.dmTextPrimary)
 
                                 Text("\(appState.projects.count) active ventures • \(completedTasksAcrossProjects) of \(totalTasksAcrossProjects) tasks completed")
-                                    .font(.system(size: 12, weight: .regular))
+                                    .font(.system(size: 14, weight: .medium))
                                     .foregroundColor(Color.dmTextSecondary)
                             }
 
@@ -49,10 +49,10 @@ public struct ProjectsView: View {
                             ZStack {
                                 Circle()
                                     .fill(Color.dmLilac.opacity(0.14))
-                                    .frame(width: 48, height: 48)
+                                    .frame(width: 52, height: 52)
 
                                 Image(systemName: "square.stack.3d.up.fill")
-                                    .font(.system(size: 20, weight: .semibold))
+                                    .font(.system(size: 22, weight: .semibold))
                                     .foregroundColor(Color.dmLilac)
                             }
                         }
@@ -63,14 +63,14 @@ public struct ProjectsView: View {
                                 ZStack(alignment: .leading) {
                                     Capsule()
                                         .fill(Color.white.opacity(0.85))
-                                        .frame(height: 5)
+                                        .frame(height: 6)
 
                                     Capsule()
                                         .fill(Color.dmLilac)
-                                        .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(overallProgressRatio))), height: 5)
+                                        .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(overallProgressRatio))), height: 6)
                                 }
                             }
-                            .frame(height: 5)
+                            .frame(height: 6)
                         }
                     }
                     .padding(DMSpacing.md)
@@ -103,15 +103,15 @@ public struct ProjectsView: View {
                     Button {
                         showingAddProject = true
                     } label: {
-                        HStack(spacing: DMSpacing.xs) {
+                        HStack(spacing: DMSpacing.xs + 2) {
                             Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 15, weight: .semibold))
+                                .font(.system(size: 17, weight: .semibold))
                             Text("New Workspace")
-                                .font(.system(size: 14, weight: .bold))
+                                .font(.system(size: 16, weight: .bold))
                         }
                         .foregroundColor(Color.dmAccent)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
+                        .padding(.vertical, 14)
                         .background(Color.dmCard)
                         .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                         .overlay(

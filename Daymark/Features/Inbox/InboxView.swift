@@ -25,15 +25,15 @@ public struct InboxView: View {
                 // Top inline capture bar
                 HStack(spacing: DMSpacing.sm) {
                     Image(systemName: "plus")
-                        .font(.system(size: 13, weight: .bold))
+                        .font(.system(size: 15, weight: .bold))
                         .foregroundColor(.white)
-                        .frame(width: 28, height: 28)
+                        .frame(width: 34, height: 34)
                         .background(Color.dmAccent)
                         .clipShape(Circle())
                         .shadow(color: Color.dmAccent.opacity(0.3), radius: 3, x: 0, y: 1.5)
 
                     TextField("Quick capture task, idea, or note...", text: $quickCaptureText)
-                        .font(.system(size: 15, weight: .regular))
+                        .font(.system(size: 17, weight: .regular))
                         .focused($isCaptureFocused)
                         .submitLabel(.done)
                         .onSubmit {
@@ -45,10 +45,10 @@ public struct InboxView: View {
                             submitQuickCapture()
                         } label: {
                             Text("Save")
-                                .font(.system(size: 12, weight: .bold, design: .rounded))
+                                .font(.system(size: 14, weight: .bold, design: .rounded))
                                 .foregroundColor(.white)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 7)
                                 .background(Color.dmCocoa)
                                 .clipShape(Capsule())
                         }
@@ -56,7 +56,7 @@ public struct InboxView: View {
                     }
                 }
                 .padding(.horizontal, DMSpacing.md)
-                .padding(.vertical, 10)
+                .padding(.vertical, 12)
                 .background(Color.dmCard)
                 .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                 .overlay(
@@ -179,23 +179,23 @@ public struct InboxView: View {
 
     private func filterChip(title: String, count: Int, color: Color?, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            HStack(spacing: 4) {
+            HStack(spacing: 5) {
                 if let dotColor = color {
                     Circle()
                         .fill(dotColor)
-                        .frame(width: 5, height: 5)
+                        .frame(width: 6, height: 6)
                 }
 
                 Text(title)
-                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                    .font(.system(size: 15, weight: .bold, design: .rounded))
 
                 Text("\(count)")
-                    .font(.system(size: 11, weight: .semibold, design: .rounded))
-                    .opacity(isSelected ? 0.9 : 0.6)
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .opacity(isSelected ? 0.95 : 0.65)
             }
             .foregroundColor(isSelected ? .white : Color.dmTextPrimary)
-            .padding(.horizontal, 11)
-            .padding(.vertical, 5)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
             .background(isSelected ? Color.dmCocoa : Color.dmCard)
             .clipShape(Capsule())
             .overlay(
