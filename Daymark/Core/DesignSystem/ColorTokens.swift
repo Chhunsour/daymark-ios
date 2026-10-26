@@ -50,11 +50,11 @@ public extension Color {
             : UIColor(red: 0.620, green: 0.616, blue: 0.655, alpha: 1.0) // #9E9DA7
     })
 
-    /// Confident, vibrant Royal Cobalt accent
+    /// Confident, vibrant Warm Sunrise Orange primary brand accent
     static let dmAccent = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark
-            ? UIColor(red: 0.400, green: 0.550, blue: 1.000, alpha: 1.0) // #668CFF
-            : UIColor(red: 0.170, green: 0.350, blue: 1.000, alpha: 1.0) // #2B59FF
+            ? UIColor(red: 1.000, green: 0.478, blue: 0.239, alpha: 1.0) // #FF7A3D Vibrant Sunrise Orange in dark mode
+            : UIColor(red: 1.000, green: 0.353, blue: 0.122, alpha: 1.0) // #FF5A1F Warm Modern Orange in light mode
     })
 
     /// Secondary highlight (Electric Lilac / Indigo)
@@ -87,12 +87,12 @@ public extension Color {
 
     // MARK: - Concept Pastel Palette (for Squircles, Hero Cards & Timeline Nodes)
 
-    /// Warm Peach / Apricot (Concept 1 reminder & morning focus)
-    static let dmPeach = Color(red: 0.890, green: 0.388, blue: 0.176) // #E3632D
+    /// Warm Peach / Apricot (reminder & morning focus)
+    static let dmPeach = Color(red: 1.000, green: 0.353, blue: 0.122) // #FF5A1F
     static let dmPeachBg = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark
-            ? UIColor(red: 0.231, green: 0.141, blue: 0.098, alpha: 1.0) // #3B2419
-            : UIColor(red: 1.000, green: 0.941, blue: 0.902, alpha: 1.0) // #FFF0E6
+            ? UIColor(red: 0.220, green: 0.130, blue: 0.080, alpha: 1.0) // #382114
+            : UIColor(red: 1.000, green: 0.949, blue: 0.918, alpha: 1.0) // #FFF2EA
     })
 
     /// Soft Lilac / Lavender (Concept 2 hero card & deep work)
@@ -135,11 +135,11 @@ public extension Color {
             : UIColor(red: 1.000, green: 0.922, blue: 0.922, alpha: 1.0) // #FFEBEB
     })
 
-    /// Warm Cocoa / Espresso (Concept 1 primary action button: warm espresso in light mode, vibrant cobalt in dark mode)
+    /// Deep Espresso / Solid Accent (Primary solid buttons: deep charcoal in light mode, sunrise orange in dark mode)
     static let dmCocoa = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark
-            ? UIColor(red: 0.200, green: 0.420, blue: 0.980, alpha: 1.0) // Vibrant cobalt in dark mode
-            : UIColor(red: 0.180, green: 0.125, blue: 0.090, alpha: 1.0) // #2E2017 deep warm cocoa in light mode
+            ? UIColor(red: 1.000, green: 0.478, blue: 0.239, alpha: 1.0) // #FF7A3D Sunrise orange in dark mode
+            : UIColor(red: 0.110, green: 0.106, blue: 0.122, alpha: 1.0) // #1C1B1F Deep charcoal in light mode
     })
 
     /// Initialize a SwiftUI Color from a hex string (e.g. "#3B82F6", "3B82F6", "FFF")
