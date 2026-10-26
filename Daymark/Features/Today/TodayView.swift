@@ -8,6 +8,7 @@ public struct TodayView: View {
     @State private var selectedTaskToEdit: DaymarkTask? = nil
     @State private var showingEveningReview: Bool = false
     @State private var showingMorningConfirmation: Bool = false
+    @State private var showingSettings: Bool = false
 
     public init() {}
 
@@ -82,12 +83,22 @@ public struct TodayView: View {
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingQuickCapture = true
-                    } label: {
-                        Image(systemName: "square.and.pencil")
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(Color.dmAccent)
+                    HStack(spacing: DMSpacing.sm) {
+                        Button {
+                            showingSettings = true
+                        } label: {
+                            Image(systemName: "gearshape")
+                                .font(.system(size: 15))
+                                .foregroundColor(Color.dmTextSecondary)
+                        }
+
+                        Button {
+                            showingQuickCapture = true
+                        } label: {
+                            Image(systemName: "square.and.pencil")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor(Color.dmAccent)
+                        }
                     }
                 }
             }
@@ -99,6 +110,15 @@ public struct TodayView: View {
             }
             .sheet(item: $selectedTaskToEdit) { task in
                 TaskDetailEditorSheet(task: task)
+            }
+            .sheet(isPresented: $showingMorningConfirmation) {
+                MorningConfirmationSheet()
+            }
+            .sheet(isPresented: $showingEveningReview) {
+                EveningPlanningSheet()
+            }
+            .sheet(isPresented: $showingSettings) {
+                SettingsView()
             }
         }
     }

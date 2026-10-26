@@ -183,24 +183,24 @@
 		71890557326BBBB4701BB83A /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				D5DB9AEF4546F18E10E1930E /* Models */,
-				2F59D6E2DBE90DB610F3308F /* Notifications */,
-				34987BE36306B0FDA15B81B8 /* Persistence */,
-				18C2571930464B57526AA198 /* DesignSystem */,
-				F5514F6BC3B57857F891C431 /* Scheduling */,
 				D3AB9100BB9461D95A7B6410 /* State */,
+				18C2571930464B57526AA198 /* DesignSystem */,
+				34987BE36306B0FDA15B81B8 /* Persistence */,
+				D5DB9AEF4546F18E10E1930E /* Models */,
+				F5514F6BC3B57857F891C431 /* Scheduling */,
+				2F59D6E2DBE90DB610F3308F /* Notifications */,
 			);
 			path = "Core"; sourceTree = "<group>";
 		};
 		936F6010E515CAAE85AC54BC /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				D2F1FF0E382165BFF91C71AC /* DailyReview */,
+				AEAA1D2326C7A908AEE09AE9 /* Settings */,
 				EFEEE3CDFC0A0450E5261F2E /* Today */,
 				C4872151F3D998D9647E8AB1 /* Projects */,
-				AEAA1D2326C7A908AEE09AE9 /* Settings */,
 				452DCB1E6D1D51BF326B583B /* Routines */,
 				0E478543E760037E6140C13D /* Inbox */,
+				D2F1FF0E382165BFF91C71AC /* DailyReview */,
 			);
 			path = "Features"; sourceTree = "<group>";
 		};
@@ -212,13 +212,12 @@
 			);
 			path = "App"; sourceTree = "<group>";
 		};
-		D2F1FF0E382165BFF91C71AC /* DailyReview */ = {
+		AEAA1D2326C7A908AEE09AE9 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				A8CC5A6723C6BA40DB772EF5 /* EveningPlanningSheet.swift */,
-				A8180FF3C66D8FBA5444F92B /* MorningConfirmationSheet.swift */,
+				2FEB2F7CA92F895F043A70DE /* SettingsView.swift */,
 			);
-			path = "DailyReview"; sourceTree = "<group>";
+			path = "Settings"; sourceTree = "<group>";
 		};
 		EFEEE3CDFC0A0450E5261F2E /* Today */ = {
 			isa = PBXGroup;
@@ -228,6 +227,23 @@
 			);
 			path = "Today"; sourceTree = "<group>";
 		};
+		D3AB9100BB9461D95A7B6410 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				B4C400DA0E469FB2A86EC67A /* AppState.swift */,
+			);
+			path = "State"; sourceTree = "<group>";
+		};
+		18C2571930464B57526AA198 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				8F6687AF6CBF3D09AE39BA09 /* Components */,
+				AC4D754C6BC52095C50AF572 /* ColorTokens.swift */,
+				B54D7874DAF22BB9ECBB97FF /* SpacingTokens.swift */,
+				7F80B354A720F681A0AB2BA2 /* TypographyTokens.swift */,
+			);
+			path = "DesignSystem"; sourceTree = "<group>";
+		};
 		C4872151F3D998D9647E8AB1 /* Projects */ = {
 			isa = PBXGroup;
 			children = (
@@ -236,6 +252,16 @@
 				8B6AC2369D83216ED8F2DEAC /* ProjectsView.swift */,
 			);
 			path = "Projects"; sourceTree = "<group>";
+		};
+		34987BE36306B0FDA15B81B8 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				174A872D9CEA416A37FA4A63 /* DaymarkRepository.swift */,
+				7107D3EFA91A95D5D3342C95 /* LocalDaymarkRepository.swift */,
+				654BE5487A1011AFBA2D7DF9 /* SeedData.swift */,
+				CE8BD97FA58F7D496DE2ECFD /* SupabaseConfig.swift */,
+			);
+			path = "Persistence"; sourceTree = "<group>";
 		};
 		D5DB9AEF4546F18E10E1930E /* Models */ = {
 			isa = PBXGroup;
@@ -250,39 +276,14 @@
 			);
 			path = "Models"; sourceTree = "<group>";
 		};
-		2F59D6E2DBE90DB610F3308F /* Notifications */ = {
+		F5514F6BC3B57857F891C431 /* Scheduling */ = {
 			isa = PBXGroup;
 			children = (
-				1AA56FC619AC38FC127C45C0 /* DaymarkNotificationManager.swift */,
+				96E532033A5DFF2C398876D8 /* MissedTaskDetector.swift */,
+				D71BA736432020620DC10B26 /* SchedulingEngine.swift */,
+				73667751F4920F652D88752E /* TimeSlot.swift */,
 			);
-			path = "Notifications"; sourceTree = "<group>";
-		};
-		AEAA1D2326C7A908AEE09AE9 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				2FEB2F7CA92F895F043A70DE /* SettingsView.swift */,
-			);
-			path = "Settings"; sourceTree = "<group>";
-		};
-		34987BE36306B0FDA15B81B8 /* Persistence */ = {
-			isa = PBXGroup;
-			children = (
-				174A872D9CEA416A37FA4A63 /* DaymarkRepository.swift */,
-				7107D3EFA91A95D5D3342C95 /* LocalDaymarkRepository.swift */,
-				654BE5487A1011AFBA2D7DF9 /* SeedData.swift */,
-				CE8BD97FA58F7D496DE2ECFD /* SupabaseConfig.swift */,
-			);
-			path = "Persistence"; sourceTree = "<group>";
-		};
-		18C2571930464B57526AA198 /* DesignSystem */ = {
-			isa = PBXGroup;
-			children = (
-				8F6687AF6CBF3D09AE39BA09 /* Components */,
-				AC4D754C6BC52095C50AF572 /* ColorTokens.swift */,
-				B54D7874DAF22BB9ECBB97FF /* SpacingTokens.swift */,
-				7F80B354A720F681A0AB2BA2 /* TypographyTokens.swift */,
-			);
-			path = "DesignSystem"; sourceTree = "<group>";
+			path = "Scheduling"; sourceTree = "<group>";
 		};
 		452DCB1E6D1D51BF326B583B /* Routines */ = {
 			isa = PBXGroup;
@@ -299,21 +300,20 @@
 			);
 			path = "Inbox"; sourceTree = "<group>";
 		};
-		F5514F6BC3B57857F891C431 /* Scheduling */ = {
+		D2F1FF0E382165BFF91C71AC /* DailyReview */ = {
 			isa = PBXGroup;
 			children = (
-				96E532033A5DFF2C398876D8 /* MissedTaskDetector.swift */,
-				D71BA736432020620DC10B26 /* SchedulingEngine.swift */,
-				73667751F4920F652D88752E /* TimeSlot.swift */,
+				A8CC5A6723C6BA40DB772EF5 /* EveningPlanningSheet.swift */,
+				A8180FF3C66D8FBA5444F92B /* MorningConfirmationSheet.swift */,
 			);
-			path = "Scheduling"; sourceTree = "<group>";
+			path = "DailyReview"; sourceTree = "<group>";
 		};
-		D3AB9100BB9461D95A7B6410 /* State */ = {
+		2F59D6E2DBE90DB610F3308F /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				B4C400DA0E469FB2A86EC67A /* AppState.swift */,
+				1AA56FC619AC38FC127C45C0 /* DaymarkNotificationManager.swift */,
 			);
-			path = "State"; sourceTree = "<group>";
+			path = "Notifications"; sourceTree = "<group>";
 		};
 		882830F876670A1AE75604D4 /* Components */ = {
 			isa = PBXGroup;
@@ -325,14 +325,6 @@
 				295263FBAEC2D02C8BDAB081 /* MissedTasksResolutionSheet.swift */,
 				003403226CEE497A2ED9F42B /* QuickCaptureSheet.swift */,
 				EA0E515F74959B1FEEDE6080 /* TimelineSection.swift */,
-			);
-			path = "Components"; sourceTree = "<group>";
-		};
-		8E31CA22C4E32DB3FDD53F96 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				1D4354FAA03886C74C5A3773 /* InboxTaskRow.swift */,
-				D51F9FCE0429363B226A0D96 /* TaskDetailEditorSheet.swift */,
 			);
 			path = "Components"; sourceTree = "<group>";
 		};
@@ -353,6 +345,14 @@
 				6529885A843E6B2DFC0B94E1 /* EditProjectSheet.swift */,
 				D120ECE3FAACC89D6BECBAC2 /* MilestoneRow.swift */,
 				6E0905176F014064CD3E6E3E /* ProjectCard.swift */,
+			);
+			path = "Components"; sourceTree = "<group>";
+		};
+		8E31CA22C4E32DB3FDD53F96 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				1D4354FAA03886C74C5A3773 /* InboxTaskRow.swift */,
+				D51F9FCE0429363B226A0D96 /* TaskDetailEditorSheet.swift */,
 			);
 			path = "Components"; sourceTree = "<group>";
 		};
