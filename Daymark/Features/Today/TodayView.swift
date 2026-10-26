@@ -192,25 +192,25 @@ public struct TodayView: View {
                 } label: {
                     HStack(spacing: 5) {
                         Image(systemName: mode.icon)
-                            .font(.system(size: 13, weight: .bold))
+                            .font(.system(size: 12, weight: .semibold))
 
                         Text(modeTitle(for: mode))
-                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .font(.system(size: 13, weight: .semibold))
                             .lineLimit(1)
                             .fixedSize(horizontal: true, vertical: false)
                     }
                     .foregroundColor(isSelected ? Color.white : Color.dmTextSecondary)
-                    .padding(.horizontal, 13)
-                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 7)
                     .background(
-                        isSelected ? Color.dmCocoa : Color.dmCard
+                        isSelected ? Color.dmAccent : Color.dmCard
                     )
                     .clipShape(Capsule())
                     .overlay(
                         Capsule()
                             .stroke(isSelected ? Color.clear : Color.dmBorder.opacity(0.8), lineWidth: 0.6)
                     )
-                    .shadow(color: Color.black.opacity(isSelected ? 0.10 : 0.02), radius: 3, x: 0, y: 1)
+                    .shadow(color: isSelected ? Color.dmAccent.opacity(0.32) : Color.black.opacity(0.02), radius: 6, x: 0, y: 2)
                 }
                 .buttonStyle(.plain)
             }
@@ -244,14 +244,14 @@ public struct TodayRoutinesQuickView: View {
         VStack(alignment: .leading, spacing: DMSpacing.sm) {
             HStack {
                 Text("Daily Routines")
-                    .font(.system(size: 20, weight: .bold))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(Color.dmTextPrimary)
 
                 Spacer()
 
                 let fullyDone = appState.routines.filter { $0.isFullyCompleted(on: Date()) }.count
                 Text("\(fullyDone) of \(appState.routines.count) completed")
-                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .font(.system(size: 12.5, weight: .semibold, design: .rounded))
                     .foregroundColor(Color.dmTextSecondary)
             }
             .padding(.horizontal, DMSpacing.md)
@@ -259,22 +259,22 @@ public struct TodayRoutinesQuickView: View {
             if appState.routines.isEmpty {
                 VStack(spacing: DMSpacing.xs) {
                     Image(systemName: "repeat.circle")
-                        .font(.system(size: 28))
+                        .font(.system(size: 24))
                         .foregroundColor(Color.dmTextTertiary)
                     Text("No active routines")
-                        .font(.system(size: 18, weight: .bold))
+                        .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(Color.dmTextPrimary)
                     Text("Create routines to track habits.")
-                        .font(.system(size: 15, weight: .medium))
+                        .font(.system(size: 13, weight: .medium))
                         .foregroundColor(Color.dmTextSecondary)
                         .multilineTextAlignment(.center)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(DMSpacing.lg)
                 .background(Color.dmCard)
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
                         .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
                 )
                 .padding(.horizontal, DMSpacing.md)
@@ -308,41 +308,41 @@ public struct TodayRoutinesQuickView: View {
                     iconName: iconName,
                     backgroundColor: color.opacity(0.15),
                     iconColor: color,
-                    size: 44,
-                    cornerRadius: 13,
-                    iconSize: 20
+                    size: 38,
+                    cornerRadius: 11,
+                    iconSize: 17
                 )
 
                 VStack(alignment: .leading, spacing: 3) {
                     Text(routine.title)
-                        .font(.system(size: 18, weight: .bold))
+                        .font(.system(size: 15, weight: .semibold))
                         .foregroundColor(Color.dmTextPrimary)
                         .strikethrough(isDone, color: Color.dmTextTertiary)
 
                     HStack(spacing: DMSpacing.xs + 2) {
                         Text("🔥 \(routine.currentStreakDays)d")
-                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .font(.system(size: 12, weight: .semibold, design: .rounded))
                             .foregroundColor(color)
                             .lineLimit(1)
 
                         if let target = routine.targetTimeOfDay {
                             Text("•")
-                                .font(.system(size: 13, weight: .bold))
+                                .font(.system(size: 11, weight: .bold))
                                 .foregroundColor(Color.dmTextTertiary)
 
                             Text(target)
-                                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                .font(.system(size: 12, weight: .semibold, design: .rounded))
                                 .foregroundColor(Color.dmTextSecondary)
                                 .lineLimit(1)
                         }
 
                         if let freq = routine.frequencyText {
                             Text("•")
-                                .font(.system(size: 13, weight: .bold))
+                                .font(.system(size: 11, weight: .bold))
                                 .foregroundColor(Color.dmTextTertiary)
 
                             Text(freq)
-                                .font(.system(size: 14, weight: .medium))
+                                .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(Color.dmTextSecondary)
                                 .lineLimit(1)
                         }
@@ -361,16 +361,16 @@ public struct TodayRoutinesQuickView: View {
                 } label: {
                     ZStack {
                         Circle()
-                            .stroke(isDone ? color : Color.dmBorder, lineWidth: isDone ? 2.5 : 1.8)
-                            .frame(width: 34, height: 34)
+                            .stroke(isDone ? color : Color.dmBorder, lineWidth: isDone ? 2.0 : 1.5)
+                            .frame(width: 28, height: 28)
 
                         if isDone {
                             Circle()
                                 .fill(color)
-                                .frame(width: 34, height: 34)
+                                .frame(width: 28, height: 28)
 
                             Image(systemName: "checkmark")
-                                .font(.system(size: 14, weight: .bold))
+                                .font(.system(size: 12, weight: .bold))
                                 .foregroundColor(.white)
                         }
                     }
@@ -380,7 +380,7 @@ public struct TodayRoutinesQuickView: View {
 
             // Checklist Items
             if !routine.checklist.isEmpty {
-                VStack(spacing: 8) {
+                VStack(spacing: 6) {
                     ForEach(routine.checklist) { item in
                         let itemCompleted = routine.isItemCompleted(itemId: item.id, on: Date())
                         Button {
@@ -392,23 +392,23 @@ public struct TodayRoutinesQuickView: View {
                         } label: {
                             HStack(spacing: DMSpacing.sm) {
                                 Image(systemName: itemCompleted ? "checkmark.circle.fill" : "circle")
-                                    .font(.system(size: 20))
+                                    .font(.system(size: 17))
                                     .foregroundColor(itemCompleted ? color : Color.dmTextTertiary)
 
                                 Text(item.title)
-                                    .font(.system(size: 16, weight: itemCompleted ? .regular : .medium))
+                                    .font(.system(size: 13.5, weight: itemCompleted ? .regular : .medium))
                                     .foregroundColor(itemCompleted ? Color.dmTextTertiary : Color.dmTextPrimary)
                                     .strikethrough(itemCompleted, color: Color.dmTextTertiary)
 
                                 Spacer()
                             }
-                            .padding(.vertical, 2)
+                            .padding(.vertical, 1.5)
                         }
                         .buttonStyle(.plain)
                     }
                 }
-                .padding(.top, 4)
-                .padding(.leading, 52)
+                .padding(.top, 2)
+                .padding(.leading, 46)
             }
         }
         .padding(DMSpacing.md)

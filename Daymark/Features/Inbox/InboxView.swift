@@ -25,15 +25,15 @@ public struct InboxView: View {
                 // Top inline capture bar
                 HStack(spacing: DMSpacing.sm) {
                     Image(systemName: "plus")
-                        .font(.system(size: 15, weight: .bold))
+                        .font(.system(size: 13, weight: .bold))
                         .foregroundColor(.white)
-                        .frame(width: 34, height: 34)
+                        .frame(width: 30, height: 30)
                         .background(Color.dmAccent)
                         .clipShape(Circle())
-                        .shadow(color: Color.dmAccent.opacity(0.3), radius: 3, x: 0, y: 1.5)
+                        .shadow(color: Color.dmAccent.opacity(0.25), radius: 3, x: 0, y: 1.5)
 
                     TextField("Quick capture task, idea, or note...", text: $quickCaptureText)
-                        .font(.system(size: 17, weight: .regular))
+                        .font(.system(size: 15, weight: .regular))
                         .focused($isCaptureFocused)
                         .submitLabel(.done)
                         .onSubmit {
@@ -45,10 +45,10 @@ public struct InboxView: View {
                             submitQuickCapture()
                         } label: {
                             Text("Save")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                .font(.system(size: 13, weight: .semibold, design: .rounded))
                                 .foregroundColor(.white)
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 7)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
                                 .background(Color.dmCocoa)
                                 .clipShape(Capsule())
                         }
@@ -56,14 +56,14 @@ public struct InboxView: View {
                     }
                 }
                 .padding(.horizontal, DMSpacing.md)
-                .padding(.vertical, 12)
+                .padding(.vertical, 10)
                 .background(Color.dmCard)
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
                         .stroke(Color.dmBorder.opacity(0.8), lineWidth: 0.6)
                 )
-                .shadow(color: Color.black.opacity(0.025), radius: 4, x: 0, y: 1.5)
+                .shadow(color: Color.black.opacity(0.02), radius: 3, x: 0, y: 1)
                 .padding(.horizontal, DMSpacing.md)
                 .padding(.top, DMSpacing.xs)
                 .padding(.bottom, DMSpacing.xs)
@@ -187,15 +187,15 @@ public struct InboxView: View {
                 }
 
                 Text(title)
-                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .font(.system(size: 13, weight: .semibold, design: .rounded))
 
                 Text("\(count)")
-                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .opacity(isSelected ? 0.95 : 0.65)
             }
             .foregroundColor(isSelected ? .white : Color.dmTextPrimary)
-            .padding(.horizontal, 14)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
             .background(isSelected ? Color.dmCocoa : Color.dmCard)
             .clipShape(Capsule())
             .overlay(

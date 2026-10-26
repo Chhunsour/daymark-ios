@@ -26,21 +26,21 @@ public struct ProjectsView: View {
                     // Hero Summary Card (Concept 2 style)
                     VStack(alignment: .leading, spacing: DMSpacing.sm) {
                         HStack(alignment: .top) {
-                            VStack(alignment: .leading, spacing: 4) {
+                            VStack(alignment: .leading, spacing: 3) {
                                 Text("Active Workspaces")
-                                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                                    .font(.system(size: 11.5, weight: .semibold, design: .rounded))
                                     .foregroundColor(Color.dmLilac)
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 4)
+                                    .padding(.horizontal, 9)
+                                    .padding(.vertical, 3.5)
                                     .background(Color.white)
                                     .clipShape(Capsule())
 
                                 Text("Mastering projects with focus")
-                                    .font(.system(size: 22, weight: .bold))
+                                    .font(.system(size: 18, weight: .semibold))
                                     .foregroundColor(Color.dmTextPrimary)
 
                                 Text("\(appState.projects.count) active ventures • \(completedTasksAcrossProjects) of \(totalTasksAcrossProjects) tasks completed")
-                                    .font(.system(size: 14, weight: .medium))
+                                    .font(.system(size: 12.5, weight: .medium))
                                     .foregroundColor(Color.dmTextSecondary)
                             }
 
@@ -49,10 +49,10 @@ public struct ProjectsView: View {
                             ZStack {
                                 Circle()
                                     .fill(Color.dmLilac.opacity(0.14))
-                                    .frame(width: 52, height: 52)
+                                    .frame(width: 44, height: 44)
 
                                 Image(systemName: "square.stack.3d.up.fill")
-                                    .font(.system(size: 22, weight: .semibold))
+                                    .font(.system(size: 18, weight: .semibold))
                                     .foregroundColor(Color.dmLilac)
                             }
                         }
@@ -63,26 +63,26 @@ public struct ProjectsView: View {
                                 ZStack(alignment: .leading) {
                                     Capsule()
                                         .fill(Color.white.opacity(0.85))
-                                        .frame(height: 6)
+                                        .frame(height: 5)
 
                                     Capsule()
                                         .fill(Color.dmLilac)
-                                        .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(overallProgressRatio))), height: 6)
+                                        .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(overallProgressRatio))), height: 5)
                                 }
                             }
-                            .frame(height: 6)
+                            .frame(height: 5)
                         }
                     }
                     .padding(DMSpacing.md)
                     .background(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
                             .fill(Color.dmLilacBg)
                     )
                     .overlay(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
                             .stroke(Color.dmLilac.opacity(0.22), lineWidth: 0.8)
                     )
-                    .shadow(color: Color.dmLilac.opacity(0.08), radius: 8, x: 0, y: 3)
+                    .shadow(color: Color.dmLilac.opacity(0.06), radius: 6, x: 0, y: 2)
                     .padding(.horizontal, DMSpacing.md)
                     .padding(.top, DMSpacing.xs)
 
@@ -105,17 +105,17 @@ public struct ProjectsView: View {
                     } label: {
                         HStack(spacing: DMSpacing.xs + 2) {
                             Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 17, weight: .semibold))
+                                .font(.system(size: 15, weight: .semibold))
                             Text("New Workspace")
-                                .font(.system(size: 16, weight: .bold))
+                                .font(.system(size: 14, weight: .semibold))
                         }
                         .foregroundColor(Color.dmAccent)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
+                        .padding(.vertical, 12)
                         .background(Color.dmCard)
-                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            RoundedRectangle(cornerRadius: 16, style: .continuous)
                                 .stroke(Color.dmBorder.opacity(0.7), lineWidth: 0.5)
                         )
                         .shadow(color: Color.black.opacity(0.02), radius: 3, x: 0, y: 1)

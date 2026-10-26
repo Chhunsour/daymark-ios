@@ -9,7 +9,7 @@ public struct DaymarkCheckbox: View {
     public init(
         isChecked: Bool,
         accentColor: Color = Color.dmSuccess,
-        size: CGFloat = 26,
+        size: CGFloat = 24,
         action: @escaping () -> Void
     ) {
         self.isChecked = isChecked
@@ -26,7 +26,7 @@ public struct DaymarkCheckbox: View {
         } label: {
             ZStack {
                 Circle()
-                    .strokeBorder(isChecked ? accentColor : Color.dmBorder, lineWidth: 1.8)
+                    .strokeBorder(isChecked ? accentColor : Color.dmBorder, lineWidth: 1.6)
                     .background(Circle().fill(isChecked ? accentColor : Color.clear))
                     .frame(width: size, height: size)
 

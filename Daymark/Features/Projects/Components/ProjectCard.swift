@@ -40,19 +40,19 @@ public struct ProjectCard: View {
                     iconName: project.iconName,
                     backgroundColor: theme.fg.opacity(0.14),
                     iconColor: theme.fg,
-                    size: 46,
-                    cornerRadius: 14,
-                    iconSize: 22
+                    size: 38,
+                    cornerRadius: 11,
+                    iconSize: 18
                 )
 
-                VStack(alignment: .leading, spacing: 3) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text(project.name)
-                        .font(.system(size: 20, weight: .bold))
+                        .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(Color.dmTextPrimary)
 
                     if let desc = project.description, !desc.isEmpty {
                         Text(desc)
-                            .font(.system(size: 14, weight: .regular))
+                            .font(.system(size: 13, weight: .regular))
                             .foregroundColor(Color.dmTextSecondary)
                             .lineLimit(1)
                     }
@@ -63,55 +63,55 @@ public struct ProjectCard: View {
                 HStack(spacing: DMSpacing.xs) {
                     if project.status != .active {
                         Text(project.status.displayName)
-                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                            .font(.system(size: 11.5, weight: .semibold, design: .rounded))
                             .foregroundColor(Color.dmTextSecondary)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 3)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 2.5)
                             .background(Color.dmCard)
                             .clipShape(Capsule())
                     }
 
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(Color.dmTextTertiary)
                 }
             }
 
             // Refined Progress Bar with percentage (Concept 2 style)
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 5) {
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         Capsule()
                             .fill(Color.white.opacity(0.85))
-                            .frame(height: 6)
+                            .frame(height: 5)
 
                         Capsule()
                             .fill(theme.fg)
-                            .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(progressRatio))), height: 6)
+                            .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(progressRatio))), height: 5)
                     }
                 }
-                .frame(height: 6)
+                .frame(height: 5)
 
                 // Meta Row with tasks done and milestones
                 HStack(alignment: .center) {
                     Text("\(completedTasksCount) of \(totalTasksCount) tasks done")
-                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .font(.system(size: 12.5, weight: .semibold, design: .rounded))
                         .foregroundColor(Color.dmTextSecondary)
 
                     if !projectMilestones.isEmpty {
                         Text("•")
-                            .font(.system(size: 13, weight: .bold))
+                            .font(.system(size: 11, weight: .bold))
                             .foregroundColor(Color.dmTextTertiary)
 
                         Text("\(completedMilestonesCount)/\(projectMilestones.count) milestones")
-                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
                             .foregroundColor(Color.dmTextTertiary)
                     }
 
                     Spacer()
 
                     Text("\(Int(progressRatio * 100))%")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
                         .foregroundColor(theme.fg)
                 }
                 .padding(.top, 2)

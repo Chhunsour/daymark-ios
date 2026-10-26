@@ -25,7 +25,7 @@ public struct InboxTaskRow: View {
         Button(action: onSelect) {
             HStack(alignment: .center, spacing: DMSpacing.mdSm) {
                 // Interactive Checkbox
-                DaymarkCheckbox(isChecked: task.status == .completed, size: 28) {
+                DaymarkCheckbox(isChecked: task.status == .completed, size: 24) {
                     Task { try? await appState.completeTask(task) }
                 }
 
@@ -34,15 +34,15 @@ public struct InboxTaskRow: View {
                     iconName: project?.iconName ?? "tray.fill",
                     backgroundColor: theme.bg,
                     iconColor: theme.fg,
-                    size: 44,
-                    cornerRadius: 13,
-                    iconSize: 20
+                    size: 38,
+                    cornerRadius: 11,
+                    iconSize: 17
                 )
 
                 // Task Details
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(task.title)
-                        .font(.system(size: 18, weight: .bold))
+                        .font(.system(size: 15, weight: .semibold))
                         .foregroundColor(Color.dmTextPrimary)
                         .lineLimit(2)
                         .multilineTextAlignment(.leading)
@@ -50,26 +50,26 @@ public struct InboxTaskRow: View {
                     HStack(spacing: DMSpacing.xs + 2) {
                         if let proj = project {
                             Text(proj.name)
-                                .font(.system(size: 13, weight: .bold, design: .rounded))
+                                .font(.system(size: 12, weight: .semibold, design: .rounded))
                                 .foregroundColor(theme.fg)
                                 .lineLimit(1)
                         }
 
                         HStack(spacing: 3) {
                             Image(systemName: "clock")
-                                .font(.system(size: 11))
+                                .font(.system(size: 10.5))
                                 .foregroundColor(Color.dmTextTertiary)
                             Text("\(task.estimatedDurationMinutes)m")
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .font(.system(size: 12, weight: .semibold, design: .rounded))
                                 .foregroundColor(Color.dmTextTertiary)
                         }
 
                         if task.importance >= .high {
                             Text(task.importance.displayName)
-                                .font(.system(size: 12, weight: .bold, design: .rounded))
+                                .font(.system(size: 11.5, weight: .semibold, design: .rounded))
                                 .foregroundColor(task.importance == .critical ? Color.dmCoral : Color.dmLilac)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 2.5)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
                                 .background(task.importance == .critical ? Color.dmCoralBg : Color.dmLilacBg)
                                 .clipShape(Capsule())
                                 .lineLimit(1)
@@ -78,10 +78,10 @@ public struct InboxTaskRow: View {
                         if let due = task.dueDate {
                             HStack(spacing: 3) {
                                 Image(systemName: "calendar")
-                                    .font(.system(size: 11))
+                                    .font(.system(size: 10.5))
                                 Text(DateFormatter.localizedString(from: due, dateStyle: .short, timeStyle: .none))
                             }
-                            .font(.system(size: 13, weight: .semibold, design: .rounded))
+                            .font(.system(size: 12, weight: .semibold, design: .rounded))
                             .foregroundColor(Color.dmAmber)
                         }
                     }
@@ -90,7 +90,7 @@ public struct InboxTaskRow: View {
                 Spacer(minLength: 4)
 
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundColor(Color.dmTextTertiary.opacity(0.6))
             }
             .padding(.horizontal, DMSpacing.md)

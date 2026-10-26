@@ -19,7 +19,7 @@ public struct TimelineSection: View {
             // Header with Auto-Schedule option
             HStack {
                 Text("Schedule Timeline")
-                    .font(.system(size: 20, weight: .bold))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(Color.dmTextPrimary)
 
                 Spacer()
@@ -30,15 +30,15 @@ public struct TimelineSection: View {
                         generator.impactOccurred()
                         Task { try? await appState.autoScheduleToday() }
                     } label: {
-                        HStack(spacing: 5) {
+                        HStack(spacing: 4) {
                             Image(systemName: "sparkles")
-                                .font(.system(size: 13, weight: .semibold))
+                                .font(.system(size: 12, weight: .semibold))
                             Text("Auto-Schedule")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                .font(.system(size: 12.5, weight: .semibold, design: .rounded))
                         }
                         .foregroundColor(Color.dmAccent)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
                         .background(Color.dmAccent.opacity(0.12))
                         .clipShape(Capsule())
                     }
@@ -139,15 +139,15 @@ public struct TimelineSection: View {
             VStack(alignment: .trailing, spacing: 2) {
                 if let start = task.scheduledStartTime {
                     Text(timeString(from: start))
-                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
                         .foregroundColor(isCurrent ? Color.dmAccent : (isCompleted ? Color.dmTextTertiary : Color.dmTextPrimary))
                 }
                 Text("\(task.estimatedDurationMinutes)m")
-                    .font(.system(size: 13, weight: .semibold, design: .rounded))
+                    .font(.system(size: 11.5, weight: .medium, design: .rounded))
                     .foregroundColor(Color.dmTextTertiary)
             }
-            .frame(width: 62, alignment: .trailing)
-            .padding(.top, isCurrent ? 12 : 6)
+            .frame(width: 58, alignment: .trailing)
+            .padding(.top, isCurrent ? 10 : 5)
 
             // 2. Track & Node (Concept 3 vertical capsule rail)
             VStack(spacing: 0) {
@@ -221,7 +221,7 @@ public struct TimelineSection: View {
                     }
 
                     Text(task.title)
-                        .font(.system(size: 18, weight: isCompleted ? .medium : .bold))
+                        .font(.system(size: 15, weight: isCompleted ? .regular : .semibold))
                         .foregroundColor(isCompleted ? Color.dmTextTertiary : Color.dmTextPrimary)
                         .strikethrough(isCompleted, color: Color.dmTextTertiary)
                         .lineLimit(2)
@@ -232,9 +232,9 @@ public struct TimelineSection: View {
                             HStack(spacing: 4) {
                                 Circle()
                                     .fill(theme.fg)
-                                    .frame(width: 6, height: 6)
+                                    .frame(width: 5, height: 5)
                                 Text(proj.name)
-                                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                                    .font(.system(size: 11.5, weight: .medium))
                                     .foregroundColor(Color.dmTextSecondary)
                                     .lineLimit(1)
                             }
@@ -242,10 +242,10 @@ public struct TimelineSection: View {
 
                         if task.importance >= .high && !isCompleted {
                             Text(task.importance.displayName)
-                                .font(.system(size: 12, weight: .bold, design: .rounded))
+                                .font(.system(size: 10.5, weight: .semibold, design: .rounded))
                                 .foregroundColor(task.importance == .critical ? Color.dmCoral : Color.dmAmber)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 2.5)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
                                 .background(task.importance == .critical ? Color.dmCoralBg : Color.dmAmberBg)
                                 .clipShape(Capsule())
                         }
@@ -270,16 +270,16 @@ public struct TimelineSection: View {
                         Circle()
                             .stroke(
                                 isCompleted ? Color.dmSuccess : (isCurrent ? Color.dmAccent : Color.dmBorder),
-                                lineWidth: 2
+                                lineWidth: 1.8
                             )
-                            .frame(width: 30, height: 30)
+                            .frame(width: 26, height: 26)
 
                         if isCompleted {
                             Circle()
                                 .fill(Color.dmSuccess)
-                                .frame(width: 20, height: 20)
+                                .frame(width: 17, height: 17)
                             Image(systemName: "checkmark")
-                                .font(.system(size: 12, weight: .bold))
+                                .font(.system(size: 10.5, weight: .bold))
                                 .foregroundColor(.white)
                         }
                     }

@@ -35,22 +35,22 @@ public struct CurrentTaskCard: View {
                         HStack(spacing: DMSpacing.xs) {
                             Circle()
                                 .fill(isCurrentActive ? Color.dmAccent : Color.dmPeach)
-                                .frame(width: 8, height: 8)
+                                .frame(width: 7, height: 7)
 
                             Text(isCurrentActive ? "Focusing Now" : "Up Next Focus")
-                                .font(.system(size: 13, weight: .bold, design: .rounded))
+                                .font(.system(size: 11.5, weight: .semibold, design: .rounded))
                                 .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmPeach)
 
                             Text("•")
-                                .font(.system(size: 13, weight: .bold))
+                                .font(.system(size: 11, weight: .bold))
                                 .foregroundColor(Color.dmTextTertiary)
 
                             Text("\(task.estimatedDurationMinutes) min")
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .font(.system(size: 11.5, weight: .semibold, design: .rounded))
                                 .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmPeach)
                         }
-                        .padding(.horizontal, 11)
-                        .padding(.vertical, 6)
+                        .padding(.horizontal, 9)
+                        .padding(.vertical, 4.5)
                         .background(isCurrentActive ? Color.dmAccent.opacity(0.12) : Color.dmCard)
                         .clipShape(Capsule())
                         .shadow(color: Color.black.opacity(0.02), radius: 2, x: 0, y: 1)
@@ -62,13 +62,13 @@ public struct CurrentTaskCard: View {
                             HStack(spacing: 5) {
                                 Circle()
                                     .fill(theme.fg)
-                                    .frame(width: 7, height: 7)
+                                    .frame(width: 6, height: 6)
                                 Text(proj.name)
-                                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                                    .font(.system(size: 11.5, weight: .semibold, design: .rounded))
                                     .foregroundColor(Color.dmTextPrimary)
                             }
-                            .padding(.horizontal, 11)
-                            .padding(.vertical, 6)
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 4.5)
                             .background(Color.dmCard)
                             .clipShape(Capsule())
                             .shadow(color: Color.black.opacity(0.02), radius: 2, x: 0, y: 1)
@@ -77,23 +77,23 @@ public struct CurrentTaskCard: View {
 
                     // Content & Minimalist Focus Indicator
                     HStack(alignment: .top, spacing: DMSpacing.sm) {
-                        VStack(alignment: .leading, spacing: 6) {
+                        VStack(alignment: .leading, spacing: 5) {
                             Text(task.title)
-                                .font(.system(size: 22, weight: .bold, design: .rounded))
+                                .font(.system(size: 17, weight: .semibold, design: .default))
                                 .foregroundColor(Color.dmTextPrimary)
                                 .lineLimit(2)
                                 .fixedSize(horizontal: false, vertical: true)
 
                             if !timeFormatted.isEmpty {
-                                HStack(spacing: 6) {
+                                HStack(spacing: 5) {
                                     Image(systemName: "clock.fill")
-                                        .font(.system(size: 13))
+                                        .font(.system(size: 11))
                                         .foregroundColor(Color.dmPeach)
                                     Text(timeFormatted)
-                                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
                                         .foregroundColor(Color.dmTextSecondary)
                                 }
-                                .padding(.top, 2)
+                                .padding(.top, 1)
                             }
                         }
 
@@ -103,10 +103,10 @@ public struct CurrentTaskCard: View {
                         ZStack {
                             Circle()
                                 .fill(Color.dmPeach.opacity(0.14))
-                                .frame(width: 52, height: 52)
+                                .frame(width: 44, height: 44)
 
                             Image(systemName: isCurrentActive ? "flame.fill" : "timer")
-                                .font(.system(size: 22, weight: .semibold))
+                                .font(.system(size: 18, weight: .semibold))
                                 .foregroundColor(Color.dmPeach)
                         }
                     }
@@ -119,18 +119,18 @@ public struct CurrentTaskCard: View {
                                 generator.impactOccurred()
                                 Task { try? await appState.pauseTask(task) }
                             } label: {
-                                HStack(spacing: 6) {
+                                HStack(spacing: 5) {
                                     Image(systemName: "pause.fill")
-                                        .font(.system(size: 14, weight: .bold))
+                                        .font(.system(size: 13, weight: .semibold))
                                     Text("Pause Focus")
-                                        .font(.system(size: 16, weight: .bold))
+                                        .font(.system(size: 14, weight: .semibold))
                                 }
                                 .frame(maxWidth: .infinity)
-                                .padding(.vertical, 13)
+                                .padding(.vertical, 10)
                                 .foregroundColor(.white)
                                 .background(Color.dmCocoa)
                                 .clipShape(Capsule())
-                                .shadow(color: Color.black.opacity(0.12), radius: 4, x: 0, y: 2)
+                                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 2)
                             }
                             .buttonStyle(DaymarkPressableStyle())
                         } else {
@@ -139,18 +139,18 @@ public struct CurrentTaskCard: View {
                                 generator.impactOccurred()
                                 Task { try? await appState.startTask(task) }
                             } label: {
-                                HStack(spacing: 6) {
+                                HStack(spacing: 5) {
                                     Image(systemName: "play.fill")
-                                        .font(.system(size: 14, weight: .bold))
+                                        .font(.system(size: 13, weight: .semibold))
                                     Text("Start Focus")
-                                        .font(.system(size: 16, weight: .bold))
+                                        .font(.system(size: 14, weight: .semibold))
                                 }
                                 .frame(maxWidth: .infinity)
-                                .padding(.vertical, 13)
+                                .padding(.vertical, 10)
                                 .foregroundColor(.white)
                                 .background(Color.dmCocoa)
                                 .clipShape(Capsule())
-                                .shadow(color: Color.black.opacity(0.12), radius: 4, x: 0, y: 2)
+                                .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 2)
                             }
                             .buttonStyle(DaymarkPressableStyle())
                         }
@@ -161,14 +161,14 @@ public struct CurrentTaskCard: View {
                             generator.impactOccurred()
                             Task { try? await appState.completeTask(task) }
                         } label: {
-                            HStack(spacing: 6) {
+                            HStack(spacing: 5) {
                                 Image(systemName: "checkmark")
-                                    .font(.system(size: 14, weight: .bold))
+                                    .font(.system(size: 13, weight: .semibold))
                                 Text("Done")
-                                    .font(.system(size: 16, weight: .bold))
+                                    .font(.system(size: 14, weight: .semibold))
                             }
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 13)
+                            .padding(.vertical, 10)
                             .foregroundColor(Color.dmTextPrimary)
                             .background(Color.dmCard)
                             .clipShape(Capsule())

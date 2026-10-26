@@ -62,25 +62,21 @@ public struct WeekCalendarStrip: View {
                 selectedDate = date
             }
         } label: {
-            VStack(spacing: 6) {
+            VStack(spacing: 5) {
                 Text(weekdayString)
                     .font(.dmWeekday)
-                    .foregroundColor(isSelected ? Color.dmTextPrimary : Color.dmTextSecondary)
+                    .foregroundColor(isSelected ? Color.dmAccent : Color.dmTextSecondary)
 
                 ZStack {
                     if isSelected {
                         Circle()
-                            .fill(Color(UIColor { trait in
-                                trait.userInterfaceStyle == .dark
-                                    ? UIColor(red: 0.20, green: 0.42, blue: 0.98, alpha: 1.0) // Cobalt in dark
-                                    : UIColor(red: 0.14, green: 0.14, blue: 0.18, alpha: 1.0) // Charcoal in light
-                            }))
-                            .frame(width: 44, height: 44)
-                            .shadow(color: Color.black.opacity(0.12), radius: 4, x: 0, y: 2)
+                            .fill(Color.dmAccent)
+                            .frame(width: 38, height: 38)
+                            .shadow(color: Color.dmAccent.opacity(0.35), radius: 6, x: 0, y: 3)
                     } else {
                         Circle()
                             .fill(Color.dmCard)
-                            .frame(width: 44, height: 44)
+                            .frame(width: 38, height: 38)
                             .overlay(
                                 Circle()
                                     .stroke(isToday ? Color.dmAccent.opacity(0.6) : Color.dmBorder.opacity(0.6), lineWidth: isToday ? 1.5 : 0.5)
@@ -92,7 +88,7 @@ public struct WeekCalendarStrip: View {
                         .font(.dmDayNumber)
                         .foregroundColor(isSelected ? Color.white : Color.dmTextPrimary)
                 }
-                .frame(width: 46, height: 46)
+                .frame(width: 40, height: 40)
 
                 // Mini task dots (Concept 3 style)
                 HStack(spacing: 3) {
