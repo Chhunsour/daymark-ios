@@ -190,16 +190,18 @@ public struct TodayView: View {
                         selectedMode = mode
                     }
                 } label: {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 5) {
                         Image(systemName: mode.icon)
-                            .font(.system(size: 14, weight: .bold))
+                            .font(.system(size: 13, weight: .bold))
 
                         Text(modeTitle(for: mode))
-                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
                     }
                     .foregroundColor(isSelected ? Color.white : Color.dmTextSecondary)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 9)
+                    .padding(.horizontal, 13)
+                    .padding(.vertical, 8)
                     .background(
                         isSelected ? Color.dmCocoa : Color.dmCard
                     )
@@ -224,11 +226,9 @@ public struct TodayView: View {
         case .schedule:
             return "Schedule"
         case .priorities:
-            let count = appState.todayPriorities.count
-            return count > 0 ? "Priorities (\(count))" : "Priorities"
+            return "Priorities"
         case .routines:
-            let count = appState.routines.count
-            return count > 0 ? "Routines (\(count))" : "Routines"
+            return "Habits"
         }
     }
 }
@@ -320,9 +320,10 @@ public struct TodayRoutinesQuickView: View {
                         .strikethrough(isDone, color: Color.dmTextTertiary)
 
                     HStack(spacing: DMSpacing.xs + 2) {
-                        Text("🔥 \(routine.currentStreakDays)d streak")
+                        Text("🔥 \(routine.currentStreakDays)d")
                             .font(.system(size: 14, weight: .bold, design: .rounded))
                             .foregroundColor(color)
+                            .lineLimit(1)
 
                         if let target = routine.targetTimeOfDay {
                             Text("•")
@@ -332,6 +333,7 @@ public struct TodayRoutinesQuickView: View {
                             Text(target)
                                 .font(.system(size: 14, weight: .semibold, design: .rounded))
                                 .foregroundColor(Color.dmTextSecondary)
+                                .lineLimit(1)
                         }
 
                         if let freq = routine.frequencyText {
@@ -342,6 +344,7 @@ public struct TodayRoutinesQuickView: View {
                             Text(freq)
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundColor(Color.dmTextSecondary)
+                                .lineLimit(1)
                         }
                     }
                 }

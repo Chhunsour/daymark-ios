@@ -245,6 +245,7 @@ public struct RoutinesView: View {
                         Text("🔥 \(routine.currentStreakDays)d")
                             .font(.system(size: 14, weight: .bold, design: .rounded))
                             .foregroundColor(color)
+                            .lineLimit(1)
 
                         if let time = routine.targetTimeOfDay {
                             Text("•")
@@ -253,6 +254,7 @@ public struct RoutinesView: View {
                             Text(time)
                                 .font(.system(size: 14, weight: .semibold, design: .rounded))
                                 .foregroundColor(Color.dmTextSecondary)
+                                .lineLimit(1)
                         }
 
                         if let freq = routine.frequencyText {
@@ -262,6 +264,7 @@ public struct RoutinesView: View {
                             Text(freq)
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundColor(Color.dmTextSecondary)
+                                .lineLimit(1)
                         }
                     }
                 }
@@ -432,14 +435,16 @@ public struct RoutinesView: View {
                         Text(routine.frequencyText ?? "Everyday")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundColor(Color.dmTextSecondary)
+                            .lineLimit(1)
 
                         Text("•")
                             .font(.system(size: 13, weight: .bold))
                             .foregroundColor(Color.dmTextTertiary)
 
-                        Text("🔥 \(routine.currentStreakDays)d streak")
+                        Text("🔥 \(routine.currentStreakDays)d")
                             .font(.system(size: 14, weight: .bold, design: .rounded))
                             .foregroundColor(color)
+                            .lineLimit(1)
                     }
                 }
 

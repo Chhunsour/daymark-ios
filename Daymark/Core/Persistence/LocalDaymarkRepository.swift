@@ -85,6 +85,10 @@ public actor LocalDaymarkRepository: DaymarkRepository {
         if fileManager.fileExists(atPath: tasksFile.path) {
             let data = try Data(contentsOf: tasksFile)
             tasksCache = try JSONDecoder().decode([DaymarkTask].self, from: data)
+            if tasksCache.isEmpty {
+                tasksCache = SeedData.makeStarterTasks(for: projectsCache)
+                try? saveTasksToDisk()
+            }
         } else {
             tasksCache = SeedData.makeStarterTasks(for: projectsCache)
             try saveTasksToDisk()
