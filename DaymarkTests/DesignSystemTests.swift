@@ -19,4 +19,16 @@ final class DesignSystemTests: XCTestCase {
         XCTAssertEqual(DMSpacing.lg, 24)
         XCTAssertEqual(DMSpacing.xl, 32)
     }
+
+    func testTypographyTokensAreDefined() {
+        XCTAssertNotNil(Font.dmHero)
+        XCTAssertNotNil(Font.dmLargeTitle)
+        XCTAssertNotNil(Font.dmGreeting)
+        XCTAssertNotNil(Font.dmTitle)
+        XCTAssertNotNil(Font.dmHeadline)
+        XCTAssertNotNil(Font.dmBody)
+        XCTAssertNotNil(Font.dmTime)
+        XCTAssertNotNil(Font.dmDayNumber)
+        XCTAssertNotNil(Font.dmStatNumber)
+    }
 }
