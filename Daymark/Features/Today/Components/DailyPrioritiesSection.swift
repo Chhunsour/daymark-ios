@@ -13,22 +13,22 @@ public struct DailyPrioritiesSection: View {
             // Section Header
             HStack(alignment: .firstTextBaseline) {
                 Text("Today's Priorities")
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundColor(Color.dmTextPrimary)
 
                 Spacer()
 
-                HStack(spacing: 4) {
+                HStack(spacing: 5) {
                     Image(systemName: "star.fill")
-                        .font(.system(size: 10))
+                        .font(.system(size: 12))
                         .foregroundColor(Color.dmAmber)
 
                     Text("\(appState.todayPriorities.count) of 5")
-                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(Color.dmTextSecondary)
                 }
-                .padding(.horizontal, 9)
-                .padding(.vertical, 3.5)
+                .padding(.horizontal, 11)
+                .padding(.vertical, 5)
                 .background(Color.dmCard)
                 .clipShape(Capsule())
                 .overlay(
@@ -41,13 +41,13 @@ public struct DailyPrioritiesSection: View {
             if appState.todayPriorities.isEmpty {
                 VStack(spacing: DMSpacing.xs) {
                     Image(systemName: "star.slash")
-                        .font(.system(size: 24))
+                        .font(.system(size: 28))
                         .foregroundColor(Color.dmTextTertiary)
                     Text("No daily priorities selected")
-                        .font(.dmHeadline)
+                        .font(.system(size: 18, weight: .bold))
                         .foregroundColor(Color.dmTextPrimary)
-                    Text("Select up to 5 high-impact tasks from Inbox or Workspaces that matter today.")
-                        .font(.dmCaption)
+                    Text("Select up to 5 high-impact tasks that matter today.")
+                        .font(.system(size: 14, weight: .medium))
                         .foregroundColor(Color.dmTextSecondary)
                         .multilineTextAlignment(.center)
                 }
@@ -80,7 +80,7 @@ public struct DailyPrioritiesSection: View {
 
         return HStack(spacing: DMSpacing.sm) {
             // Checkbox
-            DaymarkCheckbox(isChecked: isCompleted) {
+            DaymarkCheckbox(isChecked: isCompleted, size: 28) {
                 Task {
                     if isCompleted {
                         try? await appState.reopenTask(task)
@@ -95,15 +95,15 @@ public struct DailyPrioritiesSection: View {
                 iconName: icon,
                 backgroundColor: theme.bg,
                 iconColor: theme.fg,
-                size: 38,
-                cornerRadius: 11,
-                iconSize: 16
+                size: 42,
+                cornerRadius: 12,
+                iconSize: 18
             )
 
             // Task Details
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(task.title)
-                    .font(.system(size: 15, weight: isCompleted ? .regular : .semibold))
+                    .font(.system(size: 18, weight: isCompleted ? .medium : .bold))
                     .foregroundColor(isCompleted ? Color.dmTextTertiary : Color.dmTextPrimary)
                     .strikethrough(isCompleted, color: Color.dmTextTertiary)
                     .lineLimit(2)
@@ -111,41 +111,41 @@ public struct DailyPrioritiesSection: View {
 
                 HStack(spacing: 6) {
                     if let proj = project {
-                        HStack(spacing: 3) {
+                        HStack(spacing: 4) {
                             Circle()
                                 .fill(theme.fg)
-                                .frame(width: 5, height: 5)
+                                .frame(width: 6, height: 6)
                             Text(proj.name)
-                                .font(.system(size: 11, weight: .bold, design: .rounded))
+                                .font(.system(size: 13, weight: .bold, design: .rounded))
                                 .foregroundColor(Color.dmTextSecondary)
                                 .lineLimit(1)
                         }
                     }
 
-                    HStack(spacing: 2) {
+                    HStack(spacing: 3) {
                         Image(systemName: "clock")
-                            .font(.system(size: 9))
+                            .font(.system(size: 11))
                             .foregroundColor(Color.dmTextTertiary)
                         Text("\(task.estimatedDurationMinutes)m")
-                            .font(.system(size: 10, weight: .semibold, design: .rounded))
+                            .font(.system(size: 13, weight: .semibold, design: .rounded))
                             .foregroundColor(Color.dmTextTertiary)
                     }
 
                     if task.importance >= .high {
                         Text(task.importance.displayName)
-                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
                             .foregroundColor(task.importance == .critical ? Color.dmCoral : Color.dmAmber)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 1.5)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 2)
                             .background(task.importance == .critical ? Color.dmCoralBg : Color.dmAmberBg)
                             .clipShape(Capsule())
                             .lineLimit(1)
                     } else if let due = task.dueDate, due < Date() && !isCompleted {
                         Text("Overdue")
-                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
                             .foregroundColor(Color.dmDanger)
-                            .padding(.horizontal, 5)
-                            .padding(.vertical, 1.5)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 2)
                             .background(Color.dmCoralBg)
                             .clipShape(Capsule())
                             .lineLimit(1)
@@ -157,11 +157,11 @@ public struct DailyPrioritiesSection: View {
 
             // Subtle chevron to edit
             Image(systemName: "chevron.right")
-                .font(.system(size: 11, weight: .semibold))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundColor(Color.dmTextTertiary.opacity(0.5))
         }
         .padding(.horizontal, DMSpacing.md)
-        .padding(.vertical, DMSpacing.sm + 2)
+        .padding(.vertical, DMSpacing.sm + 4)
         .background(Color.dmCard)
         .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay(

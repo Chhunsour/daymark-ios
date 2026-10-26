@@ -30,20 +30,20 @@ public struct DailyOverviewHeader: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: DMSpacing.xs) {
             HStack(alignment: .center) {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text("\(greetingText), Alex")
-                        .font(.system(size: 24, weight: .bold, design: .default))
+                        .font(.dmGreeting)
                         .foregroundColor(Color.dmTextPrimary)
 
                     Text(dateFormatted)
-                        .font(.system(size: 14, weight: .medium))
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundColor(Color.dmTextSecondary)
                 }
 
                 Spacer()
 
                 // Header actions: Daily Review + Avatar
-                HStack(spacing: DMSpacing.xs + 2) {
+                HStack(spacing: DMSpacing.xs + 3) {
                     if let onReview = onReviewTap {
                         Button {
                             let generator = UIImpactFeedbackGenerator(style: .light)
@@ -53,7 +53,7 @@ public struct DailyOverviewHeader: View {
                             ZStack {
                                 Circle()
                                     .fill(Color.dmCard)
-                                    .frame(width: 38, height: 38)
+                                    .frame(width: 42, height: 42)
                                     .overlay(
                                         Circle()
                                             .stroke(Color.dmBorder.opacity(0.8), lineWidth: 0.8)
@@ -61,7 +61,7 @@ public struct DailyOverviewHeader: View {
                                     .shadow(color: Color.black.opacity(0.02), radius: 2, x: 0, y: 1)
 
                                 Image(systemName: "sparkles")
-                                    .font(.system(size: 15, weight: .semibold))
+                                    .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(Color.dmHighlight)
                             }
                         }
@@ -74,7 +74,7 @@ public struct DailyOverviewHeader: View {
                         generator.impactOccurred()
                         onAvatarTap?()
                     } label: {
-                        DaymarkAvatarView(size: 38, initials: "AL", systemIcon: nil)
+                        DaymarkAvatarView(size: 42, initials: "AL", systemIcon: nil)
                     }
                     .buttonStyle(DaymarkPressableStyle())
                 }
@@ -84,28 +84,28 @@ public struct DailyOverviewHeader: View {
             let completed = appState.completedTasksToday.count
             let total = appState.todayTasks.count
 
-            HStack(spacing: DMSpacing.xs + 2) {
+            HStack(spacing: DMSpacing.xs + 3) {
                 ZStack {
                     Circle()
-                        .stroke(Color.dmBorder, lineWidth: 2)
-                        .frame(width: 14, height: 14)
+                        .stroke(Color.dmBorder, lineWidth: 2.5)
+                        .frame(width: 17, height: 17)
 
                     Circle()
                         .trim(from: 0, to: CGFloat(appState.todayProgressRatio))
                         .stroke(
                             appState.todayProgressRatio >= 1.0 ? Color.dmSuccess : Color.dmAccent,
-                            style: StrokeStyle(lineWidth: 2, lineCap: .round)
+                            style: StrokeStyle(lineWidth: 2.5, lineCap: .round)
                         )
-                        .frame(width: 14, height: 14)
+                        .frame(width: 17, height: 17)
                         .rotationEffect(.degrees(-90))
                 }
 
                 Text(total == 0 ? "No tasks for today" : "\(completed) of \(total) completed")
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
                     .foregroundColor(Color.dmTextPrimary)
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 4.5)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
             .background(Color.dmCard)
             .clipShape(Capsule())
             .overlay(

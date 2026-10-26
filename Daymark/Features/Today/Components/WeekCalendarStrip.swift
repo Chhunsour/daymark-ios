@@ -75,12 +75,12 @@ public struct WeekCalendarStrip: View {
                                     ? UIColor(red: 0.20, green: 0.42, blue: 0.98, alpha: 1.0) // Cobalt in dark
                                     : UIColor(red: 0.14, green: 0.14, blue: 0.18, alpha: 1.0) // Charcoal in light
                             }))
-                            .frame(width: 40, height: 40)
+                            .frame(width: 44, height: 44)
                             .shadow(color: Color.black.opacity(0.12), radius: 4, x: 0, y: 2)
                     } else {
                         Circle()
                             .fill(Color.dmCard)
-                            .frame(width: 40, height: 40)
+                            .frame(width: 44, height: 44)
                             .overlay(
                                 Circle()
                                     .stroke(isToday ? Color.dmAccent.opacity(0.6) : Color.dmBorder.opacity(0.6), lineWidth: isToday ? 1.5 : 0.5)
@@ -92,27 +92,27 @@ public struct WeekCalendarStrip: View {
                         .font(.dmDayNumber)
                         .foregroundColor(isSelected ? Color.white : Color.dmTextPrimary)
                 }
-                .frame(width: 42, height: 42)
+                .frame(width: 46, height: 46)
 
                 // Mini task dots (Concept 3 style)
                 HStack(spacing: 3) {
                     if hasTasks {
                         Circle()
                             .fill(Color.dmAccent)
-                            .frame(width: 4, height: 4)
+                            .frame(width: 5, height: 5)
                     }
                     if hasCompleted {
                         Circle()
                             .fill(Color.dmSuccess)
-                            .frame(width: 4, height: 4)
+                            .frame(width: 5, height: 5)
                     }
                     if !hasTasks && !hasCompleted {
                         Circle()
                             .fill(Color.clear)
-                            .frame(width: 4, height: 4)
+                            .frame(width: 5, height: 5)
                     }
                 }
-                .frame(height: 5)
+                .frame(height: 6)
             }
             .frame(maxWidth: .infinity)
         }
