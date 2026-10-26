@@ -32,6 +32,15 @@
 		516C0545EEF97E0C1EAFA6F8 /* SchedulingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71BA736432020620DC10B26; };
 		2B6D223DFE697A2F42BD7B6F /* TimeSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73667751F4920F652D88752E; };
 		CDF626A32200824F3DC82153 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C400DA0E469FB2A86EC67A; };
+		DEC262FFDA870C38D813765E /* TaskDetailEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51F9FCE0429363B226A0D96; };
+		831430C0725EBFC87B6F4DEF /* CurrentTaskCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B842A27A51D183585B87FD8; };
+		AD6884715448E98599A3D2EF /* DailyOverviewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13767EE69D48E56C8AEB3DA; };
+		1C03AE3A22038A45479D61BF /* DailyPrioritiesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8468E843CB8BAD1EF0F6D72F; };
+		A5206A99F3B3C6FE3D4FD0C8 /* MissedTasksBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDDCDE81352E669DAD55E50; };
+		41EAD743F601C1D9C1A334EC /* MissedTasksResolutionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295263FBAEC2D02C8BDAB081; };
+		EFD0D994DC27B59EDD7579FB /* QuickCaptureSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003403226CEE497A2ED9F42B; };
+		7B3158D8AE11B67BEF6F2C6D /* TimelineSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0E515F74959B1FEEDE6080; };
+		57B5E1EA6CE6EBC068116BDE /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7297AF2CF50592B6761188D3; };
 		3FC651E61653A7034842ABFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BF08803D07505AFBCB91334; };
 		8D750D5DC06DE65E30F28816 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11EC69A898166FCF4D34038; };
 		822847023225806159B41DA0 /* DaymarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17521D0879C0AE9B490C57F1; };
@@ -79,6 +88,15 @@
 		D71BA736432020620DC10B26 /* SchedulingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SchedulingEngine.swift"; sourceTree = "<group>"; };
 		73667751F4920F652D88752E /* TimeSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeSlot.swift"; sourceTree = "<group>"; };
 		B4C400DA0E469FB2A86EC67A /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState.swift"; sourceTree = "<group>"; };
+		D51F9FCE0429363B226A0D96 /* TaskDetailEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskDetailEditorSheet.swift"; sourceTree = "<group>"; };
+		0B842A27A51D183585B87FD8 /* CurrentTaskCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrentTaskCard.swift"; sourceTree = "<group>"; };
+		F13767EE69D48E56C8AEB3DA /* DailyOverviewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyOverviewHeader.swift"; sourceTree = "<group>"; };
+		8468E843CB8BAD1EF0F6D72F /* DailyPrioritiesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyPrioritiesSection.swift"; sourceTree = "<group>"; };
+		3FDDCDE81352E669DAD55E50 /* MissedTasksBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MissedTasksBanner.swift"; sourceTree = "<group>"; };
+		295263FBAEC2D02C8BDAB081 /* MissedTasksResolutionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MissedTasksResolutionSheet.swift"; sourceTree = "<group>"; };
+		003403226CEE497A2ED9F42B /* QuickCaptureSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuickCaptureSheet.swift"; sourceTree = "<group>"; };
+		EA0E515F74959B1FEEDE6080 /* TimelineSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineSection.swift"; sourceTree = "<group>"; };
+		7297AF2CF50592B6761188D3 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TodayView.swift"; sourceTree = "<group>"; };
 		5BF08803D07505AFBCB91334 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets"; sourceTree = "<group>"; };
 		D11EC69A898166FCF4D34038 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppStateTests.swift"; sourceTree = "<group>"; };
 		17521D0879C0AE9B490C57F1 /* DaymarkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DaymarkTests.swift"; sourceTree = "<group>"; };
@@ -131,23 +149,12 @@
 		530C85862CC309D95D46636C /* Daymark */ = {
 			isa = PBXGroup;
 			children = (
-				71890557326BBBB4701BB83A /* Core */,
 				952C5BAD083AB2E6C3185947 /* App */,
+				936F6010E515CAAE85AC54BC /* Features */,
+				71890557326BBBB4701BB83A /* Core */,
 				5BF08803D07505AFBCB91334 /* Assets.xcassets */,
 			);
 			path = "Daymark"; sourceTree = "<group>";
-		};
-		71890557326BBBB4701BB83A /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				D5DB9AEF4546F18E10E1930E /* Models */,
-				F5514F6BC3B57857F891C431 /* Scheduling */,
-				D3AB9100BB9461D95A7B6410 /* State */,
-				18C2571930464B57526AA198 /* DesignSystem */,
-				34987BE36306B0FDA15B81B8 /* Persistence */,
-				2F59D6E2DBE90DB610F3308F /* Notifications */,
-			);
-			path = "Core"; sourceTree = "<group>";
 		};
 		952C5BAD083AB2E6C3185947 /* App */ = {
 			isa = PBXGroup;
@@ -156,6 +163,43 @@
 				98A9B43F7102420A12C07DD4 /* DaymarkApp.swift */,
 			);
 			path = "App"; sourceTree = "<group>";
+		};
+		936F6010E515CAAE85AC54BC /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				EFEEE3CDFC0A0450E5261F2E /* Today */,
+				0E478543E760037E6140C13D /* Inbox */,
+			);
+			path = "Features"; sourceTree = "<group>";
+		};
+		71890557326BBBB4701BB83A /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				D3AB9100BB9461D95A7B6410 /* State */,
+				34987BE36306B0FDA15B81B8 /* Persistence */,
+				D5DB9AEF4546F18E10E1930E /* Models */,
+				F5514F6BC3B57857F891C431 /* Scheduling */,
+				18C2571930464B57526AA198 /* DesignSystem */,
+				2F59D6E2DBE90DB610F3308F /* Notifications */,
+			);
+			path = "Core"; sourceTree = "<group>";
+		};
+		D3AB9100BB9461D95A7B6410 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				B4C400DA0E469FB2A86EC67A /* AppState.swift */,
+			);
+			path = "State"; sourceTree = "<group>";
+		};
+		34987BE36306B0FDA15B81B8 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				174A872D9CEA416A37FA4A63 /* DaymarkRepository.swift */,
+				7107D3EFA91A95D5D3342C95 /* LocalDaymarkRepository.swift */,
+				654BE5487A1011AFBA2D7DF9 /* SeedData.swift */,
+				CE8BD97FA58F7D496DE2ECFD /* SupabaseConfig.swift */,
+			);
+			path = "Persistence"; sourceTree = "<group>";
 		};
 		D5DB9AEF4546F18E10E1930E /* Models */ = {
 			isa = PBXGroup;
@@ -170,6 +214,14 @@
 			);
 			path = "Models"; sourceTree = "<group>";
 		};
+		EFEEE3CDFC0A0450E5261F2E /* Today */ = {
+			isa = PBXGroup;
+			children = (
+				882830F876670A1AE75604D4 /* Components */,
+				7297AF2CF50592B6761188D3 /* TodayView.swift */,
+			);
+			path = "Today"; sourceTree = "<group>";
+		};
 		F5514F6BC3B57857F891C431 /* Scheduling */ = {
 			isa = PBXGroup;
 			children = (
@@ -178,13 +230,6 @@
 				73667751F4920F652D88752E /* TimeSlot.swift */,
 			);
 			path = "Scheduling"; sourceTree = "<group>";
-		};
-		D3AB9100BB9461D95A7B6410 /* State */ = {
-			isa = PBXGroup;
-			children = (
-				B4C400DA0E469FB2A86EC67A /* AppState.swift */,
-			);
-			path = "State"; sourceTree = "<group>";
 		};
 		18C2571930464B57526AA198 /* DesignSystem */ = {
 			isa = PBXGroup;
@@ -196,15 +241,12 @@
 			);
 			path = "DesignSystem"; sourceTree = "<group>";
 		};
-		34987BE36306B0FDA15B81B8 /* Persistence */ = {
+		0E478543E760037E6140C13D /* Inbox */ = {
 			isa = PBXGroup;
 			children = (
-				174A872D9CEA416A37FA4A63 /* DaymarkRepository.swift */,
-				7107D3EFA91A95D5D3342C95 /* LocalDaymarkRepository.swift */,
-				654BE5487A1011AFBA2D7DF9 /* SeedData.swift */,
-				CE8BD97FA58F7D496DE2ECFD /* SupabaseConfig.swift */,
+				8E31CA22C4E32DB3FDD53F96 /* Components */,
 			);
-			path = "Persistence"; sourceTree = "<group>";
+			path = "Inbox"; sourceTree = "<group>";
 		};
 		2F59D6E2DBE90DB610F3308F /* Notifications */ = {
 			isa = PBXGroup;
@@ -220,6 +262,26 @@
 				577CE21A83DF0AA97DD32947 /* DaymarkButton.swift */,
 				978F91A1EDE108FE5A56740D /* DaymarkCard.swift */,
 				5C83DA942653F3250FDD7AC1 /* EmptyStateView.swift */,
+			);
+			path = "Components"; sourceTree = "<group>";
+		};
+		8E31CA22C4E32DB3FDD53F96 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				D51F9FCE0429363B226A0D96 /* TaskDetailEditorSheet.swift */,
+			);
+			path = "Components"; sourceTree = "<group>";
+		};
+		882830F876670A1AE75604D4 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				0B842A27A51D183585B87FD8 /* CurrentTaskCard.swift */,
+				F13767EE69D48E56C8AEB3DA /* DailyOverviewHeader.swift */,
+				8468E843CB8BAD1EF0F6D72F /* DailyPrioritiesSection.swift */,
+				3FDDCDE81352E669DAD55E50 /* MissedTasksBanner.swift */,
+				295263FBAEC2D02C8BDAB081 /* MissedTasksResolutionSheet.swift */,
+				003403226CEE497A2ED9F42B /* QuickCaptureSheet.swift */,
+				EA0E515F74959B1FEEDE6080 /* TimelineSection.swift */,
 			);
 			path = "Components"; sourceTree = "<group>";
 		};
@@ -360,6 +422,15 @@
 				516C0545EEF97E0C1EAFA6F8 /* SchedulingEngine.swift in Sources */,
 				2B6D223DFE697A2F42BD7B6F /* TimeSlot.swift in Sources */,
 				CDF626A32200824F3DC82153 /* AppState.swift in Sources */,
+				DEC262FFDA870C38D813765E /* TaskDetailEditorSheet.swift in Sources */,
+				831430C0725EBFC87B6F4DEF /* CurrentTaskCard.swift in Sources */,
+				AD6884715448E98599A3D2EF /* DailyOverviewHeader.swift in Sources */,
+				1C03AE3A22038A45479D61BF /* DailyPrioritiesSection.swift in Sources */,
+				A5206A99F3B3C6FE3D4FD0C8 /* MissedTasksBanner.swift in Sources */,
+				41EAD743F601C1D9C1A334EC /* MissedTasksResolutionSheet.swift in Sources */,
+				EFD0D994DC27B59EDD7579FB /* QuickCaptureSheet.swift in Sources */,
+				7B3158D8AE11B67BEF6F2C6D /* TimelineSection.swift in Sources */,
+				57B5E1EA6CE6EBC068116BDE /* TodayView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
