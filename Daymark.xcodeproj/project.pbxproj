@@ -23,6 +23,7 @@
 		18DB76B39FC9FDD8C69D0068 /* TaskImportance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E7E14192A6E738C5DA29BC; };
 		B8134A9CFF931F306EC134A7 /* TaskStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FEBB8731D0C178DEFEF776; };
 		476F01F9B94531CCFE165F18 /* UserScheduleProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D5C4DAF75C63A33149FFB9; };
+		1DFB76710A634A33B1BC1704 /* DaymarkNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA56FC619AC38FC127C45C0; };
 		AB2E144E2F2120C14BE9C39B /* DaymarkRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174A872D9CEA416A37FA4A63; };
 		06C9FFEB51EAFDC51B3D69E9 /* LocalDaymarkRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7107D3EFA91A95D5D3342C95; };
 		04D32EFAC0FE1D8DA4652E7E /* SeedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654BE5487A1011AFBA2D7DF9; };
@@ -35,6 +36,7 @@
 		31C13F94B494D66388140B1D /* DesignSystemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4377200E3CA7C8C6C0F6639B; };
 		1937ACACD11FA747E42CCCA6 /* DomainModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 724C260C62A9CF1B1AE381F3; };
 		1D9A049A8BB4A1279C1D642B /* MissedTaskDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEA95BFDC39861787233592; };
+		EA74FE15FEE3A03EA52848DF /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB38DFD7578D87C99D896CE; };
 		BA1618A931F7C4EE9317629D /* RepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66AB47ECC4F6F713DD48D3D; };
 		A3E3035D45E598C7AAE58C60 /* SchedulingEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD30C8BB8DAD03786F6532D; };
 /* End PBXBuildFile section */
@@ -66,6 +68,7 @@
 		25E7E14192A6E738C5DA29BC /* TaskImportance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskImportance.swift"; sourceTree = "<group>"; };
 		A3FEBB8731D0C178DEFEF776 /* TaskStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskStatus.swift"; sourceTree = "<group>"; };
 		15D5C4DAF75C63A33149FFB9 /* UserScheduleProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserScheduleProfile.swift"; sourceTree = "<group>"; };
+		1AA56FC619AC38FC127C45C0 /* DaymarkNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DaymarkNotificationManager.swift"; sourceTree = "<group>"; };
 		174A872D9CEA416A37FA4A63 /* DaymarkRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DaymarkRepository.swift"; sourceTree = "<group>"; };
 		7107D3EFA91A95D5D3342C95 /* LocalDaymarkRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocalDaymarkRepository.swift"; sourceTree = "<group>"; };
 		654BE5487A1011AFBA2D7DF9 /* SeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SeedData.swift"; sourceTree = "<group>"; };
@@ -78,6 +81,7 @@
 		4377200E3CA7C8C6C0F6639B /* DesignSystemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DesignSystemTests.swift"; sourceTree = "<group>"; };
 		724C260C62A9CF1B1AE381F3 /* DomainModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DomainModelTests.swift"; sourceTree = "<group>"; };
 		DBEA95BFDC39861787233592 /* MissedTaskDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MissedTaskDetectorTests.swift"; sourceTree = "<group>"; };
+		ADB38DFD7578D87C99D896CE /* NotificationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationManagerTests.swift"; sourceTree = "<group>"; };
 		A66AB47ECC4F6F713DD48D3D /* RepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepositoryTests.swift"; sourceTree = "<group>"; };
 		FCD30C8BB8DAD03786F6532D /* SchedulingEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SchedulingEngineTests.swift"; sourceTree = "<group>"; };
 		0A556B6A1C1971A2FC2B2365 /* Daymark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daymark.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,21 +127,11 @@
 		530C85862CC309D95D46636C /* Daymark */ = {
 			isa = PBXGroup;
 			children = (
-				71890557326BBBB4701BB83A /* Core */,
 				952C5BAD083AB2E6C3185947 /* App */,
+				71890557326BBBB4701BB83A /* Core */,
 				5BF08803D07505AFBCB91334 /* Assets.xcassets */,
 			);
 			path = "Daymark"; sourceTree = "<group>";
-		};
-		71890557326BBBB4701BB83A /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				18C2571930464B57526AA198 /* DesignSystem */,
-				D5DB9AEF4546F18E10E1930E /* Models */,
-				F5514F6BC3B57857F891C431 /* Scheduling */,
-				34987BE36306B0FDA15B81B8 /* Persistence */,
-			);
-			path = "Core"; sourceTree = "<group>";
 		};
 		952C5BAD083AB2E6C3185947 /* App */ = {
 			isa = PBXGroup;
@@ -147,15 +141,42 @@
 			);
 			path = "App"; sourceTree = "<group>";
 		};
-		18C2571930464B57526AA198 /* DesignSystem */ = {
+		71890557326BBBB4701BB83A /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				8F6687AF6CBF3D09AE39BA09 /* Components */,
-				AC4D754C6BC52095C50AF572 /* ColorTokens.swift */,
-				B54D7874DAF22BB9ECBB97FF /* SpacingTokens.swift */,
-				7F80B354A720F681A0AB2BA2 /* TypographyTokens.swift */,
+				2F59D6E2DBE90DB610F3308F /* Notifications */,
+				34987BE36306B0FDA15B81B8 /* Persistence */,
+				F5514F6BC3B57857F891C431 /* Scheduling */,
+				D5DB9AEF4546F18E10E1930E /* Models */,
+				18C2571930464B57526AA198 /* DesignSystem */,
 			);
-			path = "DesignSystem"; sourceTree = "<group>";
+			path = "Core"; sourceTree = "<group>";
+		};
+		2F59D6E2DBE90DB610F3308F /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				1AA56FC619AC38FC127C45C0 /* DaymarkNotificationManager.swift */,
+			);
+			path = "Notifications"; sourceTree = "<group>";
+		};
+		34987BE36306B0FDA15B81B8 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				174A872D9CEA416A37FA4A63 /* DaymarkRepository.swift */,
+				7107D3EFA91A95D5D3342C95 /* LocalDaymarkRepository.swift */,
+				654BE5487A1011AFBA2D7DF9 /* SeedData.swift */,
+				CE8BD97FA58F7D496DE2ECFD /* SupabaseConfig.swift */,
+			);
+			path = "Persistence"; sourceTree = "<group>";
+		};
+		F5514F6BC3B57857F891C431 /* Scheduling */ = {
+			isa = PBXGroup;
+			children = (
+				96E532033A5DFF2C398876D8 /* MissedTaskDetector.swift */,
+				D71BA736432020620DC10B26 /* SchedulingEngine.swift */,
+				73667751F4920F652D88752E /* TimeSlot.swift */,
+			);
+			path = "Scheduling"; sourceTree = "<group>";
 		};
 		D5DB9AEF4546F18E10E1930E /* Models */ = {
 			isa = PBXGroup;
@@ -170,24 +191,15 @@
 			);
 			path = "Models"; sourceTree = "<group>";
 		};
-		F5514F6BC3B57857F891C431 /* Scheduling */ = {
+		18C2571930464B57526AA198 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
-				96E532033A5DFF2C398876D8 /* MissedTaskDetector.swift */,
-				D71BA736432020620DC10B26 /* SchedulingEngine.swift */,
-				73667751F4920F652D88752E /* TimeSlot.swift */,
+				8F6687AF6CBF3D09AE39BA09 /* Components */,
+				AC4D754C6BC52095C50AF572 /* ColorTokens.swift */,
+				B54D7874DAF22BB9ECBB97FF /* SpacingTokens.swift */,
+				7F80B354A720F681A0AB2BA2 /* TypographyTokens.swift */,
 			);
-			path = "Scheduling"; sourceTree = "<group>";
-		};
-		34987BE36306B0FDA15B81B8 /* Persistence */ = {
-			isa = PBXGroup;
-			children = (
-				174A872D9CEA416A37FA4A63 /* DaymarkRepository.swift */,
-				7107D3EFA91A95D5D3342C95 /* LocalDaymarkRepository.swift */,
-				654BE5487A1011AFBA2D7DF9 /* SeedData.swift */,
-				CE8BD97FA58F7D496DE2ECFD /* SupabaseConfig.swift */,
-			);
-			path = "Persistence"; sourceTree = "<group>";
+			path = "DesignSystem"; sourceTree = "<group>";
 		};
 		8F6687AF6CBF3D09AE39BA09 /* Components */ = {
 			isa = PBXGroup;
@@ -206,6 +218,7 @@
 				4377200E3CA7C8C6C0F6639B /* DesignSystemTests.swift */,
 				724C260C62A9CF1B1AE381F3 /* DomainModelTests.swift */,
 				DBEA95BFDC39861787233592 /* MissedTaskDetectorTests.swift */,
+				ADB38DFD7578D87C99D896CE /* NotificationManagerTests.swift */,
 				A66AB47ECC4F6F713DD48D3D /* RepositoryTests.swift */,
 				FCD30C8BB8DAD03786F6532D /* SchedulingEngineTests.swift */,
 			);
@@ -325,6 +338,7 @@
 				18DB76B39FC9FDD8C69D0068 /* TaskImportance.swift in Sources */,
 				B8134A9CFF931F306EC134A7 /* TaskStatus.swift in Sources */,
 				476F01F9B94531CCFE165F18 /* UserScheduleProfile.swift in Sources */,
+				1DFB76710A634A33B1BC1704 /* DaymarkNotificationManager.swift in Sources */,
 				AB2E144E2F2120C14BE9C39B /* DaymarkRepository.swift in Sources */,
 				06C9FFEB51EAFDC51B3D69E9 /* LocalDaymarkRepository.swift in Sources */,
 				04D32EFAC0FE1D8DA4652E7E /* SeedData.swift in Sources */,
@@ -343,6 +357,7 @@
 				31C13F94B494D66388140B1D /* DesignSystemTests.swift in Sources */,
 				1937ACACD11FA747E42CCCA6 /* DomainModelTests.swift in Sources */,
 				1D9A049A8BB4A1279C1D642B /* MissedTaskDetectorTests.swift in Sources */,
+				EA74FE15FEE3A03EA52848DF /* NotificationManagerTests.swift in Sources */,
 				BA1618A931F7C4EE9317629D /* RepositoryTests.swift in Sources */,
 				A3E3035D45E598C7AAE58C60 /* SchedulingEngineTests.swift in Sources */,
 			);
