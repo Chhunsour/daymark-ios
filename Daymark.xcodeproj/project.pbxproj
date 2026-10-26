@@ -31,7 +31,9 @@
 		99129DCF9957FEAC8C80B76C /* MissedTaskDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E532033A5DFF2C398876D8; };
 		516C0545EEF97E0C1EAFA6F8 /* SchedulingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71BA736432020620DC10B26; };
 		2B6D223DFE697A2F42BD7B6F /* TimeSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73667751F4920F652D88752E; };
+		CDF626A32200824F3DC82153 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C400DA0E469FB2A86EC67A; };
 		3FC651E61653A7034842ABFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BF08803D07505AFBCB91334; };
+		8D750D5DC06DE65E30F28816 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11EC69A898166FCF4D34038; };
 		822847023225806159B41DA0 /* DaymarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17521D0879C0AE9B490C57F1; };
 		31C13F94B494D66388140B1D /* DesignSystemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4377200E3CA7C8C6C0F6639B; };
 		1937ACACD11FA747E42CCCA6 /* DomainModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 724C260C62A9CF1B1AE381F3; };
@@ -76,7 +78,9 @@
 		96E532033A5DFF2C398876D8 /* MissedTaskDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MissedTaskDetector.swift"; sourceTree = "<group>"; };
 		D71BA736432020620DC10B26 /* SchedulingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SchedulingEngine.swift"; sourceTree = "<group>"; };
 		73667751F4920F652D88752E /* TimeSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeSlot.swift"; sourceTree = "<group>"; };
+		B4C400DA0E469FB2A86EC67A /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState.swift"; sourceTree = "<group>"; };
 		5BF08803D07505AFBCB91334 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets"; sourceTree = "<group>"; };
+		D11EC69A898166FCF4D34038 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppStateTests.swift"; sourceTree = "<group>"; };
 		17521D0879C0AE9B490C57F1 /* DaymarkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DaymarkTests.swift"; sourceTree = "<group>"; };
 		4377200E3CA7C8C6C0F6639B /* DesignSystemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DesignSystemTests.swift"; sourceTree = "<group>"; };
 		724C260C62A9CF1B1AE381F3 /* DomainModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DomainModelTests.swift"; sourceTree = "<group>"; };
@@ -127,11 +131,23 @@
 		530C85862CC309D95D46636C /* Daymark */ = {
 			isa = PBXGroup;
 			children = (
-				952C5BAD083AB2E6C3185947 /* App */,
 				71890557326BBBB4701BB83A /* Core */,
+				952C5BAD083AB2E6C3185947 /* App */,
 				5BF08803D07505AFBCB91334 /* Assets.xcassets */,
 			);
 			path = "Daymark"; sourceTree = "<group>";
+		};
+		71890557326BBBB4701BB83A /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				D5DB9AEF4546F18E10E1930E /* Models */,
+				F5514F6BC3B57857F891C431 /* Scheduling */,
+				D3AB9100BB9461D95A7B6410 /* State */,
+				18C2571930464B57526AA198 /* DesignSystem */,
+				34987BE36306B0FDA15B81B8 /* Persistence */,
+				2F59D6E2DBE90DB610F3308F /* Notifications */,
+			);
+			path = "Core"; sourceTree = "<group>";
 		};
 		952C5BAD083AB2E6C3185947 /* App */ = {
 			isa = PBXGroup;
@@ -140,43 +156,6 @@
 				98A9B43F7102420A12C07DD4 /* DaymarkApp.swift */,
 			);
 			path = "App"; sourceTree = "<group>";
-		};
-		71890557326BBBB4701BB83A /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				2F59D6E2DBE90DB610F3308F /* Notifications */,
-				34987BE36306B0FDA15B81B8 /* Persistence */,
-				F5514F6BC3B57857F891C431 /* Scheduling */,
-				D5DB9AEF4546F18E10E1930E /* Models */,
-				18C2571930464B57526AA198 /* DesignSystem */,
-			);
-			path = "Core"; sourceTree = "<group>";
-		};
-		2F59D6E2DBE90DB610F3308F /* Notifications */ = {
-			isa = PBXGroup;
-			children = (
-				1AA56FC619AC38FC127C45C0 /* DaymarkNotificationManager.swift */,
-			);
-			path = "Notifications"; sourceTree = "<group>";
-		};
-		34987BE36306B0FDA15B81B8 /* Persistence */ = {
-			isa = PBXGroup;
-			children = (
-				174A872D9CEA416A37FA4A63 /* DaymarkRepository.swift */,
-				7107D3EFA91A95D5D3342C95 /* LocalDaymarkRepository.swift */,
-				654BE5487A1011AFBA2D7DF9 /* SeedData.swift */,
-				CE8BD97FA58F7D496DE2ECFD /* SupabaseConfig.swift */,
-			);
-			path = "Persistence"; sourceTree = "<group>";
-		};
-		F5514F6BC3B57857F891C431 /* Scheduling */ = {
-			isa = PBXGroup;
-			children = (
-				96E532033A5DFF2C398876D8 /* MissedTaskDetector.swift */,
-				D71BA736432020620DC10B26 /* SchedulingEngine.swift */,
-				73667751F4920F652D88752E /* TimeSlot.swift */,
-			);
-			path = "Scheduling"; sourceTree = "<group>";
 		};
 		D5DB9AEF4546F18E10E1930E /* Models */ = {
 			isa = PBXGroup;
@@ -191,6 +170,22 @@
 			);
 			path = "Models"; sourceTree = "<group>";
 		};
+		F5514F6BC3B57857F891C431 /* Scheduling */ = {
+			isa = PBXGroup;
+			children = (
+				96E532033A5DFF2C398876D8 /* MissedTaskDetector.swift */,
+				D71BA736432020620DC10B26 /* SchedulingEngine.swift */,
+				73667751F4920F652D88752E /* TimeSlot.swift */,
+			);
+			path = "Scheduling"; sourceTree = "<group>";
+		};
+		D3AB9100BB9461D95A7B6410 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				B4C400DA0E469FB2A86EC67A /* AppState.swift */,
+			);
+			path = "State"; sourceTree = "<group>";
+		};
 		18C2571930464B57526AA198 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -200,6 +195,23 @@
 				7F80B354A720F681A0AB2BA2 /* TypographyTokens.swift */,
 			);
 			path = "DesignSystem"; sourceTree = "<group>";
+		};
+		34987BE36306B0FDA15B81B8 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				174A872D9CEA416A37FA4A63 /* DaymarkRepository.swift */,
+				7107D3EFA91A95D5D3342C95 /* LocalDaymarkRepository.swift */,
+				654BE5487A1011AFBA2D7DF9 /* SeedData.swift */,
+				CE8BD97FA58F7D496DE2ECFD /* SupabaseConfig.swift */,
+			);
+			path = "Persistence"; sourceTree = "<group>";
+		};
+		2F59D6E2DBE90DB610F3308F /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				1AA56FC619AC38FC127C45C0 /* DaymarkNotificationManager.swift */,
+			);
+			path = "Notifications"; sourceTree = "<group>";
 		};
 		8F6687AF6CBF3D09AE39BA09 /* Components */ = {
 			isa = PBXGroup;
@@ -214,6 +226,7 @@
 		D8A0AA9B2726241740BF2205 /* DaymarkTests */ = {
 			isa = PBXGroup;
 			children = (
+				D11EC69A898166FCF4D34038 /* AppStateTests.swift */,
 				17521D0879C0AE9B490C57F1 /* DaymarkTests.swift */,
 				4377200E3CA7C8C6C0F6639B /* DesignSystemTests.swift */,
 				724C260C62A9CF1B1AE381F3 /* DomainModelTests.swift */,
@@ -346,6 +359,7 @@
 				99129DCF9957FEAC8C80B76C /* MissedTaskDetector.swift in Sources */,
 				516C0545EEF97E0C1EAFA6F8 /* SchedulingEngine.swift in Sources */,
 				2B6D223DFE697A2F42BD7B6F /* TimeSlot.swift in Sources */,
+				CDF626A32200824F3DC82153 /* AppState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +367,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D750D5DC06DE65E30F28816 /* AppStateTests.swift in Sources */,
 				822847023225806159B41DA0 /* DaymarkTests.swift in Sources */,
 				31C13F94B494D66388140B1D /* DesignSystemTests.swift in Sources */,
 				1937ACACD11FA747E42CCCA6 /* DomainModelTests.swift in Sources */,
