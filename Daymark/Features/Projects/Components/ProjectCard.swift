@@ -28,27 +28,43 @@ public struct ProjectCard: View {
         appState.projectProgressRatio(for: project.id)
     }
 
-    private var theme: PastelTheme {
-        PastelTheme.forProjectName(project.name)
+    private var accentColor: Color {
+        if !project.colorHex.isEmpty {
+            return Color(hex: project.colorHex)
+        }
+        return PastelTheme.forProjectName(project.name).fg
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: DMSpacing.mdSm) {
-            // Header with icon squircle, title, description, and status badge
-            HStack(alignment: .top, spacing: DMSpacing.sm) {
+        VStack(alignment: .leading, spacing: DMSpacing.sm + 3) {
+            // Header Row: Squircle Icon + Title/Description + Progress Ring + Chevron
+            HStack(spacing: DMSpacing.sm) {
+                // Workspace Squircle Icon with subtle tinted background
                 DaymarkSquircleIcon(
                     iconName: project.iconName,
-                    backgroundColor: theme.fg.opacity(0.14),
-                    iconColor: theme.fg,
+                    backgroundColor: accentColor.opacity(0.12),
+                    iconColor: accentColor,
                     size: 38,
                     cornerRadius: 11,
                     iconSize: 18
                 )
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(project.name)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(Color.dmTextPrimary)
+                    HStack(spacing: 6) {
+                        Text(project.name)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(Color.dmTextPrimary)
+
+                        if project.status != .active {
+                            Text(project.status.displayName)
+                                .font(.system(size: 10.5, weight: .semibold, design: .rounded))
+                                .foregroundColor(Color.dmTextTertiary)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.dmSecondaryCard)
+                                .clipShape(Capsule())
+                        }
+                    }
 
                     if let desc = project.description, !desc.isEmpty {
                         Text(desc)
@@ -58,75 +74,110 @@ public struct ProjectCard: View {
                     }
                 }
 
-                Spacer()
+                Spacer(minLength: 4)
 
-                HStack(spacing: DMSpacing.xs) {
-                    if project.status != .active {
-                        Text(project.status.displayName)
-                            .font(.system(size: 11.5, weight: .semibold, design: .rounded))
-                            .foregroundColor(Color.dmTextSecondary)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 2.5)
-                            .background(Color.dmCard)
-                            .clipShape(Capsule())
-                    }
+                // Compact Circular Progress Ring / Completion Badge
+                circularProgressBadge
+                    .padding(.trailing, 2)
 
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(Color.dmTextTertiary)
-                }
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundColor(Color.dmTextTertiary.opacity(0.7))
             }
 
-            // Refined Progress Bar with percentage (Concept 2 style)
-            VStack(alignment: .leading, spacing: 5) {
-                GeometryReader { geo in
-                    ZStack(alignment: .leading) {
-                        Capsule()
-                            .fill(Color.white.opacity(0.85))
-                            .frame(height: 5)
+            // Divider / Micro Progress Line
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.dmBorder.opacity(0.45))
+                        .frame(height: 3)
 
-                        Capsule()
-                            .fill(theme.fg)
-                            .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(progressRatio))), height: 5)
-                            .animation(.spring(response: 0.45, dampingFraction: 0.75), value: progressRatio)
-                    }
+                    Capsule()
+                        .fill(accentColor)
+                        .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(progressRatio))), height: 3)
+                        .animation(.spring(response: 0.45, dampingFraction: 0.75), value: progressRatio)
                 }
-                .frame(height: 5)
+            }
+            .frame(height: 3)
+            .padding(.top, 1)
 
-                // Meta Row with tasks done and milestones
-                HStack(alignment: .center) {
-                    Text("\(completedTasksCount) of \(totalTasksCount) tasks done")
-                        .font(.system(size: 12.5, weight: .semibold, design: .rounded))
-                        .foregroundColor(Color.dmTextSecondary)
-
-                    if !projectMilestones.isEmpty {
-                        Text("•")
-                            .font(.system(size: 11, weight: .bold))
-                            .foregroundColor(Color.dmTextTertiary)
-
-                        Text("\(completedMilestonesCount)/\(projectMilestones.count) milestones")
+            // Metadata Row
+            HStack(alignment: .center) {
+                if totalTasksCount == 0 {
+                    Text("No tasks yet")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(Color.dmTextTertiary)
+                } else if completedTasksCount == totalTasksCount {
+                    HStack(spacing: 4) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor(Color.dmSuccess)
+                        Text("All \(totalTasksCount) tasks done")
+                            .font(.system(size: 12, weight: .semibold, design: .rounded))
+                            .foregroundColor(Color.dmSuccess)
+                    }
+                } else {
+                    HStack(spacing: 5) {
+                        Circle()
+                            .fill(accentColor)
+                            .frame(width: 5, height: 5)
+                        Text("\(totalTasksCount - completedTasksCount) tasks remaining")
                             .font(.system(size: 12, weight: .medium, design: .rounded))
-                            .foregroundColor(Color.dmTextTertiary)
+                            .foregroundColor(Color.dmTextSecondary)
                     }
-
-                    Spacer()
-
-                    Text("\(Int(progressRatio * 100))%")
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
-                        .foregroundColor(theme.fg)
                 }
-                .padding(.top, 2)
+
+                if !projectMilestones.isEmpty {
+                    Text("•")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(Color.dmTextTertiary)
+
+                    Text("\(completedMilestonesCount)/\(projectMilestones.count) milestones")
+                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                        .foregroundColor(Color.dmTextTertiary)
+                }
+
+                Spacer()
+
+                Text("\(completedTasksCount)/\(totalTasksCount)")
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .foregroundColor(Color.dmTextTertiary)
             }
         }
         .padding(DMSpacing.md)
-        .background(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(theme.bg)
-        )
+        .background(Color.dmCard)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(theme.fg.opacity(0.22), lineWidth: 0.8)
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.dmBorder.opacity(0.7), lineWidth: 0.6)
         )
-        .shadow(color: theme.fg.opacity(0.06), radius: 6, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(0.02), radius: 4, x: 0, y: 1.5)
+    }
+
+    private var circularProgressBadge: some View {
+        ZStack {
+            if totalTasksCount > 0 && completedTasksCount == totalTasksCount {
+                Circle()
+                    .fill(Color.dmMintBg)
+                    .frame(width: 28, height: 28)
+                Image(systemName: "checkmark")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(Color.dmSuccess)
+            } else {
+                Circle()
+                    .stroke(Color.dmBorder.opacity(0.5), lineWidth: 2.2)
+                    .frame(width: 28, height: 28)
+
+                Circle()
+                    .trim(from: 0, to: CGFloat(progressRatio))
+                    .stroke(accentColor, style: StrokeStyle(lineWidth: 2.2, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+                    .frame(width: 28, height: 28)
+
+                Text("\(Int(progressRatio * 100))%")
+                    .font(.system(size: 8.5, weight: .bold, design: .rounded))
+                    .foregroundColor(Color.dmTextPrimary)
+            }
+        }
     }
 }

@@ -89,7 +89,7 @@ public struct ProjectDetailView: View {
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(DMSpacing.sm + 2)
-                                .background(Color.white.opacity(0.8))
+                                .background(Color.dmSecondaryCard)
                                 .clipShape(RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous))
 
                                 VStack(alignment: .leading, spacing: 3) {
@@ -100,7 +100,7 @@ public struct ProjectDetailView: View {
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(DMSpacing.sm + 2)
-                                .background(Color.white.opacity(0.8))
+                                .background(Color.dmSecondaryCard)
                                 .clipShape(RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous))
                             }
                             .padding(.top, 2)
@@ -111,7 +111,7 @@ public struct ProjectDetailView: View {
                                 GeometryReader { geo in
                                     ZStack(alignment: .leading) {
                                         Capsule()
-                                            .fill(Color.white.opacity(0.8))
+                                            .fill(Color.dmBorder.opacity(0.45))
                                             .frame(height: 6)
 
                                         Capsule()
@@ -139,13 +139,13 @@ public struct ProjectDetailView: View {
                         .padding(DMSpacing.mdLg)
                         .background(
                             RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
-                                .fill(theme.bg)
+                                .fill(Color.dmCard)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
-                                .stroke(theme.fg.opacity(0.20), lineWidth: 1.0)
+                                .stroke(Color.dmBorder.opacity(0.7), lineWidth: 0.8)
                         )
-                        .shadow(color: theme.fg.opacity(0.08), radius: 8, x: 0, y: 3)
+                        .shadow(color: Color.black.opacity(0.02), radius: 6, x: 0, y: 2)
                         .padding(.horizontal, DMSpacing.md)
 
                         // Milestones Section
