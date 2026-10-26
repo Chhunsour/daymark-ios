@@ -107,6 +107,7 @@ public struct DailyPrioritiesSection: View {
                     .foregroundColor(isCompleted ? Color.dmTextTertiary : Color.dmTextPrimary)
                     .strikethrough(isCompleted, color: Color.dmTextTertiary)
                     .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 HStack(spacing: DMSpacing.xs + 2) {
                     if let proj = project {
@@ -117,46 +118,49 @@ public struct DailyPrioritiesSection: View {
                             Text(proj.name)
                                 .font(.dmCaptionBold)
                                 .foregroundColor(Color.dmTextSecondary)
+                                .lineLimit(1)
                         }
                     }
 
-                    if let due = task.dueDate {
-                        Text("•")
-                            .font(.dmCaption)
-                            .foregroundColor(Color.dmTextTertiary)
-
-                        Text("Due \(timeString(from: due))")
-                            .font(.dmCaption)
-                            .foregroundColor(due < Date() && !isCompleted ? Color.dmDanger : Color.dmTextSecondary)
-                    }
-
                     if task.importance >= .high {
-                        Text("•")
-                            .font(.dmCaption)
-                            .foregroundColor(Color.dmTextTertiary)
-
                         Text(task.importance.displayName)
                             .font(.dmCaptionBold)
                             .foregroundColor(task.importance == .critical ? Color.dmCoral : Color.dmAmber)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 1.5)
+                            .background(task.importance == .critical ? Color.dmCoralBg : Color.dmAmberBg)
+                            .clipShape(Capsule())
+                            .lineLimit(1)
+                    } else if let due = task.dueDate, due < Date() && !isCompleted {
+                        Text("Overdue")
+                            .font(.dmCaptionBold)
+                            .foregroundColor(Color.dmDanger)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 1.5)
+                            .background(Color.dmCoralBg)
+                            .clipShape(Capsule())
+                            .lineLimit(1)
                     }
                 }
             }
 
             Spacer(minLength: 4)
 
-            // Right side: Estimated duration with clock icon (Concept 1 style)
+            // Right side: Estimated duration with capsule badge (Concept 1 style)
             if task.estimatedDurationMinutes > 0 {
-                VStack(alignment: .trailing, spacing: 2) {
-                    HStack(spacing: 3) {
-                        Image(systemName: "clock")
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundColor(Color.dmTextTertiary)
+                HStack(spacing: 3) {
+                    Image(systemName: "clock")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundColor(Color.dmTextTertiary)
 
-                        Text("\(task.estimatedDurationMinutes) min")
-                            .font(.dmCaptionBold)
-                            .foregroundColor(Color.dmTextSecondary)
-                    }
+                    Text("\(task.estimatedDurationMinutes)m")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
+                .padding(.horizontal, 7)
+                .padding(.vertical, 3.5)
+                .background(Color.dmSecondaryCard)
+                .clipShape(Capsule())
             }
         }
         .padding(.horizontal, DMSpacing.md)

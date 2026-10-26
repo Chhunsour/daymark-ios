@@ -96,6 +96,11 @@ public final class AppState {
             .sorted { ($0.scheduledStartTime ?? Date.distantPast) < ($1.scheduledStartTime ?? Date.distantPast) }
     }
 
+    public var scheduledTasksToday: [DaymarkTask] {
+        todayTasks.filter { $0.scheduledStartTime != nil && $0.status != .cancelled }
+            .sorted { ($0.scheduledStartTime ?? Date.distantPast) < ($1.scheduledStartTime ?? Date.distantPast) }
+    }
+
     public var unscheduledTodayTasks: [DaymarkTask] {
         todayTasks.filter { $0.scheduledStartTime == nil && $0.status != .completed }
             .sorted { $0.importance > $1.importance }

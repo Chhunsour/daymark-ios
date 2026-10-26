@@ -23,6 +23,12 @@ public struct TodayView: View {
         }
     }
 
+    private var selectedDateString: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, d MMMM"
+        return formatter.string(from: selectedDate)
+    }
+
     public var body: some View {
         NavigationStack {
             ScrollViewReader { proxy in
@@ -35,6 +41,36 @@ public struct TodayView: View {
 
                         // 2. Horizontal Week Calendar Strip (Concept 1 & 3 style)
                         WeekCalendarStrip(selectedDate: $selectedDate)
+
+                        if !Calendar.current.isDateInToday(selectedDate) {
+                            HStack {
+                                Image(systemName: "calendar")
+                                    .font(.system(size: 13, weight: .semibold))
+                                    .foregroundColor(Color.dmAccent)
+                                Text("Viewing \(selectedDateString)")
+                                    .font(.dmCaptionBold)
+                                    .foregroundColor(Color.dmTextPrimary)
+                                Spacer()
+                                Button {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        selectedDate = Date()
+                                    }
+                                } label: {
+                                    Text("Return to Today")
+                                        .font(.dmCaptionBold)
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 4)
+                                        .background(Color.dmAccent)
+                                        .clipShape(Capsule())
+                                }
+                            }
+                            .padding(.horizontal, DMSpacing.md)
+                            .padding(.vertical, 8)
+                            .background(Color.dmAccent.opacity(0.08))
+                            .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                            .padding(.horizontal, DMSpacing.md)
+                        }
 
                         // 3. Circular Quick Actions Row (Concept 3 style)
                         QuickActionRow(
@@ -78,9 +114,12 @@ public struct TodayView: View {
                         }
                         .id("timeline-section")
 
-                        Spacer(minLength: 120)
+                        Spacer(minLength: 40)
                     }
                     .padding(.vertical, DMSpacing.xs)
+                }
+                .safeAreaInset(edge: .bottom) {
+                    Color.clear.frame(height: 72)
                 }
                 .onAppear {
                     if CommandLine.arguments.contains("-ScrollToTimeline") {

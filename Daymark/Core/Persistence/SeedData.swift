@@ -88,17 +88,23 @@ public struct SeedData: Sendable {
     }
 
     public static func makeStarterRoutines() -> [DaymarkRoutine] {
-        [
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.timeZone = Calendar.current.timeZone
+        let todayKey = formatter.string(from: Date())
+
+        let morningItem1 = RoutineChecklistItem(title: "Confirm today's top 3-5 priorities")
+        let morningItem2 = RoutineChecklistItem(title: "Check calendar for fixed meetings and commute")
+        let morningItem3 = RoutineChecklistItem(title: "Triage unorganized Inbox captures (3 min)")
+
+        return [
             DaymarkRoutine(
                 title: "Morning Planning",
                 description: "Align focus and lock in today's highest leverage priorities.",
-                checklist: [
-                    RoutineChecklistItem(title: "Confirm today's top 3-5 priorities"),
-                    RoutineChecklistItem(title: "Check calendar for fixed meetings and commute"),
-                    RoutineChecklistItem(title: "Triage unorganized Inbox captures (3 min)")
-                ],
+                checklist: [morningItem1, morningItem2, morningItem3],
                 targetTimeOfDay: "08:15",
-                recurrenceDays: [] // Daily
+                recurrenceDays: [], // Daily
+                completionRecords: [todayKey: [morningItem1.id]]
             ),
             DaymarkRoutine(
                 title: "End-of-Day Review",
@@ -149,7 +155,7 @@ public struct SeedData: Sendable {
 
         // Priority 1
         if let task1 = try? DaymarkTask(
-            title: "Smile Media — Finalize Q4 Roadmap Sprint Scope",
+            title: "Finalize Q4 Roadmap Sprint Scope",
             notes: "Review deliverables with engineering leads and lock in release dates.",
             projectId: smileMediaId,
             dueDate: today,
@@ -166,7 +172,7 @@ public struct SeedData: Sendable {
 
         // Priority 2
         if let task2 = try? DaymarkTask(
-            title: "SlidesClock — Verify Native Onboarding & Permissions",
+            title: "Verify Native Onboarding & Permissions",
             notes: "Ensure notification permission is gentle and user experience is calm.",
             projectId: slidesClockId,
             dueDate: today,
@@ -183,7 +189,7 @@ public struct SeedData: Sendable {
 
         // Priority 3
         if let task3 = try? DaymarkTask(
-            title: "TovMuk Solution — Prepare Weekly Retainer Update",
+            title: "Prepare Weekly Retainer Update",
             notes: "Send concise bulleted progress email to key client.",
             projectId: tovmukId,
             dueDate: today,

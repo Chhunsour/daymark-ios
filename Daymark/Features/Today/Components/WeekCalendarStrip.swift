@@ -43,8 +43,17 @@ public struct WeekCalendarStrip: View {
         let dayNumber = calendar.component(.day, from: date)
 
         // Count tasks on this day for dots
-        let hasTasks = isToday && !appState.todayTasks.isEmpty
-        let hasCompleted = isToday && !appState.completedTasksToday.isEmpty
+        let dateTasks = appState.tasks.filter { task in
+            if let start = task.scheduledStartTime {
+                return calendar.isDate(start, inSameDayAs: date)
+            }
+            if let due = task.dueDate {
+                return calendar.isDate(due, inSameDayAs: date)
+            }
+            return false
+        }
+        let hasTasks = !dateTasks.isEmpty || (isToday && !appState.todayTasks.isEmpty)
+        let hasCompleted = dateTasks.contains(where: { $0.status == .completed }) || (isToday && !appState.completedTasksToday.isEmpty)
 
         return Button {
             let generator = UIImpactFeedbackGenerator(style: .light)

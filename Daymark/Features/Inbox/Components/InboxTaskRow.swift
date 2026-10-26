@@ -52,6 +52,7 @@ public struct InboxTaskRow: View {
                             Text(proj.name)
                                 .font(.dmCaptionBold)
                                 .foregroundColor(theme.fg)
+                                .lineLimit(1)
                         }
 
                         HStack(spacing: 2) {
@@ -71,6 +72,7 @@ public struct InboxTaskRow: View {
                                 .padding(.vertical, 2)
                                 .background(task.importance == .critical ? Color.dmCoralBg : Color.dmLilacBg)
                                 .clipShape(Capsule())
+                                .lineLimit(1)
                         }
 
                         if let due = task.dueDate {

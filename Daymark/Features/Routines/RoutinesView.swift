@@ -95,9 +95,12 @@ public struct RoutinesView: View {
                     .padding(.horizontal, DMSpacing.md)
                     .padding(.top, DMSpacing.xs)
 
-                    Spacer(minLength: 120)
+                    Spacer(minLength: 40)
                 }
                 .padding(.vertical, DMSpacing.sm)
+            }
+            .safeAreaInset(edge: .bottom) {
+                Color.clear.frame(height: 72)
             }
             .background(Color.dmBackground)
             .navigationTitle("Routines")
@@ -188,16 +191,36 @@ public struct RoutinesView: View {
             Divider()
                 .background(Color.dmBorder.opacity(0.5))
 
-            // Checklist items with Concept 1 style
+            // Checklist items with Concept 1 themed checks
             VStack(alignment: .leading, spacing: DMSpacing.xs + 2) {
                 ForEach(routine.checklist) { item in
                     let isChecked = routine.isItemCompleted(itemId: item.id, on: Date())
                     HStack(spacing: DMSpacing.mdSm) {
-                        DaymarkCheckbox(isChecked: isChecked) {
+                        Button {
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
                             Task {
                                 try? await appState.toggleRoutineItem(routineId: routine.id, itemId: item.id, on: Date())
                             }
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .stroke(isChecked ? theme.fg : Color.dmBorder, lineWidth: isChecked ? 2 : 1.5)
+                                    .frame(width: 22, height: 22)
+
+                                if isChecked {
+                                    Circle()
+                                        .fill(theme.fg)
+                                        .frame(width: 22, height: 22)
+
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 11, weight: .bold))
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            .frame(width: 28, height: 28)
                         }
+                        .buttonStyle(.plain)
 
                         Text(item.title)
                             .font(.dmBody)

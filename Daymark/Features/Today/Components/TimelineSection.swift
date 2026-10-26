@@ -66,13 +66,13 @@ public struct TimelineSection: View {
             } else {
                 VStack(spacing: DMSpacing.md) {
                     // Vertical Timeline track (Concept 3 style)
-                    if !appState.plannedTasksToday.isEmpty {
+                    if !appState.scheduledTasksToday.isEmpty {
                         VStack(spacing: 0) {
-                            ForEach(Array(appState.plannedTasksToday.enumerated()), id: \.element.id) { index, task in
+                            ForEach(Array(appState.scheduledTasksToday.enumerated()), id: \.element.id) { index, task in
                                 timelineRow(
                                     task: task,
                                     isFirst: index == 0,
-                                    isLast: index == appState.plannedTasksToday.count - 1
+                                    isLast: index == appState.scheduledTasksToday.count - 1
                                 )
                             }
                         }
@@ -155,6 +155,7 @@ public struct TimelineSection: View {
                         Capsule()
                             .fill(Color(red: 0.28, green: 0.42, blue: 0.58)) // Soft slate blue
                             .frame(width: 32, height: 48)
+                            .shadow(color: Color(red: 0.28, green: 0.42, blue: 0.58).opacity(0.35), radius: 4, x: 0, y: 2)
 
                         Image(systemName: icon)
                             .font(.system(size: 14, weight: .bold))
@@ -203,6 +204,7 @@ public struct TimelineSection: View {
                     .foregroundColor(isCompleted ? Color.dmTextTertiary : Color.dmTextPrimary)
                     .strikethrough(isCompleted, color: Color.dmTextTertiary)
                     .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 HStack(spacing: DMSpacing.xs) {
                     if let proj = project {
@@ -213,6 +215,7 @@ public struct TimelineSection: View {
                             Text(proj.name)
                                 .font(.dmCaptionBold)
                                 .foregroundColor(Color.dmTextSecondary)
+                                .lineLimit(1)
                         }
                     }
 
@@ -224,6 +227,7 @@ public struct TimelineSection: View {
                         Text(task.importance.displayName)
                             .font(.dmCaptionBold)
                             .foregroundColor(task.importance == .critical ? Color.dmCoral : Color.dmAmber)
+                            .lineLimit(1)
                     }
                 }
             }
@@ -231,8 +235,10 @@ public struct TimelineSection: View {
 
             Spacer()
 
-            // Completion toggle
-            DaymarkCheckbox(isChecked: isCompleted) {
+            // Completion toggle with Concept 3 colorful ring
+            Button {
+                let generator = UIImpactFeedbackGenerator(style: .light)
+                generator.impactOccurred()
                 Task {
                     if isCompleted {
                         try? await appState.reopenTask(task)
@@ -240,7 +246,26 @@ public struct TimelineSection: View {
                         try? await appState.completeTask(task)
                     }
                 }
+            } label: {
+                ZStack {
+                    Circle()
+                        .stroke(isCompleted ? Color.dmMint : theme.fg.opacity(0.6), lineWidth: 1.8)
+                        .frame(width: 22, height: 22)
+
+                    if isCompleted {
+                        Circle()
+                            .fill(Color.dmMint)
+                            .frame(width: 22, height: 22)
+
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+                }
+                .frame(width: 32, height: 32)
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, DMSpacing.md)
         .padding(.vertical, DMSpacing.xs + 2)

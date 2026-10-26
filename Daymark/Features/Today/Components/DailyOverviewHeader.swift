@@ -44,7 +44,7 @@ public struct DailyOverviewHeader: View {
                 Button {
                     onAvatarTap?()
                 } label: {
-                    DaymarkAvatarView(size: 44, initials: "AX", systemIcon: "person.crop.circle.fill")
+                    DaymarkAvatarView(size: 44, initials: "AL", systemIcon: nil)
                 }
                 .buttonStyle(DaymarkPressableStyle())
             }

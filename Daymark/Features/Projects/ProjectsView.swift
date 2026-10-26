@@ -103,9 +103,12 @@ public struct ProjectsView: View {
                     .padding(.horizontal, DMSpacing.md)
                     .padding(.top, DMSpacing.xs)
 
-                    Spacer(minLength: 120)
+                    Spacer(minLength: 40)
                 }
                 .padding(.vertical, DMSpacing.sm)
+            }
+            .safeAreaInset(edge: .bottom) {
+                Color.clear.frame(height: 72)
             }
             .background(Color.dmBackground)
             .navigationTitle("Workspaces")
