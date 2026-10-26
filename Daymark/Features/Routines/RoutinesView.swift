@@ -7,15 +7,95 @@ public struct RoutinesView: View {
 
     public init() {}
 
+    private var fullyCompletedCount: Int {
+        appState.routines.filter { $0.isFullyCompleted(on: Date()) }.count
+    }
+
     public var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: DMSpacing.md) {
-                    ForEach(appState.routines) { routine in
-                        routineCard(routine: routine)
-                    }
+                    // Hero Routine Banner (Concept 1 style)
+                    HStack(spacing: DMSpacing.md) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Daily Cadence")
+                                .font(.dmCaptionBold)
+                                .foregroundColor(Color.dmMint)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(Color.white)
+                                .clipShape(Capsule())
 
-                    Spacer(minLength: 90)
+                            Text("Routines that build momentum")
+                                .font(.dmTitle)
+                                .foregroundColor(Color.dmTextPrimary)
+                                .lineLimit(2)
+
+                            Text("\(fullyCompletedCount) of \(appState.routines.count) completed today • Keep the streak alive!")
+                                .font(.dmCaption)
+                                .foregroundColor(Color.dmTextSecondary)
+                        }
+
+                        Spacer()
+
+                        // Stylized habit/streak flame visual
+                        ZStack {
+                            Circle()
+                                .fill(Color.dmMint.opacity(0.15))
+                                .frame(width: 58, height: 58)
+
+                            Image(systemName: "flame.fill")
+                                .font(.system(size: 26, weight: .semibold))
+                                .foregroundColor(Color.dmMint)
+                        }
+                    }
+                    .padding(DMSpacing.lg)
+                    .background(
+                        RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
+                            .fill(Color.dmMintBg)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
+                            .stroke(Color.dmMint.opacity(0.25), lineWidth: 1.0)
+                    )
+                    .shadow(color: Color.dmMint.opacity(0.10), radius: 8, x: 0, y: 3)
+                    .padding(.horizontal, DMSpacing.md)
+                    .padding(.top, DMSpacing.xs)
+
+                    // Routines List
+                    VStack(spacing: DMSpacing.mdSm) {
+                        ForEach(appState.routines) { routine in
+                            routineCard(routine: routine)
+                        }
+                    }
+                    .padding(.horizontal, DMSpacing.md)
+
+                    // Add Routine Button
+                    Button {
+                        showingAddRoutine = true
+                    } label: {
+                        HStack(spacing: DMSpacing.xs + 2) {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 16, weight: .semibold))
+                            Text("New Routine")
+                                .font(.dmHeadline)
+                        }
+                        .foregroundColor(Color.dmAccent)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, DMSpacing.md)
+                        .background(Color.dmCard)
+                        .clipShape(RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
+                                .stroke(Color.dmBorder.opacity(0.7), lineWidth: 0.5)
+                        )
+                        .shadow(color: Color.black.opacity(0.02), radius: 4, x: 0, y: 1.5)
+                    }
+                    .buttonStyle(DaymarkPressableStyle())
+                    .padding(.horizontal, DMSpacing.md)
+                    .padding(.top, DMSpacing.xs)
+
+                    Spacer(minLength: 120)
                 }
                 .padding(.vertical, DMSpacing.sm)
             }
@@ -28,8 +108,12 @@ public struct RoutinesView: View {
                         showingAddRoutine = true
                     } label: {
                         Image(systemName: "plus")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(Color.dmAccent)
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(width: 32, height: 32)
+                            .background(Color.dmAccent)
+                            .clipShape(Circle())
+                            .shadow(color: Color.dmAccent.opacity(0.3), radius: 3, x: 0, y: 1.5)
                     }
                 }
             }
@@ -48,9 +132,19 @@ public struct RoutinesView: View {
     private func routineCard(routine: DaymarkRoutine) -> some View {
         let isFullyDone = routine.isFullyCompleted(on: Date())
         let completedCount = routine.checklist.filter { routine.isItemCompleted(itemId: $0.id, on: Date()) }.count
+        let theme = routineTheme(for: routine.title)
 
         return VStack(alignment: .leading, spacing: DMSpacing.sm) {
-            HStack {
+            HStack(alignment: .center, spacing: DMSpacing.mdSm) {
+                DaymarkSquircleIcon(
+                    iconName: routineIcon(for: routine.title),
+                    backgroundColor: theme.bg,
+                    iconColor: theme.fg,
+                    size: 44,
+                    cornerRadius: 13,
+                    iconSize: 20
+                )
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text(routine.title)
                         .font(.dmHeadline)
@@ -60,6 +154,7 @@ public struct RoutinesView: View {
                         Text(desc)
                             .font(.dmCaption)
                             .foregroundColor(Color.dmTextSecondary)
+                            .lineLimit(1)
                     }
                 }
 
@@ -67,20 +162,33 @@ public struct RoutinesView: View {
 
                 HStack(spacing: DMSpacing.xs) {
                     if let time = routine.targetTimeOfDay {
-                        DaymarkBadge(title: time, icon: "clock", variant: .neutral)
+                        HStack(spacing: 3) {
+                            Image(systemName: "clock")
+                                .font(.system(size: 10))
+                            Text(time)
+                                .font(.dmCaption)
+                        }
+                        .foregroundColor(Color.dmTextSecondary)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 3)
+                        .background(Color.dmSecondaryCard)
+                        .clipShape(Capsule())
                     }
 
-                    DaymarkBadge(
-                        title: "\(completedCount)/\(routine.checklist.count)",
-                        variant: isFullyDone ? .success : .neutral
-                    )
+                    Text("\(completedCount)/\(routine.checklist.count)")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(isFullyDone ? Color.white : Color.dmTextSecondary)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(isFullyDone ? Color.dmSuccess : Color.dmSecondaryCard)
+                        .clipShape(Capsule())
                 }
             }
 
             Divider()
                 .background(Color.dmBorder.opacity(0.5))
 
-            // Checklist items
+            // Checklist items with Concept 1 style
             VStack(alignment: .leading, spacing: DMSpacing.xs + 2) {
                 ForEach(routine.checklist) { item in
                     let isChecked = routine.isItemCompleted(itemId: item.id, on: Date())
@@ -94,7 +202,7 @@ public struct RoutinesView: View {
                         Text(item.title)
                             .font(.dmBody)
                             .foregroundColor(isChecked ? Color.dmTextTertiary : Color.dmTextPrimary)
-                            .strikethrough(isChecked)
+                            .strikethrough(isChecked, color: Color.dmTextTertiary)
 
                         Spacer()
                     }
@@ -104,12 +212,29 @@ public struct RoutinesView: View {
         }
         .padding(DMSpacing.md)
         .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
-                .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+            RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
+                .stroke(isFullyDone ? Color.dmSuccess.opacity(0.3) : Color.dmBorder.opacity(0.6), lineWidth: 0.5)
         )
-        .padding(.horizontal, DMSpacing.md)
+        .shadow(color: Color.black.opacity(0.025), radius: 6, x: 0, y: 2)
+    }
+
+    private func routineIcon(for title: String) -> String {
+        let t = title.lowercased()
+        if t.contains("morning") { return "sun.and.horizon.fill" }
+        if t.contains("end-of-day") || t.contains("evening") { return "moon.stars.fill" }
+        if t.contains("personal") || t.contains("health") { return "figure.walk" }
+        if t.contains("weekly") { return "calendar.badge.clock" }
+        return "checklist"
+    }
+
+    private func routineTheme(for title: String) -> PastelTheme {
+        let t = title.lowercased()
+        if t.contains("morning") { return PastelTheme(bg: Color.dmAmberBg, fg: Color.dmAmber) }
+        if t.contains("end-of-day") || t.contains("evening") { return PastelTheme(bg: Color.dmLilacBg, fg: Color.dmLilac) }
+        if t.contains("personal") || t.contains("health") { return PastelTheme(bg: Color.dmMintBg, fg: Color.dmMint) }
+        return PastelTheme(bg: Color.dmSkyBg, fg: Color.dmSky)
     }
 
     private func createRoutine() {

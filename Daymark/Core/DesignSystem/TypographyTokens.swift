@@ -42,4 +42,16 @@ public extension Font {
 
     /// Scheduled time slots & durations (13pt monospaced semibold)
     static let dmTime = Font.system(size: 13, weight: .semibold, design: .monospaced)
+
+    /// Warm screen greeting (24pt bold rounded)
+    static let dmGreeting = Font.system(size: 24, weight: .bold, design: .rounded)
+
+    /// Prominent day number in calendar strip (17pt bold rounded)
+    static let dmDayNumber = Font.system(size: 17, weight: .bold, design: .rounded)
+
+    /// Weekday initials in calendar strip (11pt medium)
+    static let dmWeekday = Font.system(size: 11, weight: .semibold, design: .rounded)
+
+    /// Stat and counter values (20pt bold rounded)
+    static let dmStatNumber = Font.system(size: 20, weight: .bold, design: .rounded)
 }

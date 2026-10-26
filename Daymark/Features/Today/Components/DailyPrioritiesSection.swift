@@ -11,21 +11,38 @@ public struct DailyPrioritiesSection: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: DMSpacing.sm) {
             // Section Header
-            HStack {
+            HStack(alignment: .firstTextBaseline) {
                 Text("Daily Priorities")
-                    .font(.dmSectionHeader)
-                    .foregroundColor(Color.dmTextSecondary)
+                    .font(.dmTitle)
+                    .foregroundColor(Color.dmTextPrimary)
 
                 Spacer()
 
-                Text("\(appState.todayPriorities.count) of 5")
-                    .font(.dmCaptionBold)
-                    .foregroundColor(Color.dmTextSecondary)
+                HStack(spacing: DMSpacing.xs) {
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 10))
+                        .foregroundColor(Color.dmAmber)
+
+                    Text("\(appState.todayPriorities.count) of 5")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
+                }
+                .padding(.horizontal, DMSpacing.sm + 2)
+                .padding(.vertical, 4)
+                .background(Color.dmCard)
+                .clipShape(Capsule())
+                .overlay(
+                    Capsule()
+                        .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                )
             }
             .padding(.horizontal, DMSpacing.md)
 
             if appState.todayPriorities.isEmpty {
                 VStack(spacing: DMSpacing.xs) {
+                    Image(systemName: "star.slash")
+                        .font(.system(size: 24))
+                        .foregroundColor(Color.dmTextTertiary)
                     Text("No daily priorities selected")
                         .font(.dmHeadline)
                         .foregroundColor(Color.dmTextPrimary)
@@ -35,44 +52,33 @@ public struct DailyPrioritiesSection: View {
                         .multilineTextAlignment(.center)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(DMSpacing.mdLg)
+                .padding(DMSpacing.lg)
                 .background(Color.dmCard)
-                .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous))
                 .overlay(
-                    RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                    RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
                         .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
                 )
                 .padding(.horizontal, DMSpacing.md)
             } else {
-                // Unified Grouped Card
-                VStack(spacing: 0) {
+                // Stack of individual elevated priority cards (Concept 1 style)
+                VStack(spacing: DMSpacing.sm) {
                     ForEach(Array(appState.todayPriorities.enumerated()), id: \.element.id) { index, task in
-                        priorityRow(task: task, rank: index + 1)
-
-                        if index < appState.todayPriorities.count - 1 {
-                            Divider()
-                                .background(Color.dmBorder.opacity(0.6))
-                                .padding(.leading, 48)
-                        }
+                        priorityCard(task: task, rank: index + 1)
                     }
                 }
-                .background(Color.dmCard)
-                .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
-                        .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
-                )
-                .shadow(color: Color.black.opacity(0.02), radius: 4, x: 0, y: 1.5)
                 .padding(.horizontal, DMSpacing.md)
             }
         }
     }
 
-    private func priorityRow(task: DaymarkTask, rank: Int) -> some View {
+    private func priorityCard(task: DaymarkTask, rank: Int) -> some View {
         let isCompleted = task.status == .completed
         let project = appState.projects.first(where: { $0.id == task.projectId })
+        let theme = PastelTheme.forProjectName(project?.name ?? "")
+        let icon = project?.iconName ?? "checklist"
 
-        return HStack(spacing: DMSpacing.sm) {
+        return HStack(spacing: DMSpacing.mdSm) {
             // Checkbox
             DaymarkCheckbox(isChecked: isCompleted) {
                 Task {
@@ -84,8 +90,18 @@ public struct DailyPrioritiesSection: View {
                 }
             }
 
+            // Squircle Icon Box (Concept 1 style)
+            DaymarkSquircleIcon(
+                iconName: icon,
+                backgroundColor: theme.bg,
+                iconColor: theme.fg,
+                size: 42,
+                cornerRadius: 12,
+                iconSize: 18
+            )
+
             // Task Info
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(task.title)
                     .font(.dmHeadline)
                     .foregroundColor(isCompleted ? Color.dmTextTertiary : Color.dmTextPrimary)
@@ -96,8 +112,8 @@ public struct DailyPrioritiesSection: View {
                     if let proj = project {
                         HStack(spacing: 3) {
                             Circle()
-                                .fill(Color(hex: proj.colorHex))
-                                .frame(width: 6, height: 6)
+                                .fill(theme.fg)
+                                .frame(width: 5, height: 5)
                             Text(proj.name)
                                 .font(.dmCaptionBold)
                                 .foregroundColor(Color.dmTextSecondary)
@@ -114,27 +130,44 @@ public struct DailyPrioritiesSection: View {
                             .foregroundColor(due < Date() && !isCompleted ? Color.dmDanger : Color.dmTextSecondary)
                     }
 
-                    if task.estimatedDurationMinutes > 0 {
+                    if task.importance >= .high {
                         Text("•")
                             .font(.dmCaption)
                             .foregroundColor(Color.dmTextTertiary)
 
-                        Text("\(task.estimatedDurationMinutes)m")
-                            .font(.dmCaption)
-                            .foregroundColor(Color.dmTextSecondary)
+                        Text(task.importance.displayName)
+                            .font(.dmCaptionBold)
+                            .foregroundColor(task.importance == .critical ? Color.dmCoral : Color.dmAmber)
                     }
                 }
             }
 
-            Spacer()
+            Spacer(minLength: 4)
 
-            // Subtle chevron
-            Image(systemName: "chevron.right")
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundColor(Color.dmTextTertiary.opacity(0.5))
+            // Right side: Estimated duration with clock icon (Concept 1 style)
+            if task.estimatedDurationMinutes > 0 {
+                VStack(alignment: .trailing, spacing: 2) {
+                    HStack(spacing: 3) {
+                        Image(systemName: "clock")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor(Color.dmTextTertiary)
+
+                        Text("\(task.estimatedDurationMinutes) min")
+                            .font(.dmCaptionBold)
+                            .foregroundColor(Color.dmTextSecondary)
+                    }
+                }
+            }
         }
         .padding(.horizontal, DMSpacing.md)
-        .padding(.vertical, DMSpacing.sm + 2)
+        .padding(.vertical, DMSpacing.mdSm)
+        .background(Color.dmCard)
+        .clipShape(RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
+                .stroke(isCompleted ? Color.dmBorder.opacity(0.3) : Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+        )
+        .shadow(color: Color.black.opacity(0.025), radius: 6, x: 0, y: 2)
         .contentShape(Rectangle())
         .onTapGesture {
             onSelectTask?(task)

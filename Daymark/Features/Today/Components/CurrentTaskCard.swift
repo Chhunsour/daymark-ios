@@ -29,134 +29,245 @@ public struct CurrentTaskCard: View {
 
         Group {
             if let task = activeOrNextTask {
-                VStack(alignment: .leading, spacing: DMSpacing.sm) {
-                    // Header Status Row
+                VStack(alignment: .leading, spacing: DMSpacing.mdSm) {
+                    // Top Status & Project Badges
                     HStack(alignment: .center) {
-                        HStack(spacing: DMSpacing.xs + 1) {
+                        HStack(spacing: DMSpacing.xs + 2) {
                             Circle()
-                                .fill(isCurrentActive ? Color.dmAccent : Color.dmHighlight)
-                                .frame(width: 7, height: 7)
+                                .fill(isCurrentActive ? Color.dmAccent : Color.dmPeach)
+                                .frame(width: 8, height: 8)
 
-                            Text(isCurrentActive ? "Focus" : "Up Next")
+                            Text(isCurrentActive ? "Focusing Now" : "Up Next Focus")
                                 .font(.dmCaptionBold)
-                                .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmHighlight)
+                                .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmPeach)
+
+                            Text("•")
+                                .font(.dmCaption)
+                                .foregroundColor(Color.dmTextTertiary)
+
+                            Text("\(task.estimatedDurationMinutes) min")
+                                .font(.dmCaptionBold)
+                                .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmPeach)
                         }
-                        .padding(.horizontal, DMSpacing.sm)
-                        .padding(.vertical, 3)
-                        .background(isCurrentActive ? Color.dmAccent.opacity(0.10) : Color.dmHighlight.opacity(0.10))
+                        .padding(.horizontal, DMSpacing.sm + 2)
+                        .padding(.vertical, 4.5)
+                        .background(isCurrentActive ? Color.dmAccent.opacity(0.12) : Color.dmCard)
                         .clipShape(Capsule())
+                        .shadow(color: Color.black.opacity(0.03), radius: 2, x: 0, y: 1)
 
                         Spacer()
 
                         if let proj = project {
+                            let theme = PastelTheme.forProjectName(proj.name)
                             HStack(spacing: DMSpacing.xs) {
                                 Image(systemName: proj.iconName)
                                     .font(.system(size: 11, weight: .semibold))
-                                    .foregroundColor(Color(hex: proj.colorHex))
+                                    .foregroundColor(theme.fg)
                                 Text(proj.name)
                                     .font(.dmCaptionBold)
-                                    .foregroundColor(Color.dmTextSecondary)
+                                    .foregroundColor(Color.dmTextPrimary)
                             }
-                            .padding(.horizontal, DMSpacing.sm)
-                            .padding(.vertical, 3)
-                            .background(Color.dmSecondaryCard)
+                            .padding(.horizontal, DMSpacing.sm + 2)
+                            .padding(.vertical, 4.5)
+                            .background(Color.dmCard)
                             .clipShape(Capsule())
+                            .shadow(color: Color.black.opacity(0.03), radius: 2, x: 0, y: 1)
                         }
                     }
 
-                    // Task Title & Optional Notes
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text(task.title)
-                            .font(.dmTitle)
-                            .foregroundColor(Color.dmTextPrimary)
-                            .lineLimit(2)
-                            .fixedSize(horizontal: false, vertical: true)
+                    // Content & Stylized Illustration Row
+                    HStack(alignment: .top, spacing: DMSpacing.md) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(task.title)
+                                .font(.dmTitle)
+                                .foregroundColor(Color.dmTextPrimary)
+                                .lineLimit(2)
+                                .fixedSize(horizontal: false, vertical: true)
 
-                        if let notes = task.notes, !notes.isEmpty {
-                            Text(notes)
-                                .font(.dmSubheadline)
-                                .foregroundColor(Color.dmTextSecondary)
-                                .lineLimit(1)
-                        }
-                    }
+                            if let notes = task.notes, !notes.isEmpty {
+                                Text(notes)
+                                    .font(.dmSubheadline)
+                                    .foregroundColor(Color.dmTextSecondary)
+                                    .lineLimit(2)
+                            }
 
-                    // Metadata & Actions Bar
-                    VStack(alignment: .leading, spacing: DMSpacing.sm) {
-                        HStack(spacing: DMSpacing.mdSm) {
                             if !timeFormatted.isEmpty {
-                                HStack(spacing: 3) {
-                                    Image(systemName: "clock")
+                                HStack(spacing: 5) {
+                                    Image(systemName: "clock.fill")
                                         .font(.system(size: 11))
+                                        .foregroundColor(Color.dmPeach)
                                     Text(timeFormatted)
-                                        .font(.dmCaption)
+                                        .font(.dmCaptionBold)
+                                        .foregroundColor(Color.dmTextSecondary)
                                 }
-                                .foregroundColor(Color.dmTextSecondary)
+                                .padding(.top, 2)
                             }
-
-                            HStack(spacing: 3) {
-                                Image(systemName: "hourglass")
-                                    .font(.system(size: 11))
-                                Text("\(task.estimatedDurationMinutes) min")
-                                    .font(.dmCaption)
-                            }
-                            .foregroundColor(Color.dmTextTertiary)
-
-                            Spacer()
                         }
 
-                        // Action Buttons
-                        HStack(spacing: DMSpacing.sm) {
-                            if task.status == .inProgress {
-                                DaymarkButton(title: "Pause", icon: "pause.fill", style: .secondary, size: .compact, isFullWidth: true) {
-                                    Task { try? await appState.pauseTask(task) }
-                                }
-                            } else {
-                                DaymarkButton(title: "Start Focus", icon: "play.fill", style: .tinted, size: .compact, isFullWidth: true) {
-                                    Task { try? await appState.startTask(task) }
-                                }
-                            }
+                        Spacer(minLength: 4)
 
-                            DaymarkButton(title: "Done", icon: "checkmark", style: .primary, size: .compact, isFullWidth: true) {
-                                Task { try? await appState.completeTask(task) }
+                        // Stylized Illustration Graphic (Concept 1 & 2 inspired)
+                        heroIllustration(isActive: isCurrentActive)
+                    }
+
+                    // Action Buttons Row
+                    HStack(spacing: DMSpacing.sm) {
+                        if task.status == .inProgress {
+                            Button {
+                                let generator = UIImpactFeedbackGenerator(style: .medium)
+                                generator.impactOccurred()
+                                Task { try? await appState.pauseTask(task) }
+                            } label: {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "pause.fill")
+                                        .font(.system(size: 13, weight: .bold))
+                                    Text("Pause Focus")
+                                        .font(.dmHeadline)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 12)
+                                .foregroundColor(.white)
+                                .background(Color.dmCocoa)
+                                .clipShape(Capsule())
+                                .shadow(color: Color.black.opacity(0.12), radius: 4, x: 0, y: 2)
                             }
+                            .buttonStyle(DaymarkPressableStyle())
+                        } else {
+                            Button {
+                                let generator = UIImpactFeedbackGenerator(style: .medium)
+                                generator.impactOccurred()
+                                Task { try? await appState.startTask(task) }
+                            } label: {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "play.fill")
+                                        .font(.system(size: 13, weight: .bold))
+                                    Text("Start Focus")
+                                        .font(.dmHeadline)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 12)
+                                .foregroundColor(.white)
+                                .background(Color.dmCocoa)
+                                .clipShape(Capsule())
+                                .shadow(color: Color.black.opacity(0.12), radius: 4, x: 0, y: 2)
+                            }
+                            .buttonStyle(DaymarkPressableStyle())
                         }
+
+                        Button {
+                            let generator = UIImpactFeedbackGenerator(style: .medium)
+                            generator.impactOccurred()
+                            Task { try? await appState.completeTask(task) }
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 13, weight: .bold))
+                                Text("Done")
+                                    .font(.dmHeadline)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .foregroundColor(Color.dmTextPrimary)
+                            .background(Color.dmCard)
+                            .clipShape(Capsule())
+                            .overlay(
+                                Capsule()
+                                    .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                            )
+                            .shadow(color: Color.black.opacity(0.04), radius: 3, x: 0, y: 1)
+                        }
+                        .buttonStyle(DaymarkPressableStyle())
                     }
                     .padding(.top, DMSpacing.xxs)
-                    .padding(.top, 2)
                 }
-                .padding(DMSpacing.md)
-                .background(Color.dmCard)
-                .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
-                        .stroke(isCurrentActive ? Color.dmAccent.opacity(0.8) : Color.dmBorder.opacity(0.6), lineWidth: isCurrentActive ? 1.5 : 0.5)
+                .padding(DMSpacing.lg)
+                .background(
+                    RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
+                        .fill(Color.dmPeachBg)
                 )
-                .shadow(color: Color.black.opacity(isCurrentActive ? 0.05 : 0.02), radius: 6, x: 0, y: 2)
+                .overlay(
+                    RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
+                        .stroke(Color.dmPeach.opacity(0.25), lineWidth: 1.0)
+                )
+                .shadow(color: Color.dmPeach.opacity(0.12), radius: 10, x: 0, y: 4)
                 .contentShape(Rectangle())
                 .onTapGesture {
                     onSelectTask?(task)
                 }
             } else {
-                HStack(spacing: DMSpacing.sm) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(Color.dmSuccess)
-                        .font(.system(size: 18))
+                // Serene all caught up state
+                HStack(spacing: DMSpacing.md) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.dmMintBg)
+                            .frame(width: 48, height: 48)
 
-                    Text("All caught up. No tasks scheduled right now.")
-                        .font(.dmBody)
-                        .foregroundColor(Color.dmTextSecondary)
+                        Image(systemName: "sun.max.fill")
+                            .foregroundColor(Color.dmMint)
+                            .font(.system(size: 24))
+                    }
+
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("All caught up for today")
+                            .font(.dmHeadline)
+                            .foregroundColor(Color.dmTextPrimary)
+
+                        Text("Great pacing! Capture ideas or enjoy your focus.")
+                            .font(.dmCaption)
+                            .foregroundColor(Color.dmTextSecondary)
+                    }
 
                     Spacer()
                 }
-                .padding(DMSpacing.md)
+                .padding(DMSpacing.mdLg)
                 .background(Color.dmCard)
-                .clipShape(RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous))
                 .overlay(
-                    RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous)
-                        .stroke(Color.dmBorder.opacity(0.5), lineWidth: 0.5)
+                    RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
+                        .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
                 )
+                .shadow(color: Color.black.opacity(0.03), radius: 4, x: 0, y: 2)
             }
         }
         .padding(.horizontal, DMSpacing.md)
+    }
+
+    /// Stylized focus clock visual element with ringing arcs (Concept 1 & 2 inspired)
+    private func heroIllustration(isActive: Bool) -> some View {
+        ZStack {
+            // Ambient outer soft glow ring
+            Circle()
+                .fill(Color.dmPeach.opacity(0.15))
+                .frame(width: 72, height: 72)
+
+            // Inner tinted container
+            Circle()
+                .fill(Color.dmCard)
+                .frame(width: 58, height: 58)
+                .shadow(color: Color.dmPeach.opacity(0.25), radius: 6, x: 0, y: 3)
+
+            // Stylized bell/clock visual
+            VStack(spacing: 1) {
+                Image(systemName: isActive ? "flame.fill" : "bell.fill")
+                    .font(.system(size: 24, weight: .semibold))
+                    .foregroundColor(Color.dmPeach)
+
+                Circle()
+                    .fill(Color.dmPeach.opacity(0.5))
+                    .frame(width: 4, height: 4)
+            }
+
+            // Radiating sound/focus arcs
+            Image(systemName: "waveform")
+                .font(.system(size: 10, weight: .bold))
+                .foregroundColor(Color.dmMint)
+                .offset(x: 26, y: -16)
+
+            Image(systemName: "sparkle")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundColor(Color.dmAmber)
+                .offset(x: -24, y: -18)
+        }
+        .frame(width: 76, height: 76)
     }
 }

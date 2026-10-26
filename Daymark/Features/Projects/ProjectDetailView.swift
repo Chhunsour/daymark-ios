@@ -37,19 +37,23 @@ public struct ProjectDetailView: View {
     public var body: some View {
         Group {
             if let project = project {
+                let theme = PastelTheme.forProjectName(project.name)
+
                 ScrollView {
                     VStack(alignment: .leading, spacing: DMSpacing.md + 4) {
-                        // Project Overview Header Card
+                        // Project Overview Hero Card (Concept 2 center style)
                         VStack(alignment: .leading, spacing: DMSpacing.sm + 2) {
-                            HStack(spacing: DMSpacing.sm) {
-                                Image(systemName: project.iconName)
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .foregroundColor(Color(hex: project.colorHex))
-                                    .frame(width: 44, height: 44)
-                                    .background(Color(hex: project.colorHex).opacity(0.12))
-                                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous))
+                            HStack(alignment: .top, spacing: DMSpacing.mdSm) {
+                                DaymarkSquircleIcon(
+                                    iconName: project.iconName,
+                                    backgroundColor: theme.fg.opacity(0.18),
+                                    iconColor: theme.fg,
+                                    size: 48,
+                                    cornerRadius: 14,
+                                    iconSize: 22
+                                )
 
-                                VStack(alignment: .leading, spacing: 2) {
+                                VStack(alignment: .leading, spacing: 3) {
                                     Text(project.name)
                                         .font(.dmTitle)
                                         .foregroundColor(Color.dmTextPrimary)
@@ -58,13 +62,48 @@ public struct ProjectDetailView: View {
                                         Text(desc)
                                             .font(.dmCaption)
                                             .foregroundColor(Color.dmTextSecondary)
+                                            .lineLimit(2)
                                     }
                                 }
 
                                 Spacer()
 
-                                DaymarkBadge(title: project.status.displayName, variant: .neutral)
+                                Button {
+                                    showingEditProject = true
+                                } label: {
+                                    Image(systemName: "pencil.circle.fill")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(theme.fg)
+                                }
                             }
+
+                            // Sub-Cards: Deadline & People (Concept 2 style)
+                            HStack(spacing: DMSpacing.sm) {
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text("Status")
+                                        .font(.dmCaption)
+                                        .foregroundColor(Color.dmTextTertiary)
+                                    Text(project.status.displayName)
+                                        .font(.dmCaptionBold)
+                                        .foregroundColor(Color.dmTextPrimary)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(DMSpacing.sm + 2)
+                                .background(Color.white.opacity(0.8))
+                                .clipShape(RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous))
+
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text("Team")
+                                        .font(.dmCaption)
+                                        .foregroundColor(Color.dmTextTertiary)
+                                    DaymarkAvatarStack(size: 18, count: 3)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(DMSpacing.sm + 2)
+                                .background(Color.white.opacity(0.8))
+                                .clipShape(RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous))
+                            }
+                            .padding(.top, 2)
 
                             // Progress Summary
                             let progress = appState.projectProgressRatio(for: project.id)
@@ -72,11 +111,11 @@ public struct ProjectDetailView: View {
                                 GeometryReader { geo in
                                     ZStack(alignment: .leading) {
                                         Capsule()
-                                            .fill(Color.dmSecondaryCard)
+                                            .fill(Color.white.opacity(0.8))
                                             .frame(height: 6)
 
                                         Capsule()
-                                            .fill(Color(hex: project.colorHex))
+                                            .fill(theme.fg)
                                             .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(progress))), height: 6)
                                     }
                                 }
@@ -84,7 +123,7 @@ public struct ProjectDetailView: View {
 
                                 HStack {
                                     Text("\(completedTasks.count) of \(associatedTasks.count) tasks done (\(Int(progress * 100))%)")
-                                        .font(.dmCaption)
+                                        .font(.dmCaptionBold)
                                         .foregroundColor(Color.dmTextSecondary)
 
                                     Spacer()
@@ -97,13 +136,16 @@ public struct ProjectDetailView: View {
                             }
                             .padding(.top, DMSpacing.xxs)
                         }
-                        .padding(DMSpacing.md)
-                        .background(Color.dmCard)
-                        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
-                                .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                        .padding(DMSpacing.mdLg)
+                        .background(
+                            RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
+                                .fill(theme.bg)
                         )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
+                                .stroke(theme.fg.opacity(0.20), lineWidth: 1.0)
+                        )
+                        .shadow(color: theme.fg.opacity(0.08), radius: 8, x: 0, y: 3)
                         .padding(.horizontal, DMSpacing.md)
 
                         // Milestones Section
@@ -136,7 +178,7 @@ public struct ProjectDetailView: View {
                                     .padding(.horizontal, DMSpacing.md)
                                     .padding(.vertical, DMSpacing.xs)
                             } else {
-                                VStack(spacing: DMSpacing.xs) {
+                                VStack(spacing: DMSpacing.xs + 2) {
                                     ForEach(milestones) { milestone in
                                         MilestoneRow(milestone: milestone) {
                                             editingMilestone = milestone
@@ -177,7 +219,7 @@ public struct ProjectDetailView: View {
                                     .padding(.horizontal, DMSpacing.md)
                                     .padding(.vertical, DMSpacing.xs)
                             } else {
-                                VStack(spacing: DMSpacing.xs) {
+                                VStack(spacing: DMSpacing.xs + 2) {
                                     ForEach(activeTasks) { task in
                                         taskRow(task: task)
                                     }
@@ -198,7 +240,7 @@ public struct ProjectDetailView: View {
                             }
                         }
 
-                        Spacer(minLength: 90)
+                        Spacer(minLength: 120)
                     }
                     .padding(.vertical, DMSpacing.sm)
                 }
@@ -273,18 +315,22 @@ public struct ProjectDetailView: View {
                                 .font(.system(size: 10))
                             Text("Priority")
                         }
-                        .font(.dmCaption)
-                        .foregroundColor(Color.dmWarning)
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmAmber)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Color.dmAmberBg)
+                        .clipShape(Capsule())
                     }
 
-                    if let due = task.dueDate {
-                        HStack(spacing: 2) {
-                            Image(systemName: "calendar")
-                                .font(.system(size: 10))
-                            Text(DateFormatter.localizedString(from: due, dateStyle: .short, timeStyle: .none))
-                        }
-                        .font(.dmCaption)
-                        .foregroundColor(Color.dmWarning)
+                    if task.importance >= .high {
+                        Text(task.importance.displayName)
+                            .font(.dmCaptionBold)
+                            .foregroundColor(task.importance == .critical ? Color.dmCoral : Color.dmHighlight)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background((task.importance == .critical ? Color.dmCoralBg : Color.dmLilacBg))
+                            .clipShape(Capsule())
                     }
                 }
             }
@@ -298,11 +344,12 @@ public struct ProjectDetailView: View {
         .padding(.horizontal, DMSpacing.md)
         .padding(.vertical, DMSpacing.sm + 2)
         .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+            RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
                 .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
         )
+        .shadow(color: Color.black.opacity(0.02), radius: 4, x: 0, y: 1.5)
         .contentShape(Rectangle())
         .onTapGesture {
             editingTask = task

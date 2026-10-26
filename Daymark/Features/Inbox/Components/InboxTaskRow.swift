@@ -17,6 +17,10 @@ public struct InboxTaskRow: View {
         return appState.projects.first(where: { $0.id == pId })
     }
 
+    private var theme: PastelTheme {
+        PastelTheme.forProjectName(project?.name ?? "")
+    }
+
     public var body: some View {
         Button(action: onSelect) {
             HStack(alignment: .center, spacing: DMSpacing.mdSm) {
@@ -25,8 +29,18 @@ public struct InboxTaskRow: View {
                     Task { try? await appState.completeTask(task) }
                 }
 
+                // Pastel Icon Squircle (Concept 1 & 2 style)
+                DaymarkSquircleIcon(
+                    iconName: project?.iconName ?? "tray.fill",
+                    backgroundColor: theme.bg,
+                    iconColor: theme.fg,
+                    size: 40,
+                    cornerRadius: 12,
+                    iconSize: 17
+                )
+
                 // Task Details
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(task.title)
                         .font(.dmBody)
                         .foregroundColor(Color.dmTextPrimary)
@@ -35,14 +49,9 @@ public struct InboxTaskRow: View {
 
                     HStack(spacing: DMSpacing.xs + 2) {
                         if let proj = project {
-                            HStack(spacing: 4) {
-                                Circle()
-                                    .fill(Color(hex: proj.colorHex))
-                                    .frame(width: 6, height: 6)
-                                Text(proj.name)
-                                    .font(.dmCaption)
-                                    .foregroundColor(Color.dmTextSecondary)
-                            }
+                            Text(proj.name)
+                                .font(.dmCaptionBold)
+                                .foregroundColor(theme.fg)
                         }
 
                         HStack(spacing: 2) {
@@ -55,13 +64,13 @@ public struct InboxTaskRow: View {
                         }
 
                         if task.importance >= .high {
-                            HStack(spacing: 2) {
-                                Image(systemName: task.importance.iconName)
-                                    .font(.system(size: 10))
-                                Text(task.importance.displayName)
-                                    .font(.dmCaption)
-                            }
-                            .foregroundColor(Color.dmAccent)
+                            Text(task.importance.displayName)
+                                .font(.dmCaptionBold)
+                                .foregroundColor(task.importance == .critical ? Color.dmCoral : Color.dmLilac)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(task.importance == .critical ? Color.dmCoralBg : Color.dmLilacBg)
+                                .clipShape(Capsule())
                         }
 
                         if let due = task.dueDate {
@@ -69,9 +78,9 @@ public struct InboxTaskRow: View {
                                 Image(systemName: "calendar")
                                     .font(.system(size: 10))
                                 Text(DateFormatter.localizedString(from: due, dateStyle: .short, timeStyle: .none))
-                                    .font(.dmCaption)
                             }
-                            .foregroundColor(Color.dmWarning)
+                            .font(.dmCaption)
+                            .foregroundColor(Color.dmAmber)
                         }
                     }
                 }
@@ -83,13 +92,14 @@ public struct InboxTaskRow: View {
                     .foregroundColor(Color.dmTextTertiary.opacity(0.6))
             }
             .padding(.horizontal, DMSpacing.md)
-            .padding(.vertical, DMSpacing.mdSm)
+            .padding(.vertical, DMSpacing.sm + 2)
             .background(Color.dmCard)
-            .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous))
             .overlay(
-                RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
                     .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
             )
+            .shadow(color: Color.black.opacity(0.02), radius: 4, x: 0, y: 1.5)
         }
         .buttonStyle(.plain)
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {

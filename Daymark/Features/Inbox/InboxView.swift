@@ -25,11 +25,12 @@ public struct InboxView: View {
                 // Top inline capture bar
                 HStack(spacing: DMSpacing.sm) {
                     Image(systemName: "plus")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color.dmAccent)
-                        .frame(width: 28, height: 28)
-                        .background(Color.dmAccent.opacity(0.12))
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(width: 32, height: 32)
+                        .background(Color.dmCoral)
                         .clipShape(Circle())
+                        .shadow(color: Color.dmCoral.opacity(0.3), radius: 3, x: 0, y: 1.5)
 
                     TextField("Quick capture task or thought...", text: $quickCaptureText)
                         .font(.dmBody)
@@ -47,7 +48,7 @@ public struct InboxView: View {
                                 .font(.dmCaptionBold)
                                 .foregroundColor(.white)
                                 .padding(.horizontal, DMSpacing.mdSm)
-                                .padding(.vertical, 6)
+                                .padding(.vertical, 7)
                                 .background(Color.dmAccent)
                                 .clipShape(Capsule())
                         }
@@ -57,11 +58,12 @@ public struct InboxView: View {
                 .padding(.horizontal, DMSpacing.md)
                 .padding(.vertical, DMSpacing.sm + 2)
                 .background(Color.dmCard)
-                .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous))
                 .overlay(
-                    RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                    RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
                         .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
                 )
+                .shadow(color: Color.black.opacity(0.025), radius: 5, x: 0, y: 2)
                 .padding(.horizontal, DMSpacing.md)
                 .padding(.top, DMSpacing.sm)
                 .padding(.bottom, DMSpacing.xs)
@@ -69,9 +71,9 @@ public struct InboxView: View {
                 // Workspace filter scroll
                 if !appState.projects.isEmpty && !appState.inboxTasks.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: DMSpacing.xs) {
+                        HStack(spacing: DMSpacing.xs + 2) {
                             filterChip(
-                                title: "All",
+                                title: "All Items",
                                 count: appState.inboxTasks.count,
                                 color: nil,
                                 isSelected: selectedProjectFilter == nil
@@ -84,10 +86,11 @@ public struct InboxView: View {
                             ForEach(appState.projects) { project in
                                 let count = appState.inboxTasks.filter { $0.projectId == project.id }.count
                                 if count > 0 {
+                                    let theme = PastelTheme.forProjectName(project.name)
                                     filterChip(
                                         title: project.name,
                                         count: count,
-                                        color: Color(hex: project.colorHex),
+                                        color: theme.fg,
                                         isSelected: selectedProjectFilter == project.id
                                     ) {
                                         withAnimation(.snappy(duration: 0.2)) {
@@ -139,6 +142,12 @@ public struct InboxView: View {
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
                         }
+
+                        // Bottom spacing for tab bar
+                        Color.clear
+                            .frame(height: 100)
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
                     }
                     .listStyle(.plain)
                     .scrollContentBackground(.hidden)
@@ -154,9 +163,9 @@ public struct InboxView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Text("\(appState.inboxTasks.count)")
                         .font(.dmCaptionBold)
-                        .foregroundColor(Color.dmTextSecondary)
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 3)
+                        .foregroundColor(Color.dmTextPrimary)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
                         .background(Color.dmSecondaryCard)
                         .clipShape(Capsule())
                 }
@@ -204,6 +213,7 @@ public struct InboxView: View {
                 Capsule()
                     .stroke(isSelected ? Color.clear : Color.dmBorder.opacity(0.6), lineWidth: 0.5)
             )
+            .shadow(color: Color.black.opacity(isSelected ? 0.08 : 0.02), radius: 3, x: 0, y: 1)
         }
         .buttonStyle(.plain)
     }

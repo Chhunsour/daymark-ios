@@ -27,10 +27,10 @@ public struct SettingsView: View {
             Form {
                 Section {
                     Stepper("Wake Up: \(wakeHour):00 AM", value: $wakeHour, in: 5...11)
-                    Stepper("Work Starts: \(workStartHour):00 AM (Smile Media)", value: $workStartHour, in: 7...12)
+                    Stepper("Work Starts: \(workStartHour):00 AM", value: $workStartHour, in: 7...12)
                     Stepper("Work Ends: \(workEndHour - 12):00 PM", value: $workEndHour, in: 13...22)
                     Stepper("Bedtime: \(bedTimeHour == 24 ? "Midnight" : "\(bedTimeHour - 12):00 PM")", value: $bedTimeHour, in: 21...25)
-                    Stepper("Buffer Gap Between Tasks: \(bufferGapMinutes) min", value: $bufferGapMinutes, in: 5...60, step: 5)
+                    Stepper("Buffer Gap: \(bufferGapMinutes) min", value: $bufferGapMinutes, in: 5...60, step: 5)
 
                     Button("Save Schedule Preferences") {
                         saveProfile()
@@ -38,39 +38,64 @@ public struct SettingsView: View {
                     .font(.dmHeadline)
                     .foregroundColor(Color.dmAccent)
                 } header: {
-                    Text("Daily Schedule Defaults")
-                        .font(.dmCaptionBold)
-                        .foregroundColor(Color.dmTextSecondary)
+                    HStack(spacing: DMSpacing.xs) {
+                        Image(systemName: "clock.fill")
+                            .foregroundColor(Color.dmAmber)
+                        Text("Daily Schedule Defaults")
+                            .font(.dmCaptionBold)
+                            .foregroundColor(Color.dmTextSecondary)
+                    }
                 }
 
                 Section {
                     NavigationLink {
                         RoutinesView()
                     } label: {
-                        HStack {
-                            Image(systemName: "checklist")
-                                .foregroundColor(Color.dmAccent)
-                            Text("Manage Routines")
-                                .font(.dmBody)
-                            Spacer()
-                            Text("\(appState.routines.count) active")
-                                .font(.dmCaption)
-                                .foregroundColor(Color.dmTextSecondary)
+                        HStack(spacing: DMSpacing.sm) {
+                            DaymarkSquircleIcon(
+                                iconName: "checklist",
+                                backgroundColor: Color.dmMintBg,
+                                iconColor: Color.dmMint,
+                                size: 36,
+                                cornerRadius: 10,
+                                iconSize: 16
+                            )
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Manage Routines")
+                                    .font(.dmBody)
+                                    .foregroundColor(Color.dmTextPrimary)
+                                Text("\(appState.routines.count) active cadences")
+                                    .font(.dmCaption)
+                                    .foregroundColor(Color.dmTextSecondary)
+                            }
                         }
                     }
                 } header: {
-                    Text("Daily Routines & Checklists")
-                        .font(.dmCaptionBold)
-                        .foregroundColor(Color.dmTextSecondary)
+                    HStack(spacing: DMSpacing.xs) {
+                        Image(systemName: "repeat")
+                            .foregroundColor(Color.dmMint)
+                        Text("Daily Routines & Checklists")
+                            .font(.dmCaptionBold)
+                            .foregroundColor(Color.dmTextSecondary)
+                    }
                 }
 
                 Section {
-                    HStack {
-                        Image(systemName: "bell.badge.fill")
-                            .foregroundColor(Color.dmWarning)
+                    HStack(spacing: DMSpacing.sm) {
+                        DaymarkSquircleIcon(
+                            iconName: "bell.badge.fill",
+                            backgroundColor: Color.dmAmberBg,
+                            iconColor: Color.dmAmber,
+                            size: 36,
+                            cornerRadius: 10,
+                            iconSize: 16
+                        )
+
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Task Start & Deadline Alerts")
                                 .font(.dmBody)
+                                .foregroundColor(Color.dmTextPrimary)
                             Text(notificationStatusText)
                                 .font(.dmCaption)
                                 .foregroundColor(Color.dmTextSecondary)
@@ -89,14 +114,18 @@ public struct SettingsView: View {
                         .foregroundColor(Color.dmAccent)
                     }
                 } header: {
-                    Text("Notifications & Alerts")
-                        .font(.dmCaptionBold)
-                        .foregroundColor(Color.dmTextSecondary)
+                    HStack(spacing: DMSpacing.xs) {
+                        Image(systemName: "bell.fill")
+                            .foregroundColor(Color.dmAmber)
+                        Text("Notifications & Alerts")
+                            .font(.dmCaptionBold)
+                            .foregroundColor(Color.dmTextSecondary)
+                    }
                 }
 
                 Section {
                     VStack(alignment: .leading, spacing: DMSpacing.xs) {
-                        HStack {
+                        HStack(spacing: 6) {
                             Circle()
                                 .fill(Color.dmSuccess)
                                 .frame(width: 8, height: 8)
@@ -120,9 +149,13 @@ public struct SettingsView: View {
                     }
                     .padding(.vertical, 4)
                 } header: {
-                    Text("Backend & Synchronization")
-                        .font(.dmCaptionBold)
-                        .foregroundColor(Color.dmTextSecondary)
+                    HStack(spacing: DMSpacing.xs) {
+                        Image(systemName: "cylinder.split.1x2.fill")
+                            .foregroundColor(Color.dmSky)
+                        Text("Backend & Synchronization")
+                            .font(.dmCaptionBold)
+                            .foregroundColor(Color.dmTextSecondary)
+                    }
                 }
 
                 Section {
@@ -144,9 +177,13 @@ public struct SettingsView: View {
                             .foregroundColor(Color.dmTextSecondary)
                     }
                 } header: {
-                    Text("About Daymark")
-                        .font(.dmCaptionBold)
-                        .foregroundColor(Color.dmTextSecondary)
+                    HStack(spacing: DMSpacing.xs) {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundColor(Color.dmLilac)
+                        Text("About Daymark")
+                            .font(.dmCaptionBold)
+                            .foregroundColor(Color.dmTextSecondary)
+                    }
                 }
             }
             .scrollContentBackground(.hidden)

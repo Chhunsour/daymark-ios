@@ -32,6 +32,8 @@ public enum DMRadius {
     public static let lg: CGFloat = 16
     /// 20pt large containers
     public static let xl: CGFloat = 20
+    /// 24pt modern hero cards
+    public static let xxl: CGFloat = 24
     /// 999pt full pill/capsule
     public static let full: CGFloat = 999
 }

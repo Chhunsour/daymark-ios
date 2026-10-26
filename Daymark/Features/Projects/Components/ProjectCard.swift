@@ -28,79 +28,104 @@ public struct ProjectCard: View {
         appState.projectProgressRatio(for: project.id)
     }
 
-    public var body: some View {
-        VStack(alignment: .leading, spacing: DMSpacing.sm + 2) {
-            // Header with icon, name, and status badge
-            HStack(spacing: DMSpacing.sm) {
-                Image(systemName: project.iconName)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(Color(hex: project.colorHex))
-                    .frame(width: 36, height: 36)
-                    .background(Color(hex: project.colorHex).opacity(0.12))
-                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous))
+    private var theme: PastelTheme {
+        PastelTheme.forProjectName(project.name)
+    }
 
-                VStack(alignment: .leading, spacing: 2) {
+    public var body: some View {
+        VStack(alignment: .leading, spacing: DMSpacing.mdSm) {
+            // Header with icon squircle, title, description, and status badge
+            HStack(alignment: .top, spacing: DMSpacing.mdSm) {
+                DaymarkSquircleIcon(
+                    iconName: project.iconName,
+                    backgroundColor: theme.fg.opacity(0.16),
+                    iconColor: theme.fg,
+                    size: 44,
+                    cornerRadius: 14,
+                    iconSize: 20
+                )
+
+                VStack(alignment: .leading, spacing: 3) {
                     Text(project.name)
-                        .font(.dmHeadline)
+                        .font(.dmTitle2)
                         .foregroundColor(Color.dmTextPrimary)
 
                     if let desc = project.description, !desc.isEmpty {
                         Text(desc)
                             .font(.dmCaption)
                             .foregroundColor(Color.dmTextSecondary)
-                            .lineLimit(1)
+                            .lineLimit(2)
                     }
                 }
 
                 Spacer()
 
-                if project.status != .active {
-                    DaymarkBadge(title: project.status.displayName, variant: .neutral)
-                }
+                HStack(spacing: DMSpacing.xs) {
+                    if project.status != .active {
+                        Text(project.status.displayName)
+                            .font(.dmCaptionBold)
+                            .foregroundColor(Color.dmTextSecondary)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(Color.white.opacity(0.7))
+                            .clipShape(Capsule())
+                    }
 
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(Color.dmTextTertiary.opacity(0.6))
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(Color.dmTextTertiary)
+                }
             }
 
-            // Refined progress bar
+            // Refined Progress Bar with percentage (Concept 2 style)
             VStack(alignment: .leading, spacing: 6) {
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         Capsule()
-                            .fill(Color.dmSecondaryCard)
-                            .frame(height: 5)
+                            .fill(Color.white.opacity(0.8))
+                            .frame(height: 6)
 
                         Capsule()
-                            .fill(Color(hex: project.colorHex))
-                            .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(progressRatio))), height: 5)
+                            .fill(theme.fg)
+                            .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(progressRatio))), height: 6)
                     }
                 }
-                .frame(height: 5)
+                .frame(height: 6)
 
-                HStack {
+                // Meta Row with tasks done, milestones, and avatar stack (Concept 2 style)
+                HStack(alignment: .center) {
                     Text("\(completedTasksCount) of \(totalTasksCount) tasks done")
-                        .font(.dmCaption)
+                        .font(.dmCaptionBold)
                         .foregroundColor(Color.dmTextSecondary)
 
-                    Spacer()
-
                     if !projectMilestones.isEmpty {
+                        Text("•")
+                            .font(.dmCaption)
+                            .foregroundColor(Color.dmTextTertiary)
+
                         Text("\(completedMilestonesCount)/\(projectMilestones.count) milestones")
                             .font(.dmCaption)
                             .foregroundColor(Color.dmTextTertiary)
                     }
+
+                    Spacer()
+
+                    // Collaborator avatar stack bubbles (Concept 2 style)
+                    DaymarkAvatarStack(size: 22, count: 4)
                 }
+                .padding(.top, 2)
             }
-            .padding(.top, DMSpacing.xxs)
         }
         .padding(DMSpacing.md)
-        .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
-                .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+        .background(
+            RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
+                .fill(theme.bg)
         )
+        .overlay(
+            RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
+                .stroke(theme.fg.opacity(0.20), lineWidth: 0.8)
+        )
+        .shadow(color: theme.fg.opacity(0.08), radius: 6, x: 0, y: 2)
     }
 }
 

@@ -48,13 +48,21 @@ def capture_screen(filename, args="", appearance="light", wait_sec=4):
     time.sleep(1)
 
 def main():
-    capture_screen("01_today_screen_light.png", args="-ResetData", appearance="light")
-    capture_screen("02_today_screen_dark.png", appearance="dark")
-    capture_screen("03_inbox_screen.png", args="-TabInbox", appearance="light")
-    capture_screen("04_workspaces_screen.png", args="-TabProjects", appearance="light")
-    capture_screen("05_workspace_detail.png", args="-ShowProjectDetail", appearance="light")
-    capture_screen("06_settings_screen.png", args="-ShowSettings", appearance="light")
-    capture_screen("07_routines_screen.png", args="-ShowRoutines", appearance="light")
+    # Pre-seed starter data
+    print("Pre-seeding starter data...")
+    run_cmd(f"xcrun simctl launch {SIMULATOR_ID} {BUNDLE_ID} -ResetData")
+    time.sleep(3)
+    run_cmd(f"xcrun simctl terminate {SIMULATOR_ID} {BUNDLE_ID}")
+    time.sleep(1)
+
+    capture_screen("01_today_screen_light.png", appearance="light", wait_sec=5)
+    capture_screen("02_today_screen_dark.png", appearance="dark", wait_sec=5)
+    capture_screen("03_inbox_screen.png", args="-TabInbox", appearance="light", wait_sec=5)
+    capture_screen("04_workspaces_screen.png", args="-TabProjects", appearance="light", wait_sec=5)
+    capture_screen("05_workspace_detail.png", args="-ShowProjectDetail", appearance="light", wait_sec=5)
+    capture_screen("06_settings_screen.png", args="-ShowSettings", appearance="light", wait_sec=5)
+    capture_screen("07_routines_screen.png", args="-ShowRoutines", appearance="light", wait_sec=5)
+    capture_screen("08_today_timeline_light.png", args="-ScrollToTimeline", appearance="light", wait_sec=5)
     
     # reset appearance to light
     set_appearance("light")
