@@ -16,9 +16,17 @@
 		472047F266CD6FDD55EC08D4 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C83DA942653F3250FDD7AC1; };
 		E95566D023CC30B8FB3BC4A0 /* SpacingTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54D7874DAF22BB9ECBB97FF; };
 		12DEA7AC5FCAD5C2700B7DEB /* TypographyTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F80B354A720F681A0AB2BA2; };
+		EE877216DBDD7E3DFFC341FE /* DaymarkMilestone.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98928FE5EA72ECEE506D72C; };
+		09FEF6EEDD2A87470D34F9AD /* DaymarkProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CFC9D54E6F81739D37DA58; };
+		F484A1A7E7DDF09290BEF284 /* DaymarkRoutine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA09A700F71D80FCE9D16D22; };
+		B2139046BD4B3C4DB6390154 /* DaymarkTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7783E3522CD56438B47B2BED; };
+		18DB76B39FC9FDD8C69D0068 /* TaskImportance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E7E14192A6E738C5DA29BC; };
+		B8134A9CFF931F306EC134A7 /* TaskStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FEBB8731D0C178DEFEF776; };
+		476F01F9B94531CCFE165F18 /* UserScheduleProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D5C4DAF75C63A33149FFB9; };
 		3FC651E61653A7034842ABFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BF08803D07505AFBCB91334; };
 		822847023225806159B41DA0 /* DaymarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17521D0879C0AE9B490C57F1; };
 		31C13F94B494D66388140B1D /* DesignSystemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4377200E3CA7C8C6C0F6639B; };
+		1937ACACD11FA747E42CCCA6 /* DomainModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 724C260C62A9CF1B1AE381F3; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,9 +49,17 @@
 		5C83DA942653F3250FDD7AC1 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmptyStateView.swift"; sourceTree = "<group>"; };
 		B54D7874DAF22BB9ECBB97FF /* SpacingTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SpacingTokens.swift"; sourceTree = "<group>"; };
 		7F80B354A720F681A0AB2BA2 /* TypographyTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TypographyTokens.swift"; sourceTree = "<group>"; };
+		D98928FE5EA72ECEE506D72C /* DaymarkMilestone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DaymarkMilestone.swift"; sourceTree = "<group>"; };
+		52CFC9D54E6F81739D37DA58 /* DaymarkProject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DaymarkProject.swift"; sourceTree = "<group>"; };
+		AA09A700F71D80FCE9D16D22 /* DaymarkRoutine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DaymarkRoutine.swift"; sourceTree = "<group>"; };
+		7783E3522CD56438B47B2BED /* DaymarkTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DaymarkTask.swift"; sourceTree = "<group>"; };
+		25E7E14192A6E738C5DA29BC /* TaskImportance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskImportance.swift"; sourceTree = "<group>"; };
+		A3FEBB8731D0C178DEFEF776 /* TaskStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskStatus.swift"; sourceTree = "<group>"; };
+		15D5C4DAF75C63A33149FFB9 /* UserScheduleProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserScheduleProfile.swift"; sourceTree = "<group>"; };
 		5BF08803D07505AFBCB91334 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets"; sourceTree = "<group>"; };
 		17521D0879C0AE9B490C57F1 /* DaymarkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DaymarkTests.swift"; sourceTree = "<group>"; };
 		4377200E3CA7C8C6C0F6639B /* DesignSystemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DesignSystemTests.swift"; sourceTree = "<group>"; };
+		724C260C62A9CF1B1AE381F3 /* DomainModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DomainModelTests.swift"; sourceTree = "<group>"; };
 		0A556B6A1C1971A2FC2B2365 /* Daymark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daymark.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD364709FDE60DC288A1A98B /* DaymarkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaymarkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -96,6 +112,7 @@
 		71890557326BBBB4701BB83A /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				D5DB9AEF4546F18E10E1930E /* Models */,
 				18C2571930464B57526AA198 /* DesignSystem */,
 			);
 			path = "Core"; sourceTree = "<group>";
@@ -107,6 +124,19 @@
 				98A9B43F7102420A12C07DD4 /* DaymarkApp.swift */,
 			);
 			path = "App"; sourceTree = "<group>";
+		};
+		D5DB9AEF4546F18E10E1930E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D98928FE5EA72ECEE506D72C /* DaymarkMilestone.swift */,
+				52CFC9D54E6F81739D37DA58 /* DaymarkProject.swift */,
+				AA09A700F71D80FCE9D16D22 /* DaymarkRoutine.swift */,
+				7783E3522CD56438B47B2BED /* DaymarkTask.swift */,
+				25E7E14192A6E738C5DA29BC /* TaskImportance.swift */,
+				A3FEBB8731D0C178DEFEF776 /* TaskStatus.swift */,
+				15D5C4DAF75C63A33149FFB9 /* UserScheduleProfile.swift */,
+			);
+			path = "Models"; sourceTree = "<group>";
 		};
 		18C2571930464B57526AA198 /* DesignSystem */ = {
 			isa = PBXGroup;
@@ -133,6 +163,7 @@
 			children = (
 				17521D0879C0AE9B490C57F1 /* DaymarkTests.swift */,
 				4377200E3CA7C8C6C0F6639B /* DesignSystemTests.swift */,
+				724C260C62A9CF1B1AE381F3 /* DomainModelTests.swift */,
 			);
 			path = "DaymarkTests"; sourceTree = "<group>";
 		};
@@ -243,6 +274,13 @@
 				472047F266CD6FDD55EC08D4 /* EmptyStateView.swift in Sources */,
 				E95566D023CC30B8FB3BC4A0 /* SpacingTokens.swift in Sources */,
 				12DEA7AC5FCAD5C2700B7DEB /* TypographyTokens.swift in Sources */,
+				EE877216DBDD7E3DFFC341FE /* DaymarkMilestone.swift in Sources */,
+				09FEF6EEDD2A87470D34F9AD /* DaymarkProject.swift in Sources */,
+				F484A1A7E7DDF09290BEF284 /* DaymarkRoutine.swift in Sources */,
+				B2139046BD4B3C4DB6390154 /* DaymarkTask.swift in Sources */,
+				18DB76B39FC9FDD8C69D0068 /* TaskImportance.swift in Sources */,
+				B8134A9CFF931F306EC134A7 /* TaskStatus.swift in Sources */,
+				476F01F9B94531CCFE165F18 /* UserScheduleProfile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,6 +290,7 @@
 			files = (
 				822847023225806159B41DA0 /* DaymarkTests.swift in Sources */,
 				31C13F94B494D66388140B1D /* DesignSystemTests.swift in Sources */,
+				1937ACACD11FA747E42CCCA6 /* DomainModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
