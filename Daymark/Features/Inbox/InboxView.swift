@@ -8,6 +8,7 @@ public struct InboxView: View {
     @State private var taskToDelete: DaymarkTask? = nil
     @State private var showDeleteAlert: Bool = false
     @State private var selectedProjectFilter: UUID? = nil
+    @Namespace private var filterNamespace
     @FocusState private var isCaptureFocused: Bool
 
     public init() {}
@@ -178,7 +179,13 @@ public struct InboxView: View {
     }
 
     private func filterChip(title: String, count: Int, color: Color?, isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
+        Button {
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+            withAnimation(.spring(response: 0.28, dampingFraction: 0.74)) {
+                action()
+            }
+        } label: {
             HStack(spacing: 5) {
                 if let dotColor = color {
                     Circle()
@@ -196,13 +203,21 @@ public struct InboxView: View {
             .foregroundColor(isSelected ? .white : Color.dmTextPrimary)
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
-            .background(isSelected ? Color.dmCocoa : Color.dmCard)
-            .clipShape(Capsule())
-            .overlay(
-                Capsule()
-                    .stroke(isSelected ? Color.clear : Color.dmBorder.opacity(0.7), lineWidth: 0.5)
-            )
-            .shadow(color: Color.black.opacity(isSelected ? 0.08 : 0.02), radius: 2, x: 0, y: 1)
+            .background {
+                if isSelected {
+                    Capsule()
+                        .fill(Color.dmCocoa)
+                        .matchedGeometryEffect(id: "activeFilterPill", in: filterNamespace)
+                        .shadow(color: Color.black.opacity(0.12), radius: 4, x: 0, y: 2)
+                } else {
+                    Capsule()
+                        .fill(Color.dmCard)
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.dmBorder.opacity(0.7), lineWidth: 0.5)
+                        )
+                }
+            }
         }
         .buttonStyle(.plain)
     }

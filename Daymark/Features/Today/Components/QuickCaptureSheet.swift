@@ -148,7 +148,9 @@ public struct QuickCaptureSheet: View {
                         HStack(spacing: DMSpacing.xs + 2) {
                             ForEach(quickDurations, id: \.self) { mins in
                                 Button {
-                                    durationMinutes = mins
+                                    withAnimation(.spring(response: 0.28, dampingFraction: 0.72)) {
+                                        durationMinutes = mins
+                                    }
                                 } label: {
                                     Text("\(mins)m")
                                         .font(.dmCaptionBold)
@@ -158,7 +160,7 @@ public struct QuickCaptureSheet: View {
                                         .background(durationMinutes == mins ? Color.dmAccent : Color.dmSecondaryCard)
                                         .clipShape(Capsule())
                                 }
-                                .buttonStyle(.plain)
+                                .buttonStyle(DaymarkPressableStyle())
                             }
                         }
                     }
@@ -172,7 +174,9 @@ public struct QuickCaptureSheet: View {
                         HStack(spacing: DMSpacing.xs) {
                             ForEach(TaskImportance.allCases, id: \.self) { imp in
                                 Button {
-                                    importance = imp
+                                    withAnimation(.spring(response: 0.28, dampingFraction: 0.72)) {
+                                        importance = imp
+                                    }
                                 } label: {
                                     HStack(spacing: 3) {
                                         Image(systemName: imp.iconName)
@@ -186,7 +190,7 @@ public struct QuickCaptureSheet: View {
                                     .background(importance == imp ? Color.dmAccent : Color.dmSecondaryCard)
                                     .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm, style: .continuous))
                                 }
-                                .buttonStyle(.plain)
+                                .buttonStyle(DaymarkPressableStyle())
                             }
                         }
                     }
@@ -353,7 +357,11 @@ public struct QuickCaptureSheet: View {
     }
 
     private func projectChip(title: String, colorHex: String, icon: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
+        Button {
+            withAnimation(.spring(response: 0.28, dampingFraction: 0.72)) {
+                action()
+            }
+        } label: {
             HStack(spacing: 4) {
                 Image(systemName: icon)
                     .font(.system(size: 11, weight: .semibold))
@@ -371,7 +379,7 @@ public struct QuickCaptureSheet: View {
                     .stroke(isSelected ? Color.clear : Color.dmBorder.opacity(0.5), lineWidth: 0.5)
             )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(DaymarkPressableStyle())
     }
 
     private func submitTask() {

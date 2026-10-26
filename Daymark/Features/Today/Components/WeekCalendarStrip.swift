@@ -5,6 +5,7 @@ public struct WeekCalendarStrip: View {
     @Binding var selectedDate: Date
 
     @State private var showingDatePicker: Bool = false
+    @Namespace private var calendarNamespace
     private let calendar = Calendar.current
 
     public init(selectedDate: Binding<Date>) {
@@ -178,7 +179,7 @@ public struct WeekCalendarStrip: View {
         return Button {
             let generator = UIImpactFeedbackGenerator(style: .light)
             generator.impactOccurred()
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            withAnimation(.spring(response: 0.32, dampingFraction: 0.72)) {
                 selectedDate = date
             }
         } label: {
@@ -191,6 +192,7 @@ public struct WeekCalendarStrip: View {
                     if isSelected {
                         Circle()
                             .fill(Color.dmAccent)
+                            .matchedGeometryEffect(id: "selectedDayCircle", in: calendarNamespace)
                             .frame(width: 38, height: 38)
                             .shadow(color: Color.dmAccent.opacity(0.35), radius: 6, x: 0, y: 3)
                     } else {

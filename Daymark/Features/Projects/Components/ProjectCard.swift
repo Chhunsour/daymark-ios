@@ -88,6 +88,7 @@ public struct ProjectCard: View {
                         Capsule()
                             .fill(theme.fg)
                             .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(progressRatio))), height: 5)
+                            .animation(.spring(response: 0.45, dampingFraction: 0.75), value: progressRatio)
                     }
                 }
                 .frame(height: 5)

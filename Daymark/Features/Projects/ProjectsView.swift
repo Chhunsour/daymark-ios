@@ -68,6 +68,7 @@ public struct ProjectsView: View {
                                     Capsule()
                                         .fill(Color.dmLilac)
                                         .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(overallProgressRatio))), height: 5)
+                                        .animation(.spring(response: 0.45, dampingFraction: 0.75), value: overallProgressRatio)
                                 }
                             }
                             .frame(height: 5)

@@ -10,6 +10,7 @@ public enum RoutineTabMode: String, CaseIterable, Identifiable {
 
 public struct RoutinesView: View {
     @Environment(AppState.self) private var appState
+    @Namespace private var routinePickerNamespace
     @State private var selectedMode: RoutineTabMode = .today
     @State private var showingAddHabitSheet: Bool = false
     @State private var expandedRoutineIds: Set<UUID> = []
@@ -48,6 +49,7 @@ public struct RoutinesView: View {
                         Spacer(minLength: 60)
                     }
                     .padding(.vertical, DMSpacing.xs)
+                    .animation(.easeInOut(duration: 0.18), value: selectedMode)
                 }
             }
             .safeAreaInset(edge: .bottom) {
@@ -85,7 +87,7 @@ public struct RoutinesView: View {
         HStack(spacing: 4) {
             ForEach(RoutineTabMode.allCases) { mode in
                 Button {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                    withAnimation(.spring(response: 0.32, dampingFraction: 0.76)) {
                         selectedMode = mode
                     }
                 } label: {
@@ -94,13 +96,14 @@ public struct RoutinesView: View {
                         .foregroundColor(selectedMode == mode ? Color.dmTextPrimary : Color.dmTextSecondary)
                         .padding(.vertical, 7)
                         .frame(maxWidth: .infinity)
-                        .background(
-                            selectedMode == mode
-                                ? RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .background {
+                            if selectedMode == mode {
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
                                     .fill(Color.dmCard)
                                     .shadow(color: Color.black.opacity(0.04), radius: 2, x: 0, y: 1)
-                                : nil
-                        )
+                                    .matchedGeometryEffect(id: "routinePickerPill", in: routinePickerNamespace)
+                            }
+                        }
                 }
                 .buttonStyle(.plain)
             }
@@ -291,30 +294,11 @@ public struct RoutinesView: View {
                 }
 
                 // Interactive Circular Checkmark Button
-                Button {
-                    let generator = UIImpactFeedbackGenerator(style: .medium)
-                    generator.impactOccurred()
+                DaymarkCheckbox(isChecked: isDone, accentColor: color, size: 26) {
                     Task {
                         try? await appState.toggleRoutine(id: routine.id, on: Date())
                     }
-                } label: {
-                    ZStack {
-                        Circle()
-                            .stroke(isDone ? color : Color.dmBorder, lineWidth: isDone ? 2.0 : 1.5)
-                            .frame(width: 28, height: 28)
-
-                        if isDone {
-                            Circle()
-                                .fill(color)
-                                .frame(width: 28, height: 28)
-
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 12, weight: .bold))
-                                .foregroundColor(.white)
-                        }
-                    }
                 }
-                .buttonStyle(.plain)
             }
 
             // Expanded checklist items
@@ -322,28 +306,21 @@ public struct RoutinesView: View {
                 VStack(spacing: 8) {
                     ForEach(routine.checklist) { item in
                         let itemDone = routine.isItemCompleted(itemId: item.id, on: Date())
-                        Button {
-                            let generator = UIImpactFeedbackGenerator(style: .light)
-                            generator.impactOccurred()
-                            Task {
-                                try? await appState.toggleRoutineItem(routineId: routine.id, itemId: item.id, on: Date())
+                        HStack(spacing: DMSpacing.sm) {
+                            DaymarkCheckbox(isChecked: itemDone, accentColor: color, size: 20) {
+                                Task {
+                                    try? await appState.toggleRoutineItem(routineId: routine.id, itemId: item.id, on: Date())
+                                }
                             }
-                        } label: {
-                            HStack(spacing: DMSpacing.sm) {
-                                Image(systemName: itemDone ? "checkmark.circle.fill" : "circle")
-                                    .font(.system(size: 20))
-                                    .foregroundColor(itemDone ? color : Color.dmTextTertiary)
 
-                                Text(item.title)
-                                    .font(.system(size: 16, weight: itemDone ? .regular : .medium))
-                                    .foregroundColor(itemDone ? Color.dmTextTertiary : Color.dmTextPrimary)
-                                    .strikethrough(itemDone, color: Color.dmTextTertiary)
+                            Text(item.title)
+                                .font(.system(size: 15, weight: itemDone ? .regular : .medium))
+                                .foregroundColor(itemDone ? Color.dmTextTertiary : Color.dmTextPrimary)
+                                .strikethrough(itemDone, color: Color.dmTextTertiary)
 
-                                Spacer()
-                            }
-                            .padding(.vertical, 2)
+                            Spacer()
                         }
-                        .buttonStyle(.plain)
+                        .padding(.vertical, 1)
                     }
                 }
                 .padding(.top, 4)

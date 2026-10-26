@@ -4,6 +4,7 @@ public struct ContentView: View {
     @Environment(AppState.self) private var appState
     @State private var selectedTab: Tab = .today
     @State private var showingQuickCapture: Bool = false
+    @Namespace private var dockNamespace
 
     public enum Tab: Hashable {
         case today
@@ -60,6 +61,7 @@ public struct ContentView: View {
                         .opacity(selectedTab == .routines ? 1 : 0)
                         .allowsHitTesting(selectedTab == .routines)
                 }
+                .animation(.easeInOut(duration: 0.18), value: selectedTab)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 // Concept 3 Floating Dock + FAB
@@ -127,7 +129,7 @@ public struct ContentView: View {
                         .foregroundColor(.white)
                 }
             }
-            .buttonStyle(DaymarkPressableStyle())
+            .buttonStyle(DaymarkBouncyPressableStyle())
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
@@ -161,7 +163,7 @@ public struct ContentView: View {
         return Button {
             let generator = UIImpactFeedbackGenerator(style: .light)
             generator.impactOccurred()
-            withAnimation(.spring(response: 0.28, dampingFraction: 0.76)) {
+            withAnimation(.spring(response: 0.32, dampingFraction: 0.74)) {
                 selectedTab = tab
             }
         } label: {
@@ -170,6 +172,7 @@ public struct ContentView: View {
                     .font(.system(size: 16, weight: isSelected ? .semibold : .regular))
                     .foregroundColor(isSelected ? Color.white : Color.dmTextSecondary)
                     .frame(width: 22, height: 20)
+                    .scaleEffect(isSelected ? 1.05 : 1.0)
                     .overlay(alignment: .topTrailing) {
                         if let b = badge, b > 0 {
                             dockBadge(count: b, isSelected: isSelected)
@@ -186,16 +189,19 @@ public struct ContentView: View {
             }
             .padding(.vertical, 6)
             .padding(.horizontal, 11)
-            .background(
-                Capsule()
-                    .fill(isSelected ? Color.dmAccent : Color.clear)
-            )
-            .shadow(
-                color: isSelected ? Color.dmAccent.opacity(0.35) : Color.clear,
-                radius: 8,
-                x: 0,
-                y: 3
-            )
+            .background {
+                if isSelected {
+                    Capsule()
+                        .fill(Color.dmAccent)
+                        .matchedGeometryEffect(id: "activeDockIndicator", in: dockNamespace)
+                        .shadow(
+                            color: Color.dmAccent.opacity(0.35),
+                            radius: 8,
+                            x: 0,
+                            y: 3
+                        )
+                }
+            }
         }
         .buttonStyle(.plain)
     }

@@ -103,7 +103,7 @@ public struct TimelineSection: View {
                         .background(Color.dmAccent.opacity(0.12))
                         .clipShape(Capsule())
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(DaymarkPressableStyle())
                 }
             }
             .padding(.horizontal, DMSpacing.md)
@@ -315,10 +315,8 @@ public struct TimelineSection: View {
 
                 Spacer(minLength: 4)
 
-                // Circular completion button on right (Concept 3 style)
-                Button {
-                    let generator = UIImpactFeedbackGenerator(style: .medium)
-                    generator.impactOccurred()
+                // Interactive Checkmark
+                DaymarkCheckbox(isChecked: isCompleted, accentColor: Color.dmSuccess, size: 24) {
                     Task {
                         if isCompleted {
                             try? await appState.reopenTask(task)
@@ -326,26 +324,7 @@ public struct TimelineSection: View {
                             try? await appState.completeTask(task)
                         }
                     }
-                } label: {
-                    ZStack {
-                        Circle()
-                            .stroke(
-                                isCompleted ? Color.dmSuccess : (isCurrent ? Color.dmAccent : Color.dmBorder),
-                                lineWidth: 1.8
-                            )
-                            .frame(width: 26, height: 26)
-
-                        if isCompleted {
-                            Circle()
-                                .fill(Color.dmSuccess)
-                                .frame(width: 17, height: 17)
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 10.5, weight: .bold))
-                                .foregroundColor(.white)
-                        }
-                    }
                 }
-                .buttonStyle(.plain)
                 .padding(.trailing, 2)
             }
             .padding(.horizontal, DMSpacing.sm + 4)
@@ -415,7 +394,7 @@ public struct TimelineSection: View {
                     .background(Color.dmAccent.opacity(0.1))
                     .clipShape(Capsule())
             }
-            .buttonStyle(.plain)
+            .buttonStyle(DaymarkPressableStyle())
         }
         .padding(.horizontal, DMSpacing.md)
         .padding(.vertical, DMSpacing.sm + 2)

@@ -11,3 +11,4 @@ project.xcworkspace/xcuserdata/
 # Temporary files
 *.swp
 *~
+.superpowers/

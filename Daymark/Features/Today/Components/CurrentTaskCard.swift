@@ -4,6 +4,8 @@ public struct CurrentTaskCard: View {
     @Environment(AppState.self) private var appState
     var onSelectTask: ((DaymarkTask) -> Void)?
 
+    @State private var isBreathing: Bool = false
+
     public init(onSelectTask: ((DaymarkTask) -> Void)? = nil) {
         self.onSelectTask = onSelectTask
     }
@@ -36,6 +38,8 @@ public struct CurrentTaskCard: View {
                             Circle()
                                 .fill(isCurrentActive ? Color.dmAccent : Color.dmPeach)
                                 .frame(width: 7, height: 7)
+                                .scaleEffect(isCurrentActive && isBreathing ? 1.25 : 1.0)
+                                .opacity(isCurrentActive && isBreathing ? 1.0 : 0.75)
 
                             Text(isCurrentActive ? "Focusing Now" : "Up Next Focus")
                                 .font(.system(size: 11.5, weight: .semibold, design: .rounded))
@@ -101,13 +105,21 @@ public struct CurrentTaskCard: View {
 
                         // Elegant Minimalist Focus Clock Badge
                         ZStack {
+                            if isCurrentActive {
+                                Circle()
+                                    .stroke(Color.dmAccent.opacity(isBreathing ? 0.35 : 0.08), lineWidth: 1.5)
+                                    .frame(width: 44, height: 44)
+                                    .scaleEffect(isBreathing ? 1.18 : 1.0)
+                            }
+
                             Circle()
-                                .fill(Color.dmPeach.opacity(0.14))
+                                .fill(isCurrentActive ? Color.dmAccent.opacity(0.14) : Color.dmPeach.opacity(0.14))
                                 .frame(width: 44, height: 44)
 
                             Image(systemName: isCurrentActive ? "flame.fill" : "timer")
                                 .font(.system(size: 18, weight: .semibold))
-                                .foregroundColor(Color.dmPeach)
+                                .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmPeach)
+                                .scaleEffect(isCurrentActive && isBreathing ? 1.08 : 1.0)
                         }
                     }
 
@@ -230,5 +242,10 @@ public struct CurrentTaskCard: View {
             }
         }
         .padding(.horizontal, DMSpacing.md)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.4).repeatForever(autoreverses: true)) {
+                isBreathing = true
+            }
+        }
     }
 }

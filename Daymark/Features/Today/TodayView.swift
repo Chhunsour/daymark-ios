@@ -25,6 +25,7 @@ public struct TodayView: View {
     @State private var showingEveningReview: Bool = false
     @State private var showingMorningConfirmation: Bool = false
     @State private var showingSettings: Bool = false
+    @Namespace private var modeNamespace
 
     public init() {
         if CommandLine.arguments.contains("-ShowSettings") {
@@ -116,21 +117,24 @@ public struct TodayView: View {
                         modeSwitcher
 
                         // 6. Active View Content
-                        switch selectedMode {
-                        case .schedule:
-                            TimelineSection(selectedDate: selectedDate) { task in
-                                selectedTaskToEdit = task
-                            }
-                            .id("timeline-section")
+                        Group {
+                            switch selectedMode {
+                            case .schedule:
+                                TimelineSection(selectedDate: selectedDate) { task in
+                                    selectedTaskToEdit = task
+                                }
+                                .id("timeline-section")
 
-                        case .priorities:
-                            DailyPrioritiesSection(selectedDate: selectedDate) { task in
-                                selectedTaskToEdit = task
-                            }
+                            case .priorities:
+                                DailyPrioritiesSection(selectedDate: selectedDate) { task in
+                                    selectedTaskToEdit = task
+                                }
 
-                        case .routines:
-                            TodayRoutinesQuickView(selectedDate: selectedDate)
+                            case .routines:
+                                TodayRoutinesQuickView(selectedDate: selectedDate)
+                            }
                         }
+                        .transition(.opacity.animation(.easeInOut(duration: 0.16)))
 
                         Spacer(minLength: 20)
                     }
@@ -187,7 +191,7 @@ public struct TodayView: View {
                 Button {
                     let generator = UIImpactFeedbackGenerator(style: .light)
                     generator.impactOccurred()
-                    withAnimation(.spring(response: 0.28, dampingFraction: 0.76)) {
+                    withAnimation(.spring(response: 0.32, dampingFraction: 0.74)) {
                         selectedMode = mode
                     }
                 } label: {
@@ -203,15 +207,21 @@ public struct TodayView: View {
                     .foregroundColor(isSelected ? Color.white : Color.dmTextSecondary)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 7)
-                    .background(
-                        isSelected ? Color.dmAccent : Color.dmCard
-                    )
-                    .clipShape(Capsule())
-                    .overlay(
-                        Capsule()
-                            .stroke(isSelected ? Color.clear : Color.dmBorder.opacity(0.8), lineWidth: 0.6)
-                    )
-                    .shadow(color: isSelected ? Color.dmAccent.opacity(0.32) : Color.black.opacity(0.02), radius: 6, x: 0, y: 2)
+                    .background {
+                        if isSelected {
+                            Capsule()
+                                .fill(Color.dmAccent)
+                                .matchedGeometryEffect(id: "activeModeIndicator", in: modeNamespace)
+                                .shadow(color: Color.dmAccent.opacity(0.32), radius: 6, x: 0, y: 2)
+                        } else {
+                            Capsule()
+                                .fill(Color.dmCard)
+                                .overlay(
+                                    Capsule()
+                                        .stroke(Color.dmBorder.opacity(0.8), lineWidth: 0.6)
+                                )
+                        }
+                    }
                 }
                 .buttonStyle(.plain)
             }
@@ -355,31 +365,12 @@ public struct TodayRoutinesQuickView: View {
 
                 Spacer()
 
-                // Circular Checkmark button for instant completion toggle
-                Button {
-                    let generator = UIImpactFeedbackGenerator(style: .medium)
-                    generator.impactOccurred()
+                // Interactive Checkmark for instant completion toggle
+                DaymarkCheckbox(isChecked: isDone, accentColor: color, size: 26) {
                     Task {
                         try? await appState.toggleRoutine(id: routine.id, on: selectedDate)
                     }
-                } label: {
-                    ZStack {
-                        Circle()
-                            .stroke(isDone ? color : Color.dmBorder, lineWidth: isDone ? 2.0 : 1.5)
-                            .frame(width: 28, height: 28)
-
-                        if isDone {
-                            Circle()
-                                .fill(color)
-                                .frame(width: 28, height: 28)
-
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 12, weight: .bold))
-                                .foregroundColor(.white)
-                        }
-                    }
                 }
-                .buttonStyle(.plain)
             }
 
             // Checklist Items
@@ -387,28 +378,21 @@ public struct TodayRoutinesQuickView: View {
                 VStack(spacing: 6) {
                     ForEach(routine.checklist) { item in
                         let itemCompleted = routine.isItemCompleted(itemId: item.id, on: selectedDate)
-                        Button {
-                            let generator = UIImpactFeedbackGenerator(style: .light)
-                            generator.impactOccurred()
-                            Task {
-                                try? await appState.toggleRoutineItem(routineId: routine.id, itemId: item.id, on: selectedDate)
+                        HStack(spacing: DMSpacing.sm) {
+                            DaymarkCheckbox(isChecked: itemCompleted, accentColor: color, size: 20) {
+                                Task {
+                                    try? await appState.toggleRoutineItem(routineId: routine.id, itemId: item.id, on: selectedDate)
+                                }
                             }
-                        } label: {
-                            HStack(spacing: DMSpacing.sm) {
-                                Image(systemName: itemCompleted ? "checkmark.circle.fill" : "circle")
-                                    .font(.system(size: 17))
-                                    .foregroundColor(itemCompleted ? color : Color.dmTextTertiary)
 
-                                Text(item.title)
-                                    .font(.system(size: 13.5, weight: itemCompleted ? .regular : .medium))
-                                    .foregroundColor(itemCompleted ? Color.dmTextTertiary : Color.dmTextPrimary)
-                                    .strikethrough(itemCompleted, color: Color.dmTextTertiary)
+                            Text(item.title)
+                                .font(.system(size: 13.5, weight: itemCompleted ? .regular : .medium))
+                                .foregroundColor(itemCompleted ? Color.dmTextTertiary : Color.dmTextPrimary)
+                                .strikethrough(itemCompleted, color: Color.dmTextTertiary)
 
-                                Spacer()
-                            }
-                            .padding(.vertical, 1.5)
+                            Spacer()
                         }
-                        .buttonStyle(.plain)
+                        .padding(.vertical, 1)
                     }
                 }
                 .padding(.top, 2)
