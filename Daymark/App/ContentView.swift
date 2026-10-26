@@ -166,23 +166,18 @@ public struct ContentView: View {
             }
         } label: {
             VStack(spacing: 3) {
-                ZStack(alignment: .topTrailing) {
-                    Image(systemName: isSelected ? activeIcon : inactiveIcon)
-                        .font(.system(size: 16, weight: isSelected ? .semibold : .regular))
-                        .foregroundColor(isSelected ? Color.white : Color.dmTextSecondary)
-                        .frame(width: 22, height: 20)
-
-                    if let b = badge, b > 0 {
-                        Text("\(b)")
-                            .font(.system(size: 9, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 4)
-                            .padding(.vertical, 1)
-                            .background(Color.dmDanger)
-                            .clipShape(Capsule())
-                            .offset(x: 10, y: -4)
+                Image(systemName: isSelected ? activeIcon : inactiveIcon)
+                    .font(.system(size: 16, weight: isSelected ? .semibold : .regular))
+                    .foregroundColor(isSelected ? Color.white : Color.dmTextSecondary)
+                    .frame(width: 22, height: 20)
+                    .overlay(alignment: .topTrailing) {
+                        if let b = badge, b > 0 {
+                            dockBadge(count: b, isSelected: isSelected)
+                                .alignmentGuide(.top) { d in d[VerticalAlignment.center] }
+                                .alignmentGuide(.trailing) { d in d[HorizontalAlignment.center] }
+                                .offset(x: 3, y: -2)
+                        }
                     }
-                }
 
                 Text(title)
                     .font(.system(size: 10.5, weight: isSelected ? .semibold : .medium))
@@ -192,9 +187,9 @@ public struct ContentView: View {
             .padding(.vertical, 6)
             .padding(.horizontal, 11)
             .background(
-                isSelected ? Color.dmAccent : Color.clear
+                Capsule()
+                    .fill(isSelected ? Color.dmAccent : Color.clear)
             )
-            .clipShape(Capsule())
             .shadow(
                 color: isSelected ? Color.dmAccent.opacity(0.35) : Color.clear,
                 radius: 8,
@@ -203,6 +198,28 @@ public struct ContentView: View {
             )
         }
         .buttonStyle(.plain)
+    }
+
+    @ViewBuilder
+    private func dockBadge(count: Int, isSelected: Bool) -> some View {
+        let text = count > 99 ? "99+" : "\(count)"
+        let isSingleDigit = count < 10
+
+        Text(text)
+            .font(.system(size: 9.5, weight: .bold, design: .rounded))
+            .monospacedDigit()
+            .foregroundColor(isSelected ? Color.dmAccent : Color.white)
+            .frame(minWidth: 16, minHeight: 16)
+            .padding(.horizontal, isSingleDigit ? 0 : 4)
+            .background(
+                Capsule()
+                    .fill(isSelected ? Color.white : Color.dmDanger)
+            )
+            .overlay(
+                Capsule()
+                    .stroke(isSelected ? Color.dmAccent : Color.dmCard, lineWidth: 1.5)
+            )
+            .shadow(color: Color.black.opacity(0.12), radius: 2, x: 0, y: 1)
     }
 }
 
