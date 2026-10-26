@@ -1,0 +1,395 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		781912346BB4748B66F01E98 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C915771469BDED51CD0DD55; };
+		D51DA90B2B1BEF323B447139 /* DaymarkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98A9B43F7102420A12C07DD4; };
+		3FC651E61653A7034842ABFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BF08803D07505AFBCB91334; };
+		822847023225806159B41DA0 /* DaymarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17521D0879C0AE9B490C57F1; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EAC7B1D8DB66779087C587D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9F27354508048BD09B3A2B0A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B196886D9A8480D20785D42D;
+			remoteInfo = Daymark;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		9C915771469BDED51CD0DD55 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView.swift"; sourceTree = "<group>"; };
+		98A9B43F7102420A12C07DD4 /* DaymarkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DaymarkApp.swift"; sourceTree = "<group>"; };
+		5BF08803D07505AFBCB91334 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets"; sourceTree = "<group>"; };
+		17521D0879C0AE9B490C57F1 /* DaymarkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DaymarkTests.swift"; sourceTree = "<group>"; };
+		0A556B6A1C1971A2FC2B2365 /* Daymark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daymark.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD364709FDE60DC288A1A98B /* DaymarkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaymarkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0422B190301F97924B6776CB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F512028984CA5AA46D7C34C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0A85897F1A32FE9B91C081CD = {
+			isa = PBXGroup;
+			children = (
+				530C85862CC309D95D46636C /* Daymark */,
+				D8A0AA9B2726241740BF2205 /* DaymarkTests */,
+				B88D7E26791946AEFDCC8BB7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B88D7E26791946AEFDCC8BB7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0A556B6A1C1971A2FC2B2365 /* Daymark.app */,
+				AD364709FDE60DC288A1A98B /* DaymarkTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		530C85862CC309D95D46636C /* Daymark */ = {
+			isa = PBXGroup;
+			children = (
+				952C5BAD083AB2E6C3185947 /* App */,
+				5BF08803D07505AFBCB91334 /* Assets.xcassets */,
+			);
+			path = "Daymark"; sourceTree = "<group>";
+		};
+		952C5BAD083AB2E6C3185947 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				9C915771469BDED51CD0DD55 /* ContentView.swift */,
+				98A9B43F7102420A12C07DD4 /* DaymarkApp.swift */,
+			);
+			path = "App"; sourceTree = "<group>";
+		};
+		D8A0AA9B2726241740BF2205 /* DaymarkTests */ = {
+			isa = PBXGroup;
+			children = (
+				17521D0879C0AE9B490C57F1 /* DaymarkTests.swift */,
+			);
+			path = "DaymarkTests"; sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B196886D9A8480D20785D42D /* Daymark */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 94CF95064F0B2CB934AF2EA1 /* Build configuration list for PBXNativeTarget "Daymark" */;
+			buildPhases = (
+				1048127CBD4956720465E8BC /* Sources */,
+				0422B190301F97924B6776CB /* Frameworks */,
+				CBB3D0384058B719D611893D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Daymark;
+			productName = Daymark;
+			productReference = 0A556B6A1C1971A2FC2B2365 /* Daymark.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F7FF6760DA5BEA746374DBB5 /* DaymarkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 65823A05CFC6BD24825F0966 /* Build configuration list for PBXNativeTarget "DaymarkTests" */;
+			buildPhases = (
+				EC931DD7E088F7FCFE8D88E1 /* Sources */,
+				3F512028984CA5AA46D7C34C /* Frameworks */,
+				7F7909A4668B60B95A23410E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4568C27E37CAA8274DA3FE7E /* PBXTargetDependency */,
+			);
+			name = DaymarkTests;
+			productName = DaymarkTests;
+			productReference = AD364709FDE60DC288A1A98B /* DaymarkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9F27354508048BD09B3A2B0A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					B196886D9A8480D20785D42D = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					F7FF6760DA5BEA746374DBB5 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = B196886D9A8480D20785D42D;
+					};
+				};
+			};
+			buildConfigurationList = 9B7A4A2B574091F58331C211 /* Build configuration list for PBXProject "Daymark" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0A85897F1A32FE9B91C081CD;
+			productRefGroup = B88D7E26791946AEFDCC8BB7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B196886D9A8480D20785D42D /* Daymark */,
+				F7FF6760DA5BEA746374DBB5 /* DaymarkTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CBB3D0384058B719D611893D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FC651E61653A7034842ABFB /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F7909A4668B60B95A23410E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1048127CBD4956720465E8BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				781912346BB4748B66F01E98 /* ContentView.swift in Sources */,
+				D51DA90B2B1BEF323B447139 /* DaymarkApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EC931DD7E088F7FCFE8D88E1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				822847023225806159B41DA0 /* DaymarkTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4568C27E37CAA8274DA3FE7E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B196886D9A8480D20785D42D /* Daymark */;
+			targetProxy = EAC7B1D8DB66779087C587D3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2E4E6CCF5D6EF365E5C97DDB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		7BE66DFF231D03044D5C4C4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		35CCC0A516BD01CB06BF0308 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Daymark;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chhunsour.Daymark;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CFED12E4AC5BE7836E762A9F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Daymark;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chhunsour.Daymark;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C4D7338717B8C050F088864F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chhunsour.DaymarkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daymark.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Daymark";
+			};
+			name = Debug;
+		};
+		93CB8BC4F4D56E3519CE4238 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chhunsour.DaymarkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daymark.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Daymark";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9B7A4A2B574091F58331C211 /* Build configuration list for PBXProject "Daymark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2E4E6CCF5D6EF365E5C97DDB /* Debug */,
+				7BE66DFF231D03044D5C4C4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		94CF95064F0B2CB934AF2EA1 /* Build configuration list for PBXNativeTarget "Daymark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				35CCC0A516BD01CB06BF0308 /* Debug */,
+				CFED12E4AC5BE7836E762A9F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		65823A05CFC6BD24825F0966 /* Build configuration list for PBXNativeTarget "DaymarkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4D7338717B8C050F088864F /* Debug */,
+				93CB8BC4F4D56E3519CE4238 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = 9F27354508048BD09B3A2B0A /* Project object */;
+}
