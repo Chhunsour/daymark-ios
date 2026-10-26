@@ -160,6 +160,15 @@ public struct SettingsView: View {
 
                 Section {
                     HStack {
+                        Text("Developer")
+                            .font(.dmBody)
+                        Spacer()
+                        Text("Seng Chhunsour")
+                            .font(.dmHeadline)
+                            .foregroundColor(Color.dmTextPrimary)
+                    }
+
+                    HStack {
                         Text("Version")
                             .font(.dmBody)
                         Spacer()
@@ -184,6 +193,12 @@ public struct SettingsView: View {
                             .font(.dmCaptionBold)
                             .foregroundColor(Color.dmTextSecondary)
                     }
+                } footer: {
+                    Text("Developed by Seng Chhunsour")
+                        .font(.dmCaption)
+                        .foregroundColor(Color.dmTextTertiary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 6)
                 }
             }
             .scrollContentBackground(.hidden)

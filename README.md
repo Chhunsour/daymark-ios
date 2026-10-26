@@ -5,7 +5,8 @@
 </p>
 
 <p align="center">
-  <strong>A calm, offline-first personal operating system for founders, engineering leads, and multi-venture builders.</strong>
+  <strong>A calm, offline-first personal operating system for founders, engineering leads, and multi-venture builders.</strong><br>
+  <sub>Developed by <strong>Seng Chhunsour</strong></sub>
 </p>
 
 <p align="center">
@@ -14,6 +15,7 @@
   <a href="#technical-architecture"><img src="https://img.shields.io/badge/UI-SwiftUI-007AFF?style=for-the-badge&logo=swift&logoColor=white" alt="SwiftUI" /></a>
   <a href="#offline-first-architecture"><img src="https://img.shields.io/badge/Storage-100%25%20On--Device-10B981?style=for-the-badge&logo=icloud&logoColor=white" alt="Offline-First" /></a>
   <a href="#test-coverage-31--31-passing"><img src="https://img.shields.io/badge/Tests-31%20Passed%20(100%25)-FF5A1F?style=for-the-badge&logo=xcode&logoColor=white" alt="Tests" /></a>
+  <img src="https://img.shields.io/badge/Author-Seng%20Chhunsour-FF5A1F?style=for-the-badge&logo=github&logoColor=white" alt="Developer" />
 </p>
 
 ---
@@ -167,6 +169,14 @@ xcrun simctl launch booted com.chhunsour.Daymark
 
 ---
 
+## Author & Developer
+
+**Developed by Seng Chhunsour**
+- **GitHub:** [@Chhunsour](https://github.com/Chhunsour)
+- **Repository:** [https://github.com/Chhunsour/daymark-ios](https://github.com/Chhunsour/daymark-ios)
+
+---
+
 ## License
 
-Personal and proprietary software for Chhunsour. All rights reserved.
+Personal and proprietary software. Developed by Seng Chhunsour. All rights reserved.
