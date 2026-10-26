@@ -35,6 +35,12 @@
 		E91A7393F7FEE943FA8579FF /* InboxTaskRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4354FAA03886C74C5A3773; };
 		DEC262FFDA870C38D813765E /* TaskDetailEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51F9FCE0429363B226A0D96; };
 		227BEF4F1DAC9DBFD48DCD17 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC812052F448A4FE5567635B; };
+		0EE7907929C6A22E52CD5CBC /* EditMilestoneSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3FED6D9E86F6AD5688EE30; };
+		0635E2EEF5E301DA36C5783E /* EditProjectSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6529885A843E6B2DFC0B94E1; };
+		D1C8561A594A7AB626771139 /* MilestoneRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D120ECE3FAACC89D6BECBAC2; };
+		9C95533FC750509DEC096DFB /* ProjectCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0905176F014064CD3E6E3E; };
+		62917EB73B1DD9A4DE340409 /* ProjectDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAE06E8C162410FFD339EF5; };
+		8B26B6529D5247983DE68221 /* ProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6AC2369D83216ED8F2DEAC; };
 		831430C0725EBFC87B6F4DEF /* CurrentTaskCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B842A27A51D183585B87FD8; };
 		AD6884715448E98599A3D2EF /* DailyOverviewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13767EE69D48E56C8AEB3DA; };
 		1C03AE3A22038A45479D61BF /* DailyPrioritiesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8468E843CB8BAD1EF0F6D72F; };
@@ -93,6 +99,12 @@
 		1D4354FAA03886C74C5A3773 /* InboxTaskRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InboxTaskRow.swift"; sourceTree = "<group>"; };
 		D51F9FCE0429363B226A0D96 /* TaskDetailEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskDetailEditorSheet.swift"; sourceTree = "<group>"; };
 		AC812052F448A4FE5567635B /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InboxView.swift"; sourceTree = "<group>"; };
+		6A3FED6D9E86F6AD5688EE30 /* EditMilestoneSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditMilestoneSheet.swift"; sourceTree = "<group>"; };
+		6529885A843E6B2DFC0B94E1 /* EditProjectSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditProjectSheet.swift"; sourceTree = "<group>"; };
+		D120ECE3FAACC89D6BECBAC2 /* MilestoneRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MilestoneRow.swift"; sourceTree = "<group>"; };
+		6E0905176F014064CD3E6E3E /* ProjectCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProjectCard.swift"; sourceTree = "<group>"; };
+		1FAE06E8C162410FFD339EF5 /* ProjectDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProjectDetailView.swift"; sourceTree = "<group>"; };
+		8B6AC2369D83216ED8F2DEAC /* ProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProjectsView.swift"; sourceTree = "<group>"; };
 		0B842A27A51D183585B87FD8 /* CurrentTaskCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrentTaskCard.swift"; sourceTree = "<group>"; };
 		F13767EE69D48E56C8AEB3DA /* DailyOverviewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyOverviewHeader.swift"; sourceTree = "<group>"; };
 		8468E843CB8BAD1EF0F6D72F /* DailyPrioritiesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyPrioritiesSection.swift"; sourceTree = "<group>"; };
@@ -153,20 +165,24 @@
 		530C85862CC309D95D46636C /* Daymark */ = {
 			isa = PBXGroup;
 			children = (
-				936F6010E515CAAE85AC54BC /* Features */,
-				952C5BAD083AB2E6C3185947 /* App */,
 				71890557326BBBB4701BB83A /* Core */,
+				952C5BAD083AB2E6C3185947 /* App */,
+				936F6010E515CAAE85AC54BC /* Features */,
 				5BF08803D07505AFBCB91334 /* Assets.xcassets */,
 			);
 			path = "Daymark"; sourceTree = "<group>";
 		};
-		936F6010E515CAAE85AC54BC /* Features */ = {
+		71890557326BBBB4701BB83A /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				EFEEE3CDFC0A0450E5261F2E /* Today */,
-				0E478543E760037E6140C13D /* Inbox */,
+				D3AB9100BB9461D95A7B6410 /* State */,
+				2F59D6E2DBE90DB610F3308F /* Notifications */,
+				D5DB9AEF4546F18E10E1930E /* Models */,
+				18C2571930464B57526AA198 /* DesignSystem */,
+				F5514F6BC3B57857F891C431 /* Scheduling */,
+				34987BE36306B0FDA15B81B8 /* Persistence */,
 			);
-			path = "Features"; sourceTree = "<group>";
+			path = "Core"; sourceTree = "<group>";
 		};
 		952C5BAD083AB2E6C3185947 /* App */ = {
 			isa = PBXGroup;
@@ -176,17 +192,14 @@
 			);
 			path = "App"; sourceTree = "<group>";
 		};
-		71890557326BBBB4701BB83A /* Core */ = {
+		936F6010E515CAAE85AC54BC /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				D3AB9100BB9461D95A7B6410 /* State */,
-				D5DB9AEF4546F18E10E1930E /* Models */,
-				2F59D6E2DBE90DB610F3308F /* Notifications */,
-				18C2571930464B57526AA198 /* DesignSystem */,
-				F5514F6BC3B57857F891C431 /* Scheduling */,
-				34987BE36306B0FDA15B81B8 /* Persistence */,
+				EFEEE3CDFC0A0450E5261F2E /* Today */,
+				C4872151F3D998D9647E8AB1 /* Projects */,
+				0E478543E760037E6140C13D /* Inbox */,
 			);
-			path = "Core"; sourceTree = "<group>";
+			path = "Features"; sourceTree = "<group>";
 		};
 		EFEEE3CDFC0A0450E5261F2E /* Today */ = {
 			isa = PBXGroup;
@@ -196,12 +209,36 @@
 			);
 			path = "Today"; sourceTree = "<group>";
 		};
+		C4872151F3D998D9647E8AB1 /* Projects */ = {
+			isa = PBXGroup;
+			children = (
+				ECBC61ABC9A44C4D23C7F648 /* Components */,
+				1FAE06E8C162410FFD339EF5 /* ProjectDetailView.swift */,
+				8B6AC2369D83216ED8F2DEAC /* ProjectsView.swift */,
+			);
+			path = "Projects"; sourceTree = "<group>";
+		};
+		0E478543E760037E6140C13D /* Inbox */ = {
+			isa = PBXGroup;
+			children = (
+				8E31CA22C4E32DB3FDD53F96 /* Components */,
+				AC812052F448A4FE5567635B /* InboxView.swift */,
+			);
+			path = "Inbox"; sourceTree = "<group>";
+		};
 		D3AB9100BB9461D95A7B6410 /* State */ = {
 			isa = PBXGroup;
 			children = (
 				B4C400DA0E469FB2A86EC67A /* AppState.swift */,
 			);
 			path = "State"; sourceTree = "<group>";
+		};
+		2F59D6E2DBE90DB610F3308F /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				1AA56FC619AC38FC127C45C0 /* DaymarkNotificationManager.swift */,
+			);
+			path = "Notifications"; sourceTree = "<group>";
 		};
 		D5DB9AEF4546F18E10E1930E /* Models */ = {
 			isa = PBXGroup;
@@ -215,13 +252,6 @@
 				15D5C4DAF75C63A33149FFB9 /* UserScheduleProfile.swift */,
 			);
 			path = "Models"; sourceTree = "<group>";
-		};
-		2F59D6E2DBE90DB610F3308F /* Notifications */ = {
-			isa = PBXGroup;
-			children = (
-				1AA56FC619AC38FC127C45C0 /* DaymarkNotificationManager.swift */,
-			);
-			path = "Notifications"; sourceTree = "<group>";
 		};
 		18C2571930464B57526AA198 /* DesignSystem */ = {
 			isa = PBXGroup;
@@ -241,14 +271,6 @@
 				73667751F4920F652D88752E /* TimeSlot.swift */,
 			);
 			path = "Scheduling"; sourceTree = "<group>";
-		};
-		0E478543E760037E6140C13D /* Inbox */ = {
-			isa = PBXGroup;
-			children = (
-				8E31CA22C4E32DB3FDD53F96 /* Components */,
-				AC812052F448A4FE5567635B /* InboxView.swift */,
-			);
-			path = "Inbox"; sourceTree = "<group>";
 		};
 		34987BE36306B0FDA15B81B8 /* Persistence */ = {
 			isa = PBXGroup;
@@ -278,6 +300,16 @@
 			children = (
 				1D4354FAA03886C74C5A3773 /* InboxTaskRow.swift */,
 				D51F9FCE0429363B226A0D96 /* TaskDetailEditorSheet.swift */,
+			);
+			path = "Components"; sourceTree = "<group>";
+		};
+		ECBC61ABC9A44C4D23C7F648 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				6A3FED6D9E86F6AD5688EE30 /* EditMilestoneSheet.swift */,
+				6529885A843E6B2DFC0B94E1 /* EditProjectSheet.swift */,
+				D120ECE3FAACC89D6BECBAC2 /* MilestoneRow.swift */,
+				6E0905176F014064CD3E6E3E /* ProjectCard.swift */,
 			);
 			path = "Components"; sourceTree = "<group>";
 		};
@@ -431,6 +463,12 @@
 				E91A7393F7FEE943FA8579FF /* InboxTaskRow.swift in Sources */,
 				DEC262FFDA870C38D813765E /* TaskDetailEditorSheet.swift in Sources */,
 				227BEF4F1DAC9DBFD48DCD17 /* InboxView.swift in Sources */,
+				0EE7907929C6A22E52CD5CBC /* EditMilestoneSheet.swift in Sources */,
+				0635E2EEF5E301DA36C5783E /* EditProjectSheet.swift in Sources */,
+				D1C8561A594A7AB626771139 /* MilestoneRow.swift in Sources */,
+				9C95533FC750509DEC096DFB /* ProjectCard.swift in Sources */,
+				62917EB73B1DD9A4DE340409 /* ProjectDetailView.swift in Sources */,
+				8B26B6529D5247983DE68221 /* ProjectsView.swift in Sources */,
 				831430C0725EBFC87B6F4DEF /* CurrentTaskCard.swift in Sources */,
 				AD6884715448E98599A3D2EF /* DailyOverviewHeader.swift in Sources */,
 				1C03AE3A22038A45479D61BF /* DailyPrioritiesSection.swift in Sources */,
