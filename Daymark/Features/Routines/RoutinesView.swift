@@ -90,9 +90,9 @@ public struct RoutinesView: View {
                     }
                 } label: {
                     Text(mode.rawValue)
-                        .font(.system(size: 13, weight: selectedMode == mode ? .bold : .medium, design: .rounded))
+                        .font(.system(size: 15, weight: selectedMode == mode ? .bold : .semibold, design: .rounded))
                         .foregroundColor(selectedMode == mode ? Color.dmTextPrimary : Color.dmTextSecondary)
-                        .padding(.vertical, 7)
+                        .padding(.vertical, 9)
                         .frame(maxWidth: .infinity)
                         .background(
                             selectedMode == mode
@@ -105,7 +105,7 @@ public struct RoutinesView: View {
                 .buttonStyle(.plain)
             }
         }
-        .padding(3)
+        .padding(4)
         .background(Color.dmSecondaryCard)
         .clipShape(RoundedRectangle(cornerRadius: 13, style: .continuous))
     }
@@ -116,19 +116,16 @@ public struct RoutinesView: View {
             // Center Multi-segment Donut Ring Card
             donutRingCard
 
-            // Pacing & Insight Banner
-            insightBanner
-
             // Habits Header
             HStack {
                 Text("Today's Habits")
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundColor(Color.dmTextPrimary)
 
                 Spacer()
 
                 Text("\(appState.completedRoutinesTodayCount) of \(appState.routines.count) Done")
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
                     .foregroundColor(Color.dmTextSecondary)
             }
             .padding(.horizontal, DMSpacing.md)
@@ -154,14 +151,14 @@ public struct RoutinesView: View {
                 )
 
                 // Center Score & Status
-                VStack(spacing: 2) {
+                VStack(spacing: 3) {
                     Text(String(format: "%.1f", appState.habitScoreToday))
-                        .font(.system(size: 38, weight: .bold, design: .rounded))
+                        .font(.system(size: 44, weight: .bold, design: .rounded))
                         .foregroundColor(Color.dmTextPrimary)
 
                     let allDone = appState.completedRoutinesTodayCount == appState.routines.count && !appState.routines.isEmpty
-                    Text(allDone ? "All habits completed! 🎉" : "Your daily habits are not completed")
-                        .font(.system(size: 11, weight: .medium))
+                    Text(allDone ? "All Done! 🎉" : "\(appState.completedRoutinesTodayCount) of \(appState.routines.count) Done")
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(allDone ? Color.dmSuccess : Color.dmTextSecondary)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: 130)
@@ -182,13 +179,13 @@ public struct RoutinesView: View {
             } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "plus.circle.fill")
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: 16, weight: .semibold))
                     Text("Add habit")
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
                 }
                 .foregroundColor(Color.dmAccent)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 10)
                 .background(Color.dmAccent.opacity(0.08))
                 .clipShape(Capsule())
             }
@@ -207,51 +204,18 @@ public struct RoutinesView: View {
     }
 
     private func statPill(label: String, value: String, color: Color) -> some View {
-        VStack(spacing: 2) {
+        VStack(spacing: 3) {
             Text(value)
-                .font(.system(size: 14, weight: .bold, design: .rounded))
+                .font(.system(size: 20, weight: .bold, design: .rounded))
                 .foregroundColor(color)
             Text(label)
-                .font(.system(size: 10, weight: .medium))
+                .font(.system(size: 13, weight: .bold))
                 .foregroundColor(Color.dmTextSecondary)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 6)
+        .padding(.vertical, 9)
         .background(Color.dmSecondaryCard.opacity(0.6))
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-    }
-
-    private var insightBanner: some View {
-        HStack(spacing: DMSpacing.sm) {
-            ZStack {
-                Circle()
-                    .fill(Color.dmMint.opacity(0.15))
-                    .frame(width: 36, height: 36)
-                Image(systemName: "sparkles")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(Color.dmMint)
-            }
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Consistent Pacing")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundColor(Color.dmMint)
-                Text("Making your room and 1 hour reading drive 80% of daily focus.")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(Color.dmTextSecondary)
-                    .lineLimit(2)
-            }
-
-            Spacer()
-        }
-        .padding(DMSpacing.md)
-        .background(Color.dmMintBg)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.dmMint.opacity(0.2), lineWidth: 0.8)
-        )
-        .padding(.horizontal, DMSpacing.md)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
     private func todayHabitRow(routine: DaymarkRoutine) -> some View {
@@ -266,37 +230,37 @@ public struct RoutinesView: View {
                     iconName: routine.iconName ?? "checkmark.circle.fill",
                     backgroundColor: color.opacity(0.15),
                     iconColor: color,
-                    size: 42,
-                    cornerRadius: 12,
-                    iconSize: 19
+                    size: 46,
+                    cornerRadius: 14,
+                    iconSize: 22
                 )
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(routine.title)
-                        .font(.system(size: 15, weight: .bold))
+                        .font(.system(size: 18, weight: .bold))
                         .foregroundColor(Color.dmTextPrimary)
                         .strikethrough(isDone, color: Color.dmTextTertiary)
 
                     HStack(spacing: DMSpacing.xs + 2) {
                         Text("🔥 \(routine.currentStreakDays)d")
-                            .font(.system(size: 11, weight: .semibold, design: .rounded))
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
                             .foregroundColor(color)
 
                         if let time = routine.targetTimeOfDay {
                             Text("•")
-                                .font(.caption2)
+                                .font(.system(size: 13, weight: .bold))
                                 .foregroundColor(Color.dmTextTertiary)
                             Text(time)
-                                .font(.system(size: 11, weight: .medium, design: .rounded))
+                                .font(.system(size: 14, weight: .semibold, design: .rounded))
                                 .foregroundColor(Color.dmTextSecondary)
                         }
 
                         if let freq = routine.frequencyText {
                             Text("•")
-                                .font(.caption2)
+                                .font(.system(size: 13, weight: .bold))
                                 .foregroundColor(Color.dmTextTertiary)
                             Text(freq)
-                                .font(.system(size: 11, weight: .medium))
+                                .font(.system(size: 14, weight: .medium))
                                 .foregroundColor(Color.dmTextSecondary)
                         }
                     }
@@ -316,7 +280,7 @@ public struct RoutinesView: View {
                         }
                     } label: {
                         Image(systemName: isExpanded ? "chevron.up.circle.fill" : "checklist")
-                            .font(.system(size: 18))
+                            .font(.system(size: 20))
                             .foregroundColor(Color.dmTextTertiary)
                             .padding(4)
                     }
@@ -333,16 +297,16 @@ public struct RoutinesView: View {
                 } label: {
                     ZStack {
                         Circle()
-                            .stroke(isDone ? color : Color.dmBorder, lineWidth: isDone ? 2 : 1.5)
-                            .frame(width: 30, height: 30)
+                            .stroke(isDone ? color : Color.dmBorder, lineWidth: isDone ? 2.5 : 1.8)
+                            .frame(width: 36, height: 36)
 
                         if isDone {
                             Circle()
                                 .fill(color)
-                                .frame(width: 30, height: 30)
+                                .frame(width: 36, height: 36)
 
                             Image(systemName: "checkmark")
-                                .font(.system(size: 13, weight: .bold))
+                                .font(.system(size: 15, weight: .bold))
                                 .foregroundColor(.white)
                         }
                     }
@@ -352,7 +316,7 @@ public struct RoutinesView: View {
 
             // Expanded checklist items
             if !routine.checklist.isEmpty && isExpanded {
-                VStack(spacing: 6) {
+                VStack(spacing: 8) {
                     ForEach(routine.checklist) { item in
                         let itemDone = routine.isItemCompleted(itemId: item.id, on: Date())
                         Button {
@@ -364,11 +328,11 @@ public struct RoutinesView: View {
                         } label: {
                             HStack(spacing: DMSpacing.sm) {
                                 Image(systemName: itemDone ? "checkmark.circle.fill" : "circle")
-                                    .font(.system(size: 17))
+                                    .font(.system(size: 20))
                                     .foregroundColor(itemDone ? color : Color.dmTextTertiary)
 
                                 Text(item.title)
-                                    .font(.system(size: 13, weight: itemDone ? .regular : .medium))
+                                    .font(.system(size: 16, weight: itemDone ? .regular : .medium))
                                     .foregroundColor(itemDone ? Color.dmTextTertiary : Color.dmTextPrimary)
                                     .strikethrough(itemDone, color: Color.dmTextTertiary)
 
@@ -380,7 +344,7 @@ public struct RoutinesView: View {
                     }
                 }
                 .padding(.top, 4)
-                .padding(.leading, 50)
+                .padding(.leading, 54)
             }
         }
         .padding(DMSpacing.md)
@@ -407,26 +371,27 @@ public struct RoutinesView: View {
         VStack(spacing: DMSpacing.md) {
             // Weekly Header Banner
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text("This Week")
-                        .font(.system(size: 18, weight: .bold))
+                        .font(.system(size: 20, weight: .bold))
                         .foregroundColor(Color.dmTextPrimary)
                     Text(currentWeekDateRangeString())
-                        .font(.system(size: 12, weight: .medium))
+                        .font(.system(size: 14, weight: .medium))
                         .foregroundColor(Color.dmTextSecondary)
                 }
 
                 Spacer()
 
-                HStack(spacing: 4) {
+                HStack(spacing: 5) {
                     Image(systemName: "flame.fill")
+                        .font(.system(size: 15))
                         .foregroundColor(Color.dmPeach)
                     Text("\(appState.maxCurrentStreak) Day Streak")
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
                         .foregroundColor(Color.dmPeach)
                 }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 7)
                 .background(Color.dmPeachBg)
                 .clipShape(Capsule())
             }
@@ -453,27 +418,27 @@ public struct RoutinesView: View {
                     iconName: routine.iconName ?? "checkmark.circle.fill",
                     backgroundColor: color.opacity(0.15),
                     iconColor: color,
-                    size: 38,
-                    cornerRadius: 11,
-                    iconSize: 17
+                    size: 44,
+                    cornerRadius: 13,
+                    iconSize: 20
                 )
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(routine.title)
-                        .font(.system(size: 15, weight: .bold))
+                        .font(.system(size: 18, weight: .bold))
                         .foregroundColor(Color.dmTextPrimary)
 
                     HStack(spacing: 6) {
                         Text(routine.frequencyText ?? "Everyday")
-                            .font(.system(size: 11, weight: .medium))
+                            .font(.system(size: 14, weight: .medium))
                             .foregroundColor(Color.dmTextSecondary)
 
                         Text("•")
-                            .font(.caption2)
+                            .font(.system(size: 13, weight: .bold))
                             .foregroundColor(Color.dmTextTertiary)
 
                         Text("🔥 \(routine.currentStreakDays)d streak")
-                            .font(.system(size: 11, weight: .semibold, design: .rounded))
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
                             .foregroundColor(color)
                     }
                 }
@@ -490,14 +455,14 @@ public struct RoutinesView: View {
                     let isCompleted = routine.isFullyCompleted(on: date)
                     let isToday = Calendar.current.isDateInToday(date)
 
-                    VStack(spacing: 5) {
+                    VStack(spacing: 6) {
                         Text(weekdayAbbreviation(for: date))
-                            .font(.system(size: 10, weight: isToday ? .bold : .medium))
+                            .font(.system(size: 13, weight: .bold))
                             .foregroundColor(isToday ? Color.dmAccent : Color.dmTextSecondary)
 
                         Text(dayNumberString(for: date))
-                            .font(.system(size: 11, weight: isToday ? .bold : .regular, design: .rounded))
-                            .foregroundColor(isToday ? Color.dmAccent : Color.dmTextTertiary)
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                            .foregroundColor(isToday ? Color.dmAccent : Color.dmTextPrimary)
 
                         Button {
                             let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -510,17 +475,17 @@ public struct RoutinesView: View {
                                 Circle()
                                     .stroke(
                                         isToday ? Color.dmAccent : Color.dmBorder,
-                                        lineWidth: isToday ? 1.5 : 1.0
+                                        lineWidth: isToday ? 2.0 : 1.2
                                     )
-                                    .frame(width: 32, height: 32)
+                                    .frame(width: 38, height: 38)
 
                                 if isCompleted {
                                     Circle()
                                         .fill(color)
-                                        .frame(width: 32, height: 32)
+                                        .frame(width: 38, height: 38)
 
                                     Image(systemName: "checkmark")
-                                        .font(.system(size: 12, weight: .bold))
+                                        .font(.system(size: 15, weight: .bold))
                                         .foregroundColor(.white)
                                 }
                             }
@@ -581,11 +546,11 @@ public struct RoutinesView: View {
             // Section Header
             HStack {
                 Text("Consistency Heatmaps")
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundColor(Color.dmTextPrimary)
                 Spacer()
                 Text("Past 35 Days")
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 14, weight: .medium))
                     .foregroundColor(Color.dmTextSecondary)
             }
             .padding(.horizontal, DMSpacing.md)
@@ -602,32 +567,32 @@ public struct RoutinesView: View {
     }
 
     private func metricTile(title: String, value: String, icon: String, color: Color, bgColor: Color) -> some View {
-        VStack(alignment: .leading, spacing: DMSpacing.xs) {
+        VStack(alignment: .leading, spacing: DMSpacing.xs + 2) {
             HStack {
                 DaymarkSquircleIcon(
                     iconName: icon,
                     backgroundColor: bgColor,
                     iconColor: color,
-                    size: 34,
-                    cornerRadius: 10,
-                    iconSize: 16
+                    size: 38,
+                    cornerRadius: 12,
+                    iconSize: 18
                 )
                 Spacer()
             }
 
             Text(value)
-                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .font(.system(size: 28, weight: .bold, design: .rounded))
                 .foregroundColor(Color.dmTextPrimary)
 
             Text(title)
-                .font(.system(size: 12, weight: .medium))
+                .font(.system(size: 14, weight: .bold))
                 .foregroundColor(Color.dmTextSecondary)
         }
         .padding(DMSpacing.md)
         .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.6)
         )
         .shadow(color: Color.black.opacity(0.02), radius: 3, x: 0, y: 1)
@@ -644,18 +609,18 @@ public struct RoutinesView: View {
                     iconName: routine.iconName ?? "checkmark.circle.fill",
                     backgroundColor: color.opacity(0.15),
                     iconColor: color,
-                    size: 36,
-                    cornerRadius: 11,
-                    iconSize: 16
+                    size: 42,
+                    cornerRadius: 12,
+                    iconSize: 18
                 )
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(routine.title)
-                        .font(.system(size: 15, weight: .bold))
+                        .font(.system(size: 18, weight: .bold))
                         .foregroundColor(Color.dmTextPrimary)
 
                     Text("\(Int(routine.successRatePercentage(lastDays: 30)))% completion rate • Best streak: \(routine.bestStreakDays)d")
-                        .font(.system(size: 11, weight: .medium))
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
                         .foregroundColor(Color.dmTextSecondary)
                 }
 
@@ -670,42 +635,42 @@ public struct RoutinesView: View {
             LazyVGrid(columns: columns, spacing: 5) {
                 ForEach(0..<history.count, id: \.self) { index in
                     let entry = history[index]
-                    RoundedRectangle(cornerRadius: 3.5, style: .continuous)
+                    RoundedRectangle(cornerRadius: 4, style: .continuous)
                         .fill(entry.isCompleted ? color : Color.dmSecondaryCard)
                         .aspectRatio(1.0, contentMode: .fit)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 3.5, style: .continuous)
+                            RoundedRectangle(cornerRadius: 4, style: .continuous)
                                 .stroke(Color.dmBorder.opacity(0.4), lineWidth: 0.5)
                         )
                 }
             }
 
             // Legend
-            HStack(spacing: 6) {
+            HStack(spacing: 7) {
                 Text("Less")
-                    .font(.system(size: 10, weight: .medium))
+                    .font(.system(size: 12, weight: .bold))
                     .foregroundColor(Color.dmTextTertiary)
 
-                RoundedRectangle(cornerRadius: 2.5)
+                RoundedRectangle(cornerRadius: 3)
                     .fill(Color.dmSecondaryCard)
-                    .frame(width: 11, height: 11)
+                    .frame(width: 13, height: 13)
 
-                RoundedRectangle(cornerRadius: 2.5)
+                RoundedRectangle(cornerRadius: 3)
                     .fill(color.opacity(0.4))
-                    .frame(width: 11, height: 11)
+                    .frame(width: 13, height: 13)
 
-                RoundedRectangle(cornerRadius: 2.5)
+                RoundedRectangle(cornerRadius: 3)
                     .fill(color)
-                    .frame(width: 11, height: 11)
+                    .frame(width: 13, height: 13)
 
                 Text("More")
-                    .font(.system(size: 10, weight: .medium))
+                    .font(.system(size: 12, weight: .bold))
                     .foregroundColor(Color.dmTextTertiary)
 
                 Spacer()
 
                 Text("35-day grid")
-                    .font(.system(size: 10, weight: .medium))
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundColor(Color.dmTextTertiary)
             }
             .padding(.top, 2)
@@ -893,15 +858,15 @@ public struct AddHabitSheet: View {
                                     selectedColorHex = preset.color
                                     selectedFrequency = preset.freq
                                 } label: {
-                                    HStack(spacing: 5) {
+                                    HStack(spacing: 6) {
                                         Image(systemName: preset.icon)
-                                            .font(.system(size: 11))
+                                            .font(.system(size: 13, weight: .bold))
                                         Text(preset.title)
-                                            .font(.system(size: 12, weight: .semibold))
+                                            .font(.system(size: 14, weight: .bold))
                                     }
                                     .foregroundColor(Color(hex: preset.color))
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 6)
+                                    .padding(.horizontal, 13)
+                                    .padding(.vertical, 8)
                                     .background(Color(hex: preset.color).opacity(0.12))
                                     .clipShape(Capsule())
                                 }
@@ -914,6 +879,7 @@ public struct AddHabitSheet: View {
 
                 Section("Habit Details") {
                     TextField("Habit Title (e.g. 1 Hour Reading)", text: $title)
+                        .font(.system(size: 17))
 
                     Picker("Frequency", selection: $selectedFrequency) {
                         Text("Everyday").tag("Everyday")
