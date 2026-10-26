@@ -2,17 +2,46 @@ import SwiftUI
 
 public struct DailyPrioritiesSection: View {
     @Environment(AppState.self) private var appState
+    var selectedDate: Date
     var onSelectTask: ((DaymarkTask) -> Void)?
 
-    public init(onSelectTask: ((DaymarkTask) -> Void)? = nil) {
+    public init(selectedDate: Date = Date(), onSelectTask: ((DaymarkTask) -> Void)? = nil) {
+        self.selectedDate = selectedDate
         self.onSelectTask = onSelectTask
+    }
+
+    private var sectionTitle: String {
+        if Calendar.current.isDateInToday(selectedDate) {
+            return "Today's Priorities"
+        } else {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM d"
+            return "\(formatter.string(from: selectedDate)) Priorities"
+        }
+    }
+
+    private var displayedPriorities: [DaymarkTask] {
+        if Calendar.current.isDateInToday(selectedDate) {
+            return appState.todayPriorities
+        }
+        let calendar = Calendar.current
+        return appState.tasks.filter { task in
+            guard task.isDailyPriority && task.status != .completed && task.status != .cancelled else { return false }
+            if let start = task.scheduledStartTime {
+                return calendar.isDate(start, inSameDayAs: selectedDate)
+            }
+            if let due = task.dueDate {
+                return calendar.isDate(due, inSameDayAs: selectedDate)
+            }
+            return false
+        }.sorted { ($0.priorityRank ?? 999) < ($1.priorityRank ?? 999) }
     }
 
     public var body: some View {
         VStack(alignment: .leading, spacing: DMSpacing.sm) {
             // Section Header
             HStack(alignment: .firstTextBaseline) {
-                Text("Today's Priorities")
+                Text(sectionTitle)
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(Color.dmTextPrimary)
 
@@ -23,7 +52,7 @@ public struct DailyPrioritiesSection: View {
                         .font(.system(size: 11))
                         .foregroundColor(Color.dmAmber)
 
-                    Text("\(appState.todayPriorities.count) of 5")
+                    Text("\(displayedPriorities.count) of 5")
                         .font(.system(size: 12.5, weight: .semibold, design: .rounded))
                         .foregroundColor(Color.dmTextSecondary)
                 }
@@ -38,7 +67,7 @@ public struct DailyPrioritiesSection: View {
             }
             .padding(.horizontal, DMSpacing.md)
 
-            if appState.todayPriorities.isEmpty {
+            if displayedPriorities.isEmpty {
                 VStack(spacing: DMSpacing.xs) {
                     Image(systemName: "star.slash")
                         .font(.system(size: 24))
@@ -63,7 +92,7 @@ public struct DailyPrioritiesSection: View {
             } else {
                 // Stack of individual elevated priority cards (Concept 1 style)
                 VStack(spacing: DMSpacing.xs + 2) {
-                    ForEach(Array(appState.todayPriorities.enumerated()), id: \.element.id) { index, task in
+                    ForEach(Array(displayedPriorities.enumerated()), id: \.element.id) { index, task in
                         priorityCard(task: task, rank: index + 1)
                     }
                 }

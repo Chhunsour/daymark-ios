@@ -4,16 +4,16 @@ public struct WeekCalendarStrip: View {
     @Environment(AppState.self) private var appState
     @Binding var selectedDate: Date
 
+    @State private var showingDatePicker: Bool = false
     private let calendar = Calendar.current
 
     public init(selectedDate: Binding<Date>) {
         self._selectedDate = selectedDate
     }
 
-    private var currentWeekDays: [Date] {
-        let now = Date()
-        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: now) else {
-            return [now]
+    private var weekDays: [Date] {
+        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: selectedDate) else {
+            return [selectedDate]
         }
         var days: [Date] = []
         for offset in 0..<7 {
@@ -24,13 +24,133 @@ public struct WeekCalendarStrip: View {
         return days
     }
 
+    private var monthYearString: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        return formatter.string(from: selectedDate)
+    }
+
     public var body: some View {
-        HStack(spacing: DMSpacing.xs + 2) {
-            ForEach(currentWeekDays, id: \.self) { day in
-                dayColumn(for: day)
+        VStack(spacing: DMSpacing.xs + 2) {
+            // Month navigation & Date Picker launcher
+            HStack {
+                Button {
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                        selectedDate = calendar.date(byAdding: .weekOfYear, value: -1, to: selectedDate) ?? selectedDate
+                    }
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(Color.dmTextSecondary)
+                        .frame(width: 28, height: 28)
+                        .background(Color.dmCard)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5))
+                }
+                .buttonStyle(.plain)
+
+                Spacer()
+
+                Button {
+                    showingDatePicker = true
+                } label: {
+                    HStack(spacing: 5) {
+                        Image(systemName: "calendar")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color.dmAccent)
+                        Text(monthYearString)
+                            .font(.system(size: 13, weight: .semibold, design: .rounded))
+                            .foregroundColor(Color.dmTextPrimary)
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundColor(Color.dmTextTertiary)
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(Color.dmCard)
+                    .clipShape(Capsule())
+                    .overlay(Capsule().stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5))
+                }
+                .buttonStyle(.plain)
+
+                Spacer()
+
+                Button {
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                        selectedDate = calendar.date(byAdding: .weekOfYear, value: 1, to: selectedDate) ?? selectedDate
+                    }
+                } label: {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(Color.dmTextSecondary)
+                        .frame(width: 28, height: 28)
+                        .background(Color.dmCard)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5))
+                }
+                .buttonStyle(.plain)
             }
+            .padding(.horizontal, DMSpacing.md)
+
+            // 7-day pill columns
+            HStack(spacing: DMSpacing.xs + 2) {
+                ForEach(weekDays, id: \.self) { day in
+                    dayColumn(for: day)
+                }
+            }
+            .padding(.horizontal, DMSpacing.md)
         }
-        .padding(.horizontal, DMSpacing.md)
+        .sheet(isPresented: $showingDatePicker) {
+            NavigationStack {
+                VStack(spacing: DMSpacing.md) {
+                    DatePicker(
+                        "Select Date",
+                        selection: $selectedDate,
+                        displayedComponents: [.date]
+                    )
+                    .datePickerStyle(.graphical)
+                    .tint(Color.dmAccent)
+                    .padding()
+
+                    Button {
+                        selectedDate = Date()
+                        showingDatePicker = false
+                    } label: {
+                        HStack(spacing: 5) {
+                            Image(systemName: "arrow.counterclockwise")
+                                .font(.system(size: 12, weight: .semibold))
+                            Text("Jump to Today")
+                                .font(.system(size: 14, weight: .semibold))
+                        }
+                        .foregroundColor(Color.dmAccent)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color.dmAccent.opacity(0.12))
+                        .clipShape(Capsule())
+                    }
+
+                    Spacer()
+                }
+                .padding()
+                .background(Color.dmBackground)
+                .navigationTitle("Select Any Date")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") {
+                            showingDatePicker = false
+                        }
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(Color.dmAccent)
+                    }
+                }
+            }
+            .presentationDetents([.medium, .large])
+        }
     }
 
     private func dayColumn(for date: Date) -> some View {
@@ -90,7 +210,7 @@ public struct WeekCalendarStrip: View {
                 }
                 .frame(width: 40, height: 40)
 
-                // Mini task dots (Concept 3 style)
+                // Mini task dots
                 HStack(spacing: 3) {
                     if hasTasks {
                         Circle()

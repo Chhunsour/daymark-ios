@@ -2,10 +2,71 @@ import SwiftUI
 
 public struct TimelineSection: View {
     @Environment(AppState.self) private var appState
+    var selectedDate: Date
     var onSelectTask: ((DaymarkTask) -> Void)?
 
-    public init(onSelectTask: ((DaymarkTask) -> Void)? = nil) {
+    public init(selectedDate: Date = Date(), onSelectTask: ((DaymarkTask) -> Void)? = nil) {
+        self.selectedDate = selectedDate
         self.onSelectTask = onSelectTask
+    }
+
+    private var scheduledTasks: [DaymarkTask] {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(selectedDate) {
+            return appState.scheduledTasksToday
+        }
+        return appState.tasks.filter { task in
+            guard task.status != .cancelled else { return false }
+            if let start = task.scheduledStartTime {
+                return calendar.isDate(start, inSameDayAs: selectedDate)
+            }
+            if let due = task.dueDate {
+                return calendar.isDate(due, inSameDayAs: selectedDate)
+            }
+            return false
+        }.sorted { ($0.scheduledStartTime ?? Date.distantPast) < ($1.scheduledStartTime ?? Date.distantPast) }
+    }
+
+    private var unscheduledTasks: [DaymarkTask] {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(selectedDate) {
+            return appState.unscheduledTodayTasks
+        }
+        return appState.tasks.filter { task in
+            guard task.status != .completed && task.status != .cancelled else { return false }
+            guard task.scheduledStartTime == nil else { return false }
+            if let due = task.dueDate {
+                return calendar.isDate(due, inSameDayAs: selectedDate)
+            }
+            return false
+        }.sorted { $0.importance > $1.importance }
+    }
+
+    private var completedTasks: [DaymarkTask] {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(selectedDate) {
+            return appState.completedTasksToday
+        }
+        return appState.tasks.filter { task in
+            guard task.status == .completed else { return false }
+            if let completedAt = task.completedAt {
+                return calendar.isDate(completedAt, inSameDayAs: selectedDate)
+            }
+            if let due = task.dueDate {
+                return calendar.isDate(due, inSameDayAs: selectedDate)
+            }
+            return false
+        }
+    }
+
+    private var emptyStateTitle: String {
+        if Calendar.current.isDateInToday(selectedDate) {
+            return "No schedule for today"
+        } else {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE, MMM d"
+            return "No schedule for \(formatter.string(from: selectedDate))"
+        }
     }
 
     private func timeString(from date: Date) -> String {
@@ -24,7 +85,7 @@ public struct TimelineSection: View {
 
                 Spacer()
 
-                if !appState.unscheduledTodayTasks.isEmpty {
+                if !unscheduledTasks.isEmpty && Calendar.current.isDateInToday(selectedDate) {
                     Button {
                         let generator = UIImpactFeedbackGenerator(style: .medium)
                         generator.impactOccurred()
@@ -47,12 +108,12 @@ public struct TimelineSection: View {
             }
             .padding(.horizontal, DMSpacing.md)
 
-            if appState.plannedTasksToday.isEmpty && appState.unscheduledTodayTasks.isEmpty && appState.completedTasksToday.isEmpty {
+            if scheduledTasks.isEmpty && unscheduledTasks.isEmpty && completedTasks.isEmpty {
                 VStack(spacing: DMSpacing.xs) {
                     Image(systemName: "calendar.badge.clock")
                         .font(.system(size: 28))
                         .foregroundColor(Color.dmTextTertiary)
-                    Text("No schedule for today")
+                    Text(emptyStateTitle)
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(Color.dmTextPrimary)
                     Text("Capture a task to build your schedule timeline.")
@@ -72,13 +133,13 @@ public struct TimelineSection: View {
             } else {
                 VStack(spacing: DMSpacing.md) {
                     // Vertical Timeline track (Concept 3 style)
-                    if !appState.scheduledTasksToday.isEmpty {
+                    if !scheduledTasks.isEmpty {
                         VStack(spacing: 0) {
-                            ForEach(Array(appState.scheduledTasksToday.enumerated()), id: \.element.id) { index, task in
+                            ForEach(Array(scheduledTasks.enumerated()), id: \.element.id) { index, task in
                                 timelineRow(
                                     task: task,
                                     isFirst: index == 0,
-                                    isLast: index == appState.scheduledTasksToday.count - 1
+                                    isLast: index == scheduledTasks.count - 1
                                 )
                             }
                         }
@@ -86,26 +147,26 @@ public struct TimelineSection: View {
                     }
 
                     // Unscheduled tasks tray
-                    if !appState.unscheduledTodayTasks.isEmpty {
+                    if !unscheduledTasks.isEmpty {
                         VStack(alignment: .leading, spacing: DMSpacing.xs + 2) {
                             HStack {
-                                Text("Unscheduled for Today")
+                                Text("Unscheduled Tasks")
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(Color.dmTextSecondary)
 
                                 Spacer()
 
-                                Text("\(appState.unscheduledTodayTasks.count) tasks")
+                                Text("\(unscheduledTasks.count) tasks")
                                     .font(.system(size: 13, weight: .bold, design: .rounded))
                                     .foregroundColor(Color.dmTextTertiary)
                             }
                             .padding(.horizontal, DMSpacing.md)
 
                             VStack(spacing: 0) {
-                                ForEach(Array(appState.unscheduledTodayTasks.enumerated()), id: \.element.id) { index, task in
+                                ForEach(Array(unscheduledTasks.enumerated()), id: \.element.id) { index, task in
                                     unscheduledRow(task: task)
 
-                                    if index < appState.unscheduledTodayTasks.count - 1 {
+                                    if index < unscheduledTasks.count - 1 {
                                         Divider()
                                             .background(Color.dmBorder.opacity(0.6))
                                             .padding(.leading, 48)

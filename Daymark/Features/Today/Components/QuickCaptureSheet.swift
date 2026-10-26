@@ -1,5 +1,21 @@
 import SwiftUI
 
+public enum QuickCaptureDateOption: String, CaseIterable {
+    case today = "Today"
+    case tomorrow = "Tomorrow"
+    case custom = "Pick Date"
+    case noDate = "No Date"
+
+    var icon: String {
+        switch self {
+        case .today: return "sun.max.fill"
+        case .tomorrow: return "calendar.badge.clock"
+        case .custom: return "calendar"
+        case .noDate: return "tray.fill"
+        }
+    }
+}
+
 public struct QuickCaptureSheet: View {
     @Environment(AppState.self) private var appState
     @Environment(\.dismiss) private var dismiss
@@ -9,21 +25,47 @@ public struct QuickCaptureSheet: View {
     @State private var selectedProjectId: UUID? = nil
     @State private var durationMinutes: Int = 30
     @State private var importance: TaskImportance = .medium
-    @State private var planForToday: Bool = true
+    @State private var dateOption: QuickCaptureDateOption = .today
+    @State private var selectedDate: Date = Date()
+    @State private var includeSpecificTime: Bool = false
+    @State private var scheduledTime: Date = Date()
     @State private var isDailyPriority: Bool = false
     @State private var showNotes: Bool = false
-    @State private var showScheduleOptions: Bool = false
-    @State private var scheduledTime: Date = Date()
 
     @FocusState private var isTitleFocused: Bool
 
-    public init() {}
-
     private let quickDurations = [15, 30, 45, 60, 90]
+
+    public init(initialDate: Date? = nil) {
+        if CommandLine.arguments.contains("-ShowQuickCapturePickDate") {
+            _dateOption = State(initialValue: .custom)
+            _selectedDate = State(initialValue: Date())
+        } else if let initDate = initialDate {
+            if Calendar.current.isDateInToday(initDate) {
+                _dateOption = State(initialValue: .today)
+                _selectedDate = State(initialValue: initDate)
+            } else if Calendar.current.isDateInTomorrow(initDate) {
+                _dateOption = State(initialValue: .tomorrow)
+                _selectedDate = State(initialValue: initDate)
+            } else {
+                _dateOption = State(initialValue: .custom)
+                _selectedDate = State(initialValue: initDate)
+            }
+        } else {
+            _dateOption = State(initialValue: .today)
+            _selectedDate = State(initialValue: Date())
+        }
+    }
 
     private var selectedProject: DaymarkProject? {
         guard let id = selectedProjectId else { return nil }
         return appState.projects.first(where: { $0.id == id })
+    }
+
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, d MMMM yyyy"
+        return formatter.string(from: date)
     }
 
     public var body: some View {
@@ -149,21 +191,122 @@ public struct QuickCaptureSheet: View {
                         }
                     }
 
-                    // Quick Flags
-                    VStack(spacing: 0) {
-                        Toggle(isOn: $planForToday) {
-                            Label("Plan for Today", systemImage: "sun.max")
-                                .font(.dmBody)
-                                .foregroundColor(Color.dmTextPrimary)
+                    // Date & Scheduling Section
+                    VStack(alignment: .leading, spacing: DMSpacing.xs) {
+                        Text("Schedule & Due Date")
+                            .font(.dmCaptionBold)
+                            .foregroundColor(Color.dmTextSecondary)
+
+                        // 4 Option Chips
+                        HStack(spacing: DMSpacing.xs + 2) {
+                            ForEach(QuickCaptureDateOption.allCases, id: \.self) { option in
+                                Button {
+                                    withAnimation(.spring(response: 0.25, dampingFraction: 0.75)) {
+                                        dateOption = option
+                                        if option == .today {
+                                            selectedDate = Date()
+                                        } else if option == .tomorrow {
+                                            selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+                                        }
+                                    }
+                                } label: {
+                                    HStack(spacing: 3) {
+                                        Image(systemName: option.icon)
+                                            .font(.system(size: 11, weight: .semibold))
+                                        Text(option.rawValue)
+                                            .font(.dmCaptionBold)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 8)
+                                    .foregroundColor(dateOption == option ? Color.white : Color.dmTextPrimary)
+                                    .background(dateOption == option ? Color.dmAccent : Color.dmSecondaryCard)
+                                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm, style: .continuous))
+                                }
+                                .buttonStyle(.plain)
+                            }
                         }
-                        .padding(.vertical, DMSpacing.sm)
 
-                        Divider().background(Color.dmBorder.opacity(0.6))
+                        // Date Details & DatePicker Card
+                        if dateOption != .noDate {
+                            VStack(spacing: DMSpacing.sm) {
+                                if dateOption == .custom {
+                                    DatePicker(
+                                        "Select Date",
+                                        selection: $selectedDate,
+                                        displayedComponents: [.date]
+                                    )
+                                    .datePickerStyle(.graphical)
+                                    .tint(Color.dmAccent)
+                                    .padding(.vertical, 2)
+                                } else {
+                                    HStack {
+                                        Image(systemName: "calendar")
+                                            .font(.system(size: 14, weight: .semibold))
+                                            .foregroundColor(Color.dmAccent)
 
+                                        Text(formattedDate(selectedDate))
+                                            .font(.system(size: 13.5, weight: .medium))
+                                            .foregroundColor(Color.dmTextPrimary)
+
+                                        Spacer()
+
+                                        Button {
+                                            withAnimation(.spring(response: 0.25, dampingFraction: 0.75)) {
+                                                dateOption = .custom
+                                            }
+                                        } label: {
+                                            Text("Change")
+                                                .font(.system(size: 12, weight: .semibold))
+                                                .foregroundColor(Color.dmAccent)
+                                                .padding(.horizontal, 9)
+                                                .padding(.vertical, 4)
+                                                .background(Color.dmAccent.opacity(0.12))
+                                                .clipShape(Capsule())
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+                                    .padding(.vertical, 2)
+                                }
+
+                                Divider().background(Color.dmBorder.opacity(0.6))
+
+                                // Specific Time Option
+                                Toggle(isOn: $includeSpecificTime) {
+                                    Label("Set Specific Start Time", systemImage: "clock")
+                                        .font(.dmBody)
+                                        .foregroundColor(Color.dmTextPrimary)
+                                }
+
+                                if includeSpecificTime {
+                                    HStack {
+                                        Text("Start Time")
+                                            .font(.dmCaptionBold)
+                                            .foregroundColor(Color.dmTextSecondary)
+                                        Spacer()
+                                        DatePicker("", selection: $scheduledTime, displayedComponents: [.hourAndMinute])
+                                            .datePickerStyle(.compact)
+                                            .labelsHidden()
+                                            .tint(Color.dmAccent)
+                                    }
+                                    .padding(.top, 2)
+                                }
+                            }
+                            .padding(DMSpacing.md)
+                            .background(Color.dmCard)
+                            .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                                    .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                            )
+                        }
+                    }
+
+                    // Priority Toggle
+                    VStack(spacing: 0) {
                         Toggle(isOn: $isDailyPriority) {
                             Label("Mark as Top Priority", systemImage: "star.fill")
                                 .font(.dmBody)
-                                .foregroundColor(Color.dmTextPrimary)
+                                .foregroundColor(isDailyPriority ? Color.dmAmber : Color.dmTextPrimary)
                         }
                         .padding(.vertical, DMSpacing.sm)
                     }
@@ -179,6 +322,7 @@ public struct QuickCaptureSheet: View {
                 }
                 .padding(DMSpacing.md)
             }
+            .scrollDismissesKeyboard(.interactively)
             .background(Color.dmBackground)
             .navigationTitle("New Task")
             .navigationBarTitleDisplayMode(.inline)
@@ -201,7 +345,9 @@ public struct QuickCaptureSheet: View {
                 }
             }
             .onAppear {
-                isTitleFocused = true
+                if !CommandLine.arguments.contains("-ShowQuickCapture") {
+                    isTitleFocused = true
+                }
             }
         }
     }
@@ -232,14 +378,47 @@ public struct QuickCaptureSheet: View {
         let cleanTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !cleanTitle.isEmpty else { return }
 
+        let targetDate: Date? = {
+            let cal = Calendar.current
+            switch dateOption {
+            case .today:
+                return Date()
+            case .tomorrow:
+                return cal.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+            case .custom:
+                return selectedDate
+            case .noDate:
+                return nil
+            }
+        }()
+
+        var startTime: Date? = nil
+        var endTime: Date? = nil
+
+        if let date = targetDate, includeSpecificTime {
+            let cal = Calendar.current
+            let timeComp = cal.dateComponents([.hour, .minute], from: scheduledTime)
+            var dateComp = cal.dateComponents([.year, .month, .day], from: date)
+            dateComp.hour = timeComp.hour
+            dateComp.minute = timeComp.minute
+            if let combined = cal.date(from: dateComp) {
+                startTime = combined
+                endTime = cal.date(byAdding: .minute, value: durationMinutes, to: combined)
+            }
+        }
+
+        let status: TaskStatus = targetDate == nil ? .inbox : .planned
+
         guard let task = try? DaymarkTask(
             title: cleanTitle,
             notes: notes.isEmpty ? nil : notes,
             projectId: selectedProjectId,
-            dueDate: planForToday ? Date() : nil,
+            dueDate: targetDate,
+            scheduledStartTime: startTime,
+            scheduledEndTime: endTime,
             estimatedDurationMinutes: max(5, durationMinutes),
             importance: importance,
-            status: planForToday ? .planned : .inbox,
+            status: status,
             isDailyPriority: isDailyPriority
         ) else { return }
 

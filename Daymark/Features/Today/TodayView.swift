@@ -55,6 +55,7 @@ public struct TodayView: View {
                     VStack(alignment: .leading, spacing: DMSpacing.md) {
                         // 1. Warm Greeting & Profile Header (Concept 1 style)
                         DailyOverviewHeader(
+                            selectedDate: selectedDate,
                             onAvatarTap: {
                                 showingSettings = true
                             },
@@ -117,18 +118,18 @@ public struct TodayView: View {
                         // 6. Active View Content
                         switch selectedMode {
                         case .schedule:
-                            TimelineSection { task in
+                            TimelineSection(selectedDate: selectedDate) { task in
                                 selectedTaskToEdit = task
                             }
                             .id("timeline-section")
 
                         case .priorities:
-                            DailyPrioritiesSection { task in
+                            DailyPrioritiesSection(selectedDate: selectedDate) { task in
                                 selectedTaskToEdit = task
                             }
 
                         case .routines:
-                            TodayRoutinesQuickView()
+                            TodayRoutinesQuickView(selectedDate: selectedDate)
                         }
 
                         Spacer(minLength: 20)
@@ -157,7 +158,7 @@ public struct TodayView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $showingQuickCapture) {
-                QuickCaptureSheet()
+                QuickCaptureSheet(initialDate: selectedDate)
             }
             .sheet(isPresented: $showingMissedTasksResolution) {
                 MissedTasksResolutionSheet()
@@ -237,8 +238,11 @@ public struct TodayView: View {
 
 public struct TodayRoutinesQuickView: View {
     @Environment(AppState.self) private var appState
+    var selectedDate: Date
 
-    public init() {}
+    public init(selectedDate: Date = Date()) {
+        self.selectedDate = selectedDate
+    }
 
     public var body: some View {
         VStack(alignment: .leading, spacing: DMSpacing.sm) {
@@ -249,7 +253,7 @@ public struct TodayRoutinesQuickView: View {
 
                 Spacer()
 
-                let fullyDone = appState.routines.filter { $0.isFullyCompleted(on: Date()) }.count
+                let fullyDone = appState.routines.filter { $0.isFullyCompleted(on: selectedDate) }.count
                 Text("\(fullyDone) of \(appState.routines.count) completed")
                     .font(.system(size: 12.5, weight: .semibold, design: .rounded))
                     .foregroundColor(Color.dmTextSecondary)
@@ -290,7 +294,7 @@ public struct TodayRoutinesQuickView: View {
     }
 
     private func routineCard(routine: DaymarkRoutine) -> some View {
-        let isDone = routine.isFullyCompleted(on: Date())
+        let isDone = routine.isFullyCompleted(on: selectedDate)
         let color: Color = {
             if let hex = routine.colorHex { return Color(hex: hex) }
             if routine.title.lowercased().contains("room") { return Color(hex: "#EC4899") }
@@ -356,7 +360,7 @@ public struct TodayRoutinesQuickView: View {
                     let generator = UIImpactFeedbackGenerator(style: .medium)
                     generator.impactOccurred()
                     Task {
-                        try? await appState.toggleRoutine(id: routine.id, on: Date())
+                        try? await appState.toggleRoutine(id: routine.id, on: selectedDate)
                     }
                 } label: {
                     ZStack {
@@ -382,12 +386,12 @@ public struct TodayRoutinesQuickView: View {
             if !routine.checklist.isEmpty {
                 VStack(spacing: 6) {
                     ForEach(routine.checklist) { item in
-                        let itemCompleted = routine.isItemCompleted(itemId: item.id, on: Date())
+                        let itemCompleted = routine.isItemCompleted(itemId: item.id, on: selectedDate)
                         Button {
                             let generator = UIImpactFeedbackGenerator(style: .light)
                             generator.impactOccurred()
                             Task {
-                                try? await appState.toggleRoutineItem(routineId: routine.id, itemId: item.id)
+                                try? await appState.toggleRoutineItem(routineId: routine.id, itemId: item.id, on: selectedDate)
                             }
                         } label: {
                             HStack(spacing: DMSpacing.sm) {

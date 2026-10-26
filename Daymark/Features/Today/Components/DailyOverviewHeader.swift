@@ -2,29 +2,35 @@ import SwiftUI
 
 public struct DailyOverviewHeader: View {
     @Environment(AppState.self) private var appState
+    var selectedDate: Date
     var onAvatarTap: (() -> Void)?
     var onReviewTap: (() -> Void)?
 
-    public init(onAvatarTap: (() -> Void)? = nil, onReviewTap: (() -> Void)? = nil) {
+    public init(selectedDate: Date = Date(), onAvatarTap: (() -> Void)? = nil, onReviewTap: (() -> Void)? = nil) {
+        self.selectedDate = selectedDate
         self.onAvatarTap = onAvatarTap
         self.onReviewTap = onReviewTap
     }
 
     private var greetingText: String {
         let hour = Calendar.current.component(.hour, from: Date())
-        if hour < 12 {
-            return "Good morning"
-        } else if hour < 17 {
-            return "Good afternoon"
+        if Calendar.current.isDateInToday(selectedDate) {
+            if hour < 12 {
+                return "Good morning"
+            } else if hour < 17 {
+                return "Good afternoon"
+            } else {
+                return "Good evening"
+            }
         } else {
-            return "Good evening"
+            return "Plan for"
         }
     }
 
     private var dateFormatted: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE, d MMMM"
-        return formatter.string(from: Date())
+        return formatter.string(from: selectedDate)
     }
 
     public var body: some View {
