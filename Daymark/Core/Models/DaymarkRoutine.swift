@@ -83,4 +83,26 @@ public struct DaymarkRoutine: Identifiable, Codable, Equatable, Sendable {
         guard let currentSet = completionRecords[key] else { return false }
         return checklist.allSatisfy { currentSet.contains($0.id) }
     }
+
+    public var currentStreakDays: Int {
+        var streak = 0
+        let calendar = Calendar.current
+        var checkDate = Date()
+
+        if isFullyCompleted(on: checkDate) {
+            streak += 1
+            guard let yesterday = calendar.date(byAdding: .day, value: -1, to: checkDate) else { return streak }
+            checkDate = yesterday
+        } else {
+            guard let yesterday = calendar.date(byAdding: .day, value: -1, to: checkDate) else { return 0 }
+            checkDate = yesterday
+        }
+
+        while isFullyCompleted(on: checkDate) {
+            streak += 1
+            guard let prev = calendar.date(byAdding: .day, value: -1, to: checkDate) else { break }
+            checkDate = prev
+        }
+        return streak
+    }
 }

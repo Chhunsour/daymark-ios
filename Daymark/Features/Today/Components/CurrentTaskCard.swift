@@ -30,87 +30,95 @@ public struct CurrentTaskCard: View {
         Group {
             if let task = activeOrNextTask {
                 VStack(alignment: .leading, spacing: DMSpacing.mdSm) {
-                    // Top Status & Project Badges
+                    // Top Badges
                     HStack(alignment: .center) {
-                        HStack(spacing: DMSpacing.xs + 2) {
+                        HStack(spacing: DMSpacing.xs) {
                             Circle()
                                 .fill(isCurrentActive ? Color.dmAccent : Color.dmPeach)
-                                .frame(width: 8, height: 8)
+                                .frame(width: 7, height: 7)
 
                             Text(isCurrentActive ? "Focusing Now" : "Up Next Focus")
-                                .font(.dmCaptionBold)
+                                .font(.system(size: 11, weight: .bold, design: .rounded))
                                 .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmPeach)
 
                             Text("•")
-                                .font(.dmCaption)
+                                .font(.caption2)
                                 .foregroundColor(Color.dmTextTertiary)
 
                             Text("\(task.estimatedDurationMinutes) min")
-                                .font(.dmCaptionBold)
+                                .font(.system(size: 11, weight: .semibold, design: .rounded))
                                 .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmPeach)
                         }
-                        .padding(.horizontal, DMSpacing.sm + 2)
-                        .padding(.vertical, 4.5)
+                        .padding(.horizontal, 9)
+                        .padding(.vertical, 4)
                         .background(isCurrentActive ? Color.dmAccent.opacity(0.12) : Color.dmCard)
                         .clipShape(Capsule())
-                        .shadow(color: Color.black.opacity(0.03), radius: 2, x: 0, y: 1)
+                        .shadow(color: Color.black.opacity(0.02), radius: 2, x: 0, y: 1)
 
                         Spacer()
 
                         if let proj = project {
                             let theme = PastelTheme.forProjectName(proj.name)
-                            HStack(spacing: DMSpacing.xs) {
-                                Image(systemName: proj.iconName)
-                                    .font(.system(size: 11, weight: .semibold))
-                                    .foregroundColor(theme.fg)
+                            HStack(spacing: 4) {
+                                Circle()
+                                    .fill(theme.fg)
+                                    .frame(width: 6, height: 6)
                                 Text(proj.name)
-                                    .font(.dmCaptionBold)
+                                    .font(.system(size: 11, weight: .bold, design: .rounded))
                                     .foregroundColor(Color.dmTextPrimary)
                             }
-                            .padding(.horizontal, DMSpacing.sm + 2)
-                            .padding(.vertical, 4.5)
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 4)
                             .background(Color.dmCard)
                             .clipShape(Capsule())
-                            .shadow(color: Color.black.opacity(0.03), radius: 2, x: 0, y: 1)
+                            .shadow(color: Color.black.opacity(0.02), radius: 2, x: 0, y: 1)
                         }
                     }
 
-                    // Content & Stylized Illustration Row
-                    HStack(alignment: .top, spacing: DMSpacing.md) {
-                        VStack(alignment: .leading, spacing: 6) {
+                    // Content & Minimalist Focus Indicator
+                    HStack(alignment: .top, spacing: DMSpacing.sm) {
+                        VStack(alignment: .leading, spacing: 4) {
                             Text(task.title)
-                                .font(.dmTitle)
+                                .font(.system(size: 19, weight: .bold, design: .default))
                                 .foregroundColor(Color.dmTextPrimary)
                                 .lineLimit(2)
                                 .fixedSize(horizontal: false, vertical: true)
 
                             if let notes = task.notes, !notes.isEmpty {
                                 Text(notes)
-                                    .font(.dmSubheadline)
+                                    .font(.system(size: 13, weight: .regular))
                                     .foregroundColor(Color.dmTextSecondary)
-                                    .lineLimit(2)
+                                    .lineLimit(1)
                             }
 
                             if !timeFormatted.isEmpty {
-                                HStack(spacing: 5) {
+                                HStack(spacing: 4) {
                                     Image(systemName: "clock.fill")
-                                        .font(.system(size: 11))
+                                        .font(.system(size: 10))
                                         .foregroundColor(Color.dmPeach)
                                     Text(timeFormatted)
-                                        .font(.dmCaptionBold)
+                                        .font(.system(size: 12, weight: .semibold, design: .rounded))
                                         .foregroundColor(Color.dmTextSecondary)
                                 }
                                 .padding(.top, 2)
                             }
                         }
 
-                        Spacer(minLength: 4)
+                        Spacer(minLength: 8)
 
-                        // Stylized Illustration Graphic (Concept 1 & 2 inspired)
-                        heroIllustration(isActive: isCurrentActive)
+                        // Elegant Minimalist Focus Clock Badge
+                        ZStack {
+                            Circle()
+                                .fill(Color.dmPeach.opacity(0.12))
+                                .frame(width: 48, height: 48)
+
+                            Image(systemName: isCurrentActive ? "flame.fill" : "timer")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundColor(Color.dmPeach)
+                        }
                     }
 
-                    // Action Buttons Row
+                    // Clean Action Buttons
                     HStack(spacing: DMSpacing.sm) {
                         if task.status == .inProgress {
                             Button {
@@ -120,12 +128,12 @@ public struct CurrentTaskCard: View {
                             } label: {
                                 HStack(spacing: 6) {
                                     Image(systemName: "pause.fill")
-                                        .font(.system(size: 13, weight: .bold))
+                                        .font(.system(size: 12, weight: .bold))
                                     Text("Pause Focus")
-                                        .font(.dmHeadline)
+                                        .font(.system(size: 14, weight: .bold))
                                 }
                                 .frame(maxWidth: .infinity)
-                                .padding(.vertical, 12)
+                                .padding(.vertical, 11)
                                 .foregroundColor(.white)
                                 .background(Color.dmCocoa)
                                 .clipShape(Capsule())
@@ -140,12 +148,12 @@ public struct CurrentTaskCard: View {
                             } label: {
                                 HStack(spacing: 6) {
                                     Image(systemName: "play.fill")
-                                        .font(.system(size: 13, weight: .bold))
+                                        .font(.system(size: 12, weight: .bold))
                                     Text("Start Focus")
-                                        .font(.dmHeadline)
+                                        .font(.system(size: 14, weight: .bold))
                                 }
                                 .frame(maxWidth: .infinity)
-                                .padding(.vertical, 12)
+                                .padding(.vertical, 11)
                                 .foregroundColor(.white)
                                 .background(Color.dmCocoa)
                                 .clipShape(Capsule())
@@ -154,120 +162,80 @@ public struct CurrentTaskCard: View {
                             .buttonStyle(DaymarkPressableStyle())
                         }
 
+                        // Mark Complete Button
                         Button {
-                            let generator = UIImpactFeedbackGenerator(style: .medium)
+                            let generator = UIImpactFeedbackGenerator(style: .light)
                             generator.impactOccurred()
                             Task { try? await appState.completeTask(task) }
                         } label: {
-                            HStack(spacing: 6) {
+                            HStack(spacing: 5) {
                                 Image(systemName: "checkmark")
-                                    .font(.system(size: 13, weight: .bold))
+                                    .font(.system(size: 12, weight: .bold))
                                 Text("Done")
-                                    .font(.dmHeadline)
+                                    .font(.system(size: 14, weight: .bold))
                             }
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 12)
+                            .padding(.vertical, 11)
                             .foregroundColor(Color.dmTextPrimary)
                             .background(Color.dmCard)
                             .clipShape(Capsule())
                             .overlay(
                                 Capsule()
-                                    .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                                    .stroke(Color.dmBorder.opacity(0.8), lineWidth: 0.8)
                             )
-                            .shadow(color: Color.black.opacity(0.04), radius: 3, x: 0, y: 1)
+                            .shadow(color: Color.black.opacity(0.02), radius: 3, x: 0, y: 1)
                         }
                         .buttonStyle(DaymarkPressableStyle())
                     }
-                    .padding(.top, DMSpacing.xxs)
                 }
-                .padding(DMSpacing.lg)
+                .padding(DMSpacing.md)
                 .background(
-                    RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
+                    RoundedRectangle(cornerRadius: 22, style: .continuous)
                         .fill(Color.dmPeachBg)
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
-                        .stroke(Color.dmPeach.opacity(0.25), lineWidth: 1.0)
+                    RoundedRectangle(cornerRadius: 22, style: .continuous)
+                        .stroke(Color.dmPeach.opacity(0.25), lineWidth: 0.8)
                 )
-                .shadow(color: Color.dmPeach.opacity(0.12), radius: 10, x: 0, y: 4)
-                .contentShape(Rectangle())
+                .shadow(color: Color.dmPeach.opacity(0.08), radius: 8, x: 0, y: 3)
                 .onTapGesture {
                     onSelectTask?(task)
                 }
             } else {
                 // Serene all caught up state
-                HStack(spacing: DMSpacing.md) {
+                HStack(spacing: DMSpacing.mdSm) {
                     ZStack {
                         Circle()
                             .fill(Color.dmMintBg)
-                            .frame(width: 48, height: 48)
+                            .frame(width: 44, height: 44)
 
                         Image(systemName: "sun.max.fill")
                             .foregroundColor(Color.dmMint)
-                            .font(.system(size: 24))
+                            .font(.system(size: 20))
                     }
 
-                    VStack(alignment: .leading, spacing: 3) {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text("All caught up for today")
-                            .font(.dmHeadline)
+                            .font(.system(size: 15, weight: .bold))
                             .foregroundColor(Color.dmTextPrimary)
 
-                        Text("Great pacing! Capture ideas or enjoy your focus.")
-                            .font(.dmCaption)
+                        Text("Great pacing! Capture ideas or enjoy your focused time.")
+                            .font(.system(size: 12, weight: .regular))
                             .foregroundColor(Color.dmTextSecondary)
                     }
 
                     Spacer()
                 }
-                .padding(DMSpacing.mdLg)
+                .padding(DMSpacing.md)
                 .background(Color.dmCard)
-                .clipShape(RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                 .overlay(
-                    RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
                         .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
                 )
-                .shadow(color: Color.black.opacity(0.03), radius: 4, x: 0, y: 2)
+                .shadow(color: Color.black.opacity(0.02), radius: 4, x: 0, y: 1.5)
             }
         }
         .padding(.horizontal, DMSpacing.md)
-    }
-
-    /// Stylized focus clock visual element with ringing arcs (Concept 1 & 2 inspired)
-    private func heroIllustration(isActive: Bool) -> some View {
-        ZStack {
-            // Ambient outer soft glow ring
-            Circle()
-                .fill(Color.dmPeach.opacity(0.15))
-                .frame(width: 72, height: 72)
-
-            // Inner tinted container
-            Circle()
-                .fill(Color.dmCard)
-                .frame(width: 58, height: 58)
-                .shadow(color: Color.dmPeach.opacity(0.25), radius: 6, x: 0, y: 3)
-
-            // Stylized bell/clock visual
-            VStack(spacing: 1) {
-                Image(systemName: isActive ? "flame.fill" : "bell.fill")
-                    .font(.system(size: 24, weight: .semibold))
-                    .foregroundColor(Color.dmPeach)
-
-                Circle()
-                    .fill(Color.dmPeach.opacity(0.5))
-                    .frame(width: 4, height: 4)
-            }
-
-            // Radiating sound/focus arcs
-            Image(systemName: "waveform")
-                .font(.system(size: 10, weight: .bold))
-                .foregroundColor(Color.dmMint)
-                .offset(x: 26, y: -16)
-
-            Image(systemName: "sparkle")
-                .font(.system(size: 11, weight: .bold))
-                .foregroundColor(Color.dmAmber)
-                .offset(x: -24, y: -18)
-        }
-        .frame(width: 76, height: 76)
     }
 }

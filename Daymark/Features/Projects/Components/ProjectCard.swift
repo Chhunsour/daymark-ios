@@ -35,26 +35,26 @@ public struct ProjectCard: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: DMSpacing.mdSm) {
             // Header with icon squircle, title, description, and status badge
-            HStack(alignment: .top, spacing: DMSpacing.mdSm) {
+            HStack(alignment: .top, spacing: DMSpacing.sm) {
                 DaymarkSquircleIcon(
                     iconName: project.iconName,
-                    backgroundColor: theme.fg.opacity(0.16),
+                    backgroundColor: theme.fg.opacity(0.14),
                     iconColor: theme.fg,
-                    size: 44,
-                    cornerRadius: 14,
-                    iconSize: 20
+                    size: 42,
+                    cornerRadius: 13,
+                    iconSize: 19
                 )
 
-                VStack(alignment: .leading, spacing: 3) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text(project.name)
-                        .font(.dmTitle2)
+                        .font(.system(size: 16, weight: .bold))
                         .foregroundColor(Color.dmTextPrimary)
 
                     if let desc = project.description, !desc.isEmpty {
                         Text(desc)
-                            .font(.dmCaption)
+                            .font(.system(size: 12, weight: .regular))
                             .foregroundColor(Color.dmTextSecondary)
-                            .lineLimit(2)
+                            .lineLimit(1)
                     }
                 }
 
@@ -63,16 +63,16 @@ public struct ProjectCard: View {
                 HStack(spacing: DMSpacing.xs) {
                     if project.status != .active {
                         Text(project.status.displayName)
-                            .font(.dmCaptionBold)
+                            .font(.system(size: 10, weight: .bold, design: .rounded))
                             .foregroundColor(Color.dmTextSecondary)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 3)
-                            .background(Color.white.opacity(0.7))
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 2.5)
+                            .background(Color.dmCard)
                             .clipShape(Capsule())
                     }
 
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 12, weight: .semibold))
+                        .font(.system(size: 11, weight: .semibold))
                         .foregroundColor(Color.dmTextTertiary)
                 }
             }
@@ -82,76 +82,50 @@ public struct ProjectCard: View {
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         Capsule()
-                            .fill(Color.white.opacity(0.8))
-                            .frame(height: 6)
+                            .fill(Color.white.opacity(0.85))
+                            .frame(height: 5)
 
                         Capsule()
                             .fill(theme.fg)
-                            .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(progressRatio))), height: 6)
+                            .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(progressRatio))), height: 5)
                     }
                 }
-                .frame(height: 6)
+                .frame(height: 5)
 
-                // Meta Row with tasks done, milestones, and avatar stack (Concept 2 style)
+                // Meta Row with tasks done and milestones
                 HStack(alignment: .center) {
                     Text("\(completedTasksCount) of \(totalTasksCount) tasks done")
-                        .font(.dmCaptionBold)
+                        .font(.system(size: 11, weight: .bold, design: .rounded))
                         .foregroundColor(Color.dmTextSecondary)
 
                     if !projectMilestones.isEmpty {
                         Text("•")
-                            .font(.dmCaption)
+                            .font(.caption2)
                             .foregroundColor(Color.dmTextTertiary)
 
                         Text("\(completedMilestonesCount)/\(projectMilestones.count) milestones")
-                            .font(.dmCaption)
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
                             .foregroundColor(Color.dmTextTertiary)
                     }
 
                     Spacer()
 
-                    // Collaborator avatar stack bubbles (Concept 2 style)
-                    DaymarkAvatarStack(size: 22, count: 4)
+                    Text("\(Int(progressRatio * 100))%")
+                        .font(.system(size: 11, weight: .bold, design: .rounded))
+                        .foregroundColor(theme.fg)
                 }
-                .padding(.top, 2)
+                .padding(.top, 1)
             }
         }
         .padding(DMSpacing.md)
         .background(
-            RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .fill(theme.bg)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
-                .stroke(theme.fg.opacity(0.20), lineWidth: 0.8)
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .stroke(theme.fg.opacity(0.22), lineWidth: 0.8)
         )
-        .shadow(color: theme.fg.opacity(0.08), radius: 6, x: 0, y: 2)
-    }
-}
-
-// Color hex parser extension
-public extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let a, r, g, b: UInt64
-        switch hex.count {
-        case 3: // RGB (12-bit)
-            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: // RGB (24-bit)
-            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8: // ARGB (32-bit)
-            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (a, r, g, b) = (255, 59, 130, 246)
-        }
-        self.init(
-            .sRGB,
-            red: Double(r) / 255,
-            green: Double(g) / 255,
-            blue:  Double(b) / 255,
-            opacity: Double(a) / 255
-        )
+        .shadow(color: theme.fg.opacity(0.06), radius: 6, x: 0, y: 2)
     }
 }

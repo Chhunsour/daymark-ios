@@ -25,15 +25,15 @@ public struct InboxView: View {
                 // Top inline capture bar
                 HStack(spacing: DMSpacing.sm) {
                     Image(systemName: "plus")
-                        .font(.system(size: 14, weight: .bold))
+                        .font(.system(size: 13, weight: .bold))
                         .foregroundColor(.white)
-                        .frame(width: 32, height: 32)
-                        .background(Color.dmCoral)
+                        .frame(width: 28, height: 28)
+                        .background(Color.dmAccent)
                         .clipShape(Circle())
-                        .shadow(color: Color.dmCoral.opacity(0.3), radius: 3, x: 0, y: 1.5)
+                        .shadow(color: Color.dmAccent.opacity(0.3), radius: 3, x: 0, y: 1.5)
 
-                    TextField("Quick capture task or thought...", text: $quickCaptureText)
-                        .font(.dmBody)
+                    TextField("Quick capture task, idea, or note...", text: $quickCaptureText)
+                        .font(.system(size: 15, weight: .regular))
                         .focused($isCaptureFocused)
                         .submitLabel(.done)
                         .onSubmit {
@@ -44,34 +44,34 @@ public struct InboxView: View {
                         Button {
                             submitQuickCapture()
                         } label: {
-                            Text("Add")
-                                .font(.dmCaptionBold)
+                            Text("Save")
+                                .font(.system(size: 12, weight: .bold, design: .rounded))
                                 .foregroundColor(.white)
-                                .padding(.horizontal, DMSpacing.mdSm)
-                                .padding(.vertical, 7)
-                                .background(Color.dmAccent)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(Color.dmCocoa)
                                 .clipShape(Capsule())
                         }
                         .transition(.scale.combined(with: .opacity))
                     }
                 }
                 .padding(.horizontal, DMSpacing.md)
-                .padding(.vertical, DMSpacing.sm + 2)
+                .padding(.vertical, 10)
                 .background(Color.dmCard)
-                .clipShape(RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                 .overlay(
-                    RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
-                        .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .stroke(Color.dmBorder.opacity(0.8), lineWidth: 0.6)
                 )
-                .shadow(color: Color.black.opacity(0.025), radius: 5, x: 0, y: 2)
+                .shadow(color: Color.black.opacity(0.025), radius: 4, x: 0, y: 1.5)
                 .padding(.horizontal, DMSpacing.md)
-                .padding(.top, DMSpacing.sm)
+                .padding(.top, DMSpacing.xs)
                 .padding(.bottom, DMSpacing.xs)
 
                 // Workspace filter scroll
                 if !appState.projects.isEmpty && !appState.inboxTasks.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: DMSpacing.xs + 2) {
+                        HStack(spacing: 6) {
                             filterChip(
                                 title: "All Items",
                                 count: appState.inboxTasks.count,
@@ -101,7 +101,7 @@ public struct InboxView: View {
                             }
                         }
                         .padding(.horizontal, DMSpacing.md)
-                        .padding(.vertical, DMSpacing.xs + 2)
+                        .padding(.vertical, DMSpacing.xs)
                     }
                 }
 
@@ -143,9 +143,9 @@ public struct InboxView: View {
                             .listRowBackground(Color.clear)
                         }
 
-                        // Bottom spacing for tab bar
+                        // Bottom clearance for floating dock
                         Color.clear
-                            .frame(height: 100)
+                            .frame(height: 96)
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
                     }
@@ -159,17 +159,6 @@ public struct InboxView: View {
             .background(Color.dmBackground)
             .navigationTitle("Inbox")
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Text("\(appState.inboxTasks.count)")
-                        .font(.dmCaptionBold)
-                        .foregroundColor(Color.dmTextPrimary)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .background(Color.dmSecondaryCard)
-                        .clipShape(Capsule())
-                }
-            }
             .sheet(item: $selectedTaskToEdit) { task in
                 TaskDetailEditorSheet(task: task)
             }
@@ -190,30 +179,30 @@ public struct InboxView: View {
 
     private func filterChip(title: String, count: Int, color: Color?, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            HStack(spacing: 5) {
+            HStack(spacing: 4) {
                 if let dotColor = color {
                     Circle()
                         .fill(dotColor)
-                        .frame(width: 6, height: 6)
+                        .frame(width: 5, height: 5)
                 }
 
                 Text(title)
-                    .font(.dmCaptionBold)
+                    .font(.system(size: 12, weight: .bold, design: .rounded))
 
                 Text("\(count)")
-                    .font(.dmCaption)
+                    .font(.system(size: 11, weight: .semibold, design: .rounded))
                     .opacity(isSelected ? 0.9 : 0.6)
             }
             .foregroundColor(isSelected ? .white : Color.dmTextPrimary)
-            .padding(.horizontal, DMSpacing.sm + 4)
-            .padding(.vertical, 6)
-            .background(isSelected ? Color.dmAccent : Color.dmCard)
+            .padding(.horizontal, 11)
+            .padding(.vertical, 5)
+            .background(isSelected ? Color.dmCocoa : Color.dmCard)
             .clipShape(Capsule())
             .overlay(
                 Capsule()
-                    .stroke(isSelected ? Color.clear : Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                    .stroke(isSelected ? Color.clear : Color.dmBorder.opacity(0.7), lineWidth: 0.5)
             )
-            .shadow(color: Color.black.opacity(isSelected ? 0.08 : 0.02), radius: 3, x: 0, y: 1)
+            .shadow(color: Color.black.opacity(isSelected ? 0.08 : 0.02), radius: 2, x: 0, y: 1)
         }
         .buttonStyle(.plain)
     }

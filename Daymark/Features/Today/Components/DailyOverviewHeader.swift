@@ -3,9 +3,11 @@ import SwiftUI
 public struct DailyOverviewHeader: View {
     @Environment(AppState.self) private var appState
     var onAvatarTap: (() -> Void)?
+    var onReviewTap: (() -> Void)?
 
-    public init(onAvatarTap: (() -> Void)? = nil) {
+    public init(onAvatarTap: (() -> Void)? = nil, onReviewTap: (() -> Void)? = nil) {
         self.onAvatarTap = onAvatarTap
+        self.onReviewTap = onReviewTap
     }
 
     private var greetingText: String {
@@ -28,65 +30,90 @@ public struct DailyOverviewHeader: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: DMSpacing.xs) {
             HStack(alignment: .center) {
-                VStack(alignment: .leading, spacing: 3) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text("\(greetingText), Alex")
-                        .font(.dmGreeting)
+                        .font(.system(size: 24, weight: .bold, design: .default))
                         .foregroundColor(Color.dmTextPrimary)
 
                     Text(dateFormatted)
-                        .font(.dmSubheadline)
+                        .font(.system(size: 14, weight: .medium))
                         .foregroundColor(Color.dmTextSecondary)
                 }
 
                 Spacer()
 
-                // Avatar / Profile icon (Concept 1 style)
-                Button {
-                    onAvatarTap?()
-                } label: {
-                    DaymarkAvatarView(size: 44, initials: "AL", systemIcon: nil)
+                // Header actions: Daily Review + Avatar
+                HStack(spacing: DMSpacing.xs + 2) {
+                    if let onReview = onReviewTap {
+                        Button {
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                            onReview()
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.dmCard)
+                                    .frame(width: 38, height: 38)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.dmBorder.opacity(0.8), lineWidth: 0.8)
+                                    )
+                                    .shadow(color: Color.black.opacity(0.02), radius: 2, x: 0, y: 1)
+
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(Color.dmHighlight)
+                            }
+                        }
+                        .buttonStyle(DaymarkPressableStyle())
+                    }
+
+                    // Avatar (Concept 1 style)
+                    Button {
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
+                        onAvatarTap?()
+                    } label: {
+                        DaymarkAvatarView(size: 38, initials: "AL", systemIcon: nil)
+                    }
+                    .buttonStyle(DaymarkPressableStyle())
                 }
-                .buttonStyle(DaymarkPressableStyle())
             }
 
-            // Calm Progress Row
+            // Serene Completion Meter Pill
             let completed = appState.completedTasksToday.count
             let total = appState.todayTasks.count
 
-            HStack(spacing: DMSpacing.sm) {
-                HStack(spacing: DMSpacing.xs + 2) {
-                    ZStack {
-                        Circle()
-                            .stroke(Color.dmBorder, lineWidth: 2.5)
-                            .frame(width: 18, height: 18)
+            HStack(spacing: DMSpacing.xs + 2) {
+                ZStack {
+                    Circle()
+                        .stroke(Color.dmBorder, lineWidth: 2)
+                        .frame(width: 14, height: 14)
 
-                        Circle()
-                            .trim(from: 0, to: CGFloat(appState.todayProgressRatio))
-                            .stroke(
-                                appState.todayProgressRatio >= 1.0 ? Color.dmSuccess : Color.dmAccent,
-                                style: StrokeStyle(lineWidth: 2.5, lineCap: .round)
-                            )
-                            .frame(width: 18, height: 18)
-                            .rotationEffect(.degrees(-90))
-                    }
-
-                    Text(total == 0 ? "No tasks for today" : "\(completed) of \(total) completed")
-                        .font(.dmCaptionBold)
-                        .foregroundColor(Color.dmTextPrimary)
+                    Circle()
+                        .trim(from: 0, to: CGFloat(appState.todayProgressRatio))
+                        .stroke(
+                            appState.todayProgressRatio >= 1.0 ? Color.dmSuccess : Color.dmAccent,
+                            style: StrokeStyle(lineWidth: 2, lineCap: .round)
+                        )
+                        .frame(width: 14, height: 14)
+                        .rotationEffect(.degrees(-90))
                 }
-                .padding(.horizontal, DMSpacing.mdSm)
-                .padding(.vertical, 6)
-                .background(Color.dmCard)
-                .clipShape(Capsule())
-                .overlay(
-                    Capsule()
-                        .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
-                )
-                .shadow(color: Color.black.opacity(0.02), radius: 3, x: 0, y: 1)
 
-                Spacer()
+                Text(total == 0 ? "No tasks for today" : "\(completed) of \(total) completed")
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .foregroundColor(Color.dmTextPrimary)
             }
-            .padding(.top, DMSpacing.xxs)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 4.5)
+            .background(Color.dmCard)
+            .clipShape(Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(Color.dmBorder.opacity(0.7), lineWidth: 0.5)
+            )
+            .shadow(color: Color.black.opacity(0.02), radius: 2, x: 0, y: 1)
+            .padding(.top, 2)
         }
         .padding(.horizontal, DMSpacing.md)
         .padding(.top, DMSpacing.xs)

@@ -14,59 +14,80 @@ public struct ProjectsView: View {
         appState.projects.reduce(0) { $0 + appState.completedTasksCount(for: $1.id) }
     }
 
+    private var overallProgressRatio: Double {
+        guard totalTasksAcrossProjects > 0 else { return 0 }
+        return Double(completedTasksAcrossProjects) / Double(totalTasksAcrossProjects)
+    }
+
     public var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: DMSpacing.md) {
                     // Hero Summary Card (Concept 2 style)
-                    HStack(spacing: DMSpacing.md) {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("Active Workspaces")
-                                .font(.dmCaptionBold)
-                                .foregroundColor(Color.dmLilac)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(Color.white)
-                                .clipShape(Capsule())
+                    VStack(alignment: .leading, spacing: DMSpacing.sm) {
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Active Workspaces")
+                                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                                    .foregroundColor(Color.dmLilac)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 3)
+                                    .background(Color.white)
+                                    .clipShape(Capsule())
 
-                            Text("Mastering projects with focus")
-                                .font(.dmTitle)
-                                .foregroundColor(Color.dmTextPrimary)
-                                .lineLimit(2)
+                                Text("Mastering projects with focus")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .foregroundColor(Color.dmTextPrimary)
 
-                            Text("\(appState.projects.count) active ventures • \(completedTasksAcrossProjects) of \(totalTasksAcrossProjects) tasks completed")
-                                .font(.dmCaption)
-                                .foregroundColor(Color.dmTextSecondary)
+                                Text("\(appState.projects.count) active ventures • \(completedTasksAcrossProjects) of \(totalTasksAcrossProjects) tasks completed")
+                                    .font(.system(size: 12, weight: .regular))
+                                    .foregroundColor(Color.dmTextSecondary)
+                            }
+
+                            Spacer()
+
+                            ZStack {
+                                Circle()
+                                    .fill(Color.dmLilac.opacity(0.14))
+                                    .frame(width: 48, height: 48)
+
+                                Image(systemName: "square.stack.3d.up.fill")
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundColor(Color.dmLilac)
+                            }
                         }
 
-                        Spacer()
+                        // Overall Progress Bar
+                        VStack(alignment: .leading, spacing: 4) {
+                            GeometryReader { geo in
+                                ZStack(alignment: .leading) {
+                                    Capsule()
+                                        .fill(Color.white.opacity(0.85))
+                                        .frame(height: 5)
 
-                        // Stylized 3D folder visual
-                        ZStack {
-                            Circle()
-                                .fill(Color.dmLilac.opacity(0.15))
-                                .frame(width: 58, height: 58)
-
-                            Image(systemName: "folder.fill.badge.gearshape")
-                                .font(.system(size: 26, weight: .semibold))
-                                .foregroundColor(Color.dmLilac)
+                                    Capsule()
+                                        .fill(Color.dmLilac)
+                                        .frame(width: max(0, min(geo.size.width, geo.size.width * CGFloat(overallProgressRatio))), height: 5)
+                                }
+                            }
+                            .frame(height: 5)
                         }
                     }
-                    .padding(DMSpacing.lg)
+                    .padding(DMSpacing.md)
                     .background(
-                        RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
                             .fill(Color.dmLilacBg)
                     )
                     .overlay(
-                        RoundedRectangle(cornerRadius: DMRadius.xxl, style: .continuous)
-                            .stroke(Color.dmLilac.opacity(0.25), lineWidth: 1.0)
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .stroke(Color.dmLilac.opacity(0.22), lineWidth: 0.8)
                     )
-                    .shadow(color: Color.dmLilac.opacity(0.10), radius: 8, x: 0, y: 3)
+                    .shadow(color: Color.dmLilac.opacity(0.08), radius: 8, x: 0, y: 3)
                     .padding(.horizontal, DMSpacing.md)
                     .padding(.top, DMSpacing.xs)
 
                     // Workspaces List
-                    LazyVStack(spacing: DMSpacing.sm) {
+                    LazyVStack(spacing: DMSpacing.xs + 2) {
                         ForEach(appState.projects) { project in
                             NavigationLink {
                                 ProjectDetailView(projectId: project.id)
@@ -82,33 +103,32 @@ public struct ProjectsView: View {
                     Button {
                         showingAddProject = true
                     } label: {
-                        HStack(spacing: DMSpacing.xs + 2) {
+                        HStack(spacing: DMSpacing.xs) {
                             Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 16, weight: .semibold))
+                                .font(.system(size: 15, weight: .semibold))
                             Text("New Workspace")
-                                .font(.dmHeadline)
+                                .font(.system(size: 14, weight: .bold))
                         }
                         .foregroundColor(Color.dmAccent)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, DMSpacing.md)
+                        .padding(.vertical, 12)
                         .background(Color.dmCard)
-                        .clipShape(RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous))
+                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                         .overlay(
-                            RoundedRectangle(cornerRadius: DMRadius.xl, style: .continuous)
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
                                 .stroke(Color.dmBorder.opacity(0.7), lineWidth: 0.5)
                         )
-                        .shadow(color: Color.black.opacity(0.02), radius: 4, x: 0, y: 1.5)
+                        .shadow(color: Color.black.opacity(0.02), radius: 3, x: 0, y: 1)
                     }
                     .buttonStyle(DaymarkPressableStyle())
                     .padding(.horizontal, DMSpacing.md)
-                    .padding(.top, DMSpacing.xs)
 
-                    Spacer(minLength: 40)
+                    Spacer(minLength: 20)
                 }
-                .padding(.vertical, DMSpacing.sm)
+                .padding(.vertical, DMSpacing.xs)
             }
             .safeAreaInset(edge: .bottom) {
-                Color.clear.frame(height: 72)
+                Color.clear.frame(height: 96)
             }
             .background(Color.dmBackground)
             .navigationTitle("Workspaces")
@@ -119,12 +139,15 @@ public struct ProjectsView: View {
                         showingAddProject = true
                     } label: {
                         Image(systemName: "plus")
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(.white)
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor(Color.dmTextPrimary)
                             .frame(width: 32, height: 32)
-                            .background(Color.dmAccent)
+                            .background(Color.dmCard)
                             .clipShape(Circle())
-                            .shadow(color: Color.dmAccent.opacity(0.3), radius: 3, x: 0, y: 1.5)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.dmBorder.opacity(0.8), lineWidth: 0.8)
+                            )
                     }
                 }
             }

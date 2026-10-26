@@ -100,7 +100,7 @@ public struct RoutinesView: View {
                 .padding(.vertical, DMSpacing.sm)
             }
             .safeAreaInset(edge: .bottom) {
-                Color.clear.frame(height: 72)
+                Color.clear.frame(height: 96)
             }
             .background(Color.dmBackground)
             .navigationTitle("Routines")
@@ -111,12 +111,15 @@ public struct RoutinesView: View {
                         showingAddRoutine = true
                     } label: {
                         Image(systemName: "plus")
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(.white)
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor(Color.dmTextPrimary)
                             .frame(width: 32, height: 32)
-                            .background(Color.dmAccent)
+                            .background(Color.dmCard)
                             .clipShape(Circle())
-                            .shadow(color: Color.dmAccent.opacity(0.3), radius: 3, x: 0, y: 1.5)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.dmBorder.opacity(0.8), lineWidth: 0.8)
+                            )
                     }
                 }
             }
