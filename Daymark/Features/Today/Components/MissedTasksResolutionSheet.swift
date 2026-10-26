@@ -11,16 +11,16 @@ public struct MissedTasksResolutionSheet: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: DMSpacing.md) {
                     Text("The following tasks were scheduled previously but were not completed. Daymark never silently moves or deletes your tasks without asking.")
-                        .font(.dmBody)
+                        .font(.dmSubheadline)
                         .foregroundColor(Color.dmTextSecondary)
                         .padding(.horizontal, DMSpacing.md)
-                        .padding(.top, DMSpacing.sm)
+                        .padding(.top, DMSpacing.xs)
 
                     ForEach(appState.missedTasks) { task in
                         missedTaskCard(task: task)
                     }
                 }
-                .padding(.vertical, DMSpacing.md)
+                .padding(.vertical, DMSpacing.sm)
             }
             .background(Color.dmBackground)
             .navigationTitle("Missed Tasks")
@@ -30,7 +30,8 @@ public struct MissedTasksResolutionSheet: View {
                     Button("Done") {
                         dismiss()
                     }
-                    .font(.dmBodyBold)
+                    .font(.dmHeadline)
+                    .foregroundColor(Color.dmAccent)
                 }
             }
         }
@@ -40,7 +41,7 @@ public struct MissedTasksResolutionSheet: View {
         VStack(alignment: .leading, spacing: DMSpacing.sm) {
             HStack {
                 Text(task.title)
-                    .font(.dmBodyBold)
+                    .font(.dmHeadline)
                     .foregroundColor(Color.dmTextPrimary)
 
                 Spacer()
@@ -49,13 +50,13 @@ public struct MissedTasksResolutionSheet: View {
             }
 
             if let start = task.scheduledStartTime {
-                Text("Scheduled for: \(DateFormatter.localizedString(from: start, dateStyle: .short, timeStyle: .short))")
+                Text("Scheduled: \(DateFormatter.localizedString(from: start, dateStyle: .short, timeStyle: .short))")
                     .font(.dmCaption)
-                    .foregroundColor(Color.dmTextSecondary)
+                    .foregroundColor(Color.dmTextTertiary)
             }
 
-            HStack(spacing: DMSpacing.xs) {
-                DaymarkButton(title: "Do Today", icon: "calendar.badge.clock", style: .primary) {
+            HStack(spacing: DMSpacing.xs + 2) {
+                DaymarkButton(title: "Do Today", icon: "sun.max.fill", style: .primary, size: .compact) {
                     Task {
                         try? await appState.resolveMissedTask(task, action: .rescheduleToday)
                         if appState.missedTasks.isEmpty {
@@ -64,7 +65,7 @@ public struct MissedTasksResolutionSheet: View {
                     }
                 }
 
-                DaymarkButton(title: "To Inbox", icon: "tray.and.arrow.down", style: .secondary) {
+                DaymarkButton(title: "To Inbox", icon: "tray.and.arrow.down", style: .secondary, size: .compact) {
                     Task {
                         try? await appState.resolveMissedTask(task, action: .moveToInbox)
                         if appState.missedTasks.isEmpty {
@@ -73,7 +74,7 @@ public struct MissedTasksResolutionSheet: View {
                     }
                 }
 
-                DaymarkButton(title: "Dismiss", style: .subtle) {
+                DaymarkButton(title: "Dismiss", style: .subtle, size: .compact) {
                     Task {
                         try? await appState.resolveMissedTask(task, action: .dismiss)
                         if appState.missedTasks.isEmpty {
@@ -86,8 +87,11 @@ public struct MissedTasksResolutionSheet: View {
         }
         .padding(DMSpacing.md)
         .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
-        .overlay(RoundedRectangle(cornerRadius: DMRadius.md).stroke(Color.dmBorder, lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+        )
         .padding(.horizontal, DMSpacing.md)
     }
 }

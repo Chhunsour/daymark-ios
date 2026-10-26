@@ -34,6 +34,14 @@ public actor LocalDaymarkRepository: DaymarkRepository {
             try fileManager.createDirectory(at: storageDirectory, withIntermediateDirectories: true)
         }
 
+        if CommandLine.arguments.contains("-ResetData") {
+            try? fileManager.removeItem(at: tasksFile)
+            try? fileManager.removeItem(at: projectsFile)
+            try? fileManager.removeItem(at: milestonesFile)
+            try? fileManager.removeItem(at: routinesFile)
+            try? fileManager.removeItem(at: profileFile)
+        }
+
         // Load or seed Projects
         if fileManager.fileExists(atPath: projectsFile.path) {
             let data = try Data(contentsOf: projectsFile)

@@ -46,10 +46,10 @@ Daymark unifies fragmented responsibilities across a founder's entire ecosystem:
 - **Language & Runtime:** Swift 6 with Swift Concurrency (`actor`, `@MainActor`, `Sendable`).
 - **UI Framework:** SwiftUI with Observation framework (`@Observable`, `@Environment`).
 - **Design System:** Custom token architecture:
-  - `ColorTokens.swift`: Calm off-white / charcoal backgrounds, warm amber accent, slate indigo secondary, subtle hairline borders.
-  - `TypographyTokens.swift`: San Francisco system typography hierarchy with Dynamic Type support.
-  - `SpacingTokens.swift`: Systematic 4pt-grid spacing (`DMSpacing`) and corner radiuses (`DMRadius`).
-  - Reusable components: `DaymarkCard`, `DaymarkButton`, `DaymarkBadge`, `EmptyStateView`.
+  - `ColorTokens.swift`: "Calm Executive" palette with Slate Cobalt accent (`#2E5AAC` light / `#5C82FF` dark), crisp cool slate canvas (`#F6F7F9` / `#0B0D12`), elevated card surfaces (`#FFFFFF` / `#151821`), and subtle hairline borders (`#E2E5EB` / `#262B38`).
+  - `TypographyTokens.swift`: Native Apple SF Pro typography scale (`dmHero`, `dmLargeTitle`, `dmTitle`, `dmHeadline`, `dmBody`, `dmCaption`, `dmTime` monospaced).
+  - `SpacingTokens.swift`: Systematic 4pt-grid spacing (`DMSpacing`), corner radiuses (`DMRadius`), and control heights (`DMControlHeight`).
+  - Reusable components: `DaymarkCard`, `DaymarkButton`, `DaymarkCheckbox`, `DaymarkBadge`, `EmptyStateView`.
 - **Scheduling Engine:** `SchedulingEngine.swift` calculates available capacity, creates non-overlapping `TimeSlot`s, prioritizes critical and milestone-linked tasks, and preserves buffer gaps.
 - **Persistence:**
   - `LocalDaymarkRepository.swift`: Thread-safe actor persisting JSON stores to `Application Support/DaymarkData/` atomically.

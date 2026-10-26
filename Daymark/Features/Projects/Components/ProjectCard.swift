@@ -29,19 +29,19 @@ public struct ProjectCard: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: DMSpacing.sm) {
+        VStack(alignment: .leading, spacing: DMSpacing.sm + 2) {
             // Header with icon, name, and status badge
             HStack(spacing: DMSpacing.sm) {
                 Image(systemName: project.iconName)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(Color(hex: project.colorHex))
-                    .frame(width: 32, height: 32)
+                    .frame(width: 36, height: 36)
                     .background(Color(hex: project.colorHex).opacity(0.12))
-                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm))
+                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous))
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(project.name)
-                        .font(.dmBodyBold)
+                        .font(.dmHeadline)
                         .foregroundColor(Color.dmTextPrimary)
 
                     if let desc = project.description, !desc.isEmpty {
@@ -60,15 +60,15 @@ public struct ProjectCard: View {
 
                 Image(systemName: "chevron.right")
                     .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(Color.dmTextSecondary.opacity(0.5))
+                    .foregroundColor(Color.dmTextTertiary.opacity(0.6))
             }
 
-            // Real progress bar
-            VStack(alignment: .leading, spacing: 4) {
+            // Refined progress bar
+            VStack(alignment: .leading, spacing: 6) {
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         Capsule()
-                            .fill(Color.dmBorder.opacity(0.5))
+                            .fill(Color.dmSecondaryCard)
                             .frame(height: 5)
 
                         Capsule()
@@ -79,7 +79,7 @@ public struct ProjectCard: View {
                 .frame(height: 5)
 
                 HStack {
-                    Text("\(completedTasksCount)/\(totalTasksCount) tasks done")
+                    Text("\(completedTasksCount) of \(totalTasksCount) tasks done")
                         .font(.dmCaption)
                         .foregroundColor(Color.dmTextSecondary)
 
@@ -88,7 +88,7 @@ public struct ProjectCard: View {
                     if !projectMilestones.isEmpty {
                         Text("\(completedMilestonesCount)/\(projectMilestones.count) milestones")
                             .font(.dmCaption)
-                            .foregroundColor(Color.dmTextSecondary)
+                            .foregroundColor(Color.dmTextTertiary)
                     }
                 }
             }
@@ -96,8 +96,11 @@ public struct ProjectCard: View {
         }
         .padding(DMSpacing.md)
         .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
-        .overlay(RoundedRectangle(cornerRadius: DMRadius.md).stroke(Color.dmBorder.opacity(0.6), lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+        )
     }
 }
 

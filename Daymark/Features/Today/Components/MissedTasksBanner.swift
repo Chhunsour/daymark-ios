@@ -11,17 +11,17 @@ public struct MissedTasksBanner: View {
     public var body: some View {
         if !appState.missedTasks.isEmpty {
             HStack(spacing: DMSpacing.sm) {
-                Image(systemName: "exclamationmark.circle.fill")
+                Image(systemName: "exclamationmark.triangle.fill")
                     .foregroundColor(Color.dmWarning)
-                    .font(.system(size: 20))
+                    .font(.system(size: 18))
 
                 VStack(alignment: .leading, spacing: 2) {
                     let count = appState.missedTasks.count
-                    Text("\(count) missed task\(count == 1 ? "" : "s") need\(count == 1 ? "s" : "") attention")
-                        .font(.dmBodyBold)
+                    Text("\(count) unfinished task\(count == 1 ? "" : "s") need review")
+                        .font(.dmHeadline)
                         .foregroundColor(Color.dmTextPrimary)
 
-                    Text("Tasks from previous windows that were not marked complete.")
+                    Text("Reschedule for today or move back to Inbox.")
                         .font(.dmCaption)
                         .foregroundColor(Color.dmTextSecondary)
                 }
@@ -33,17 +33,17 @@ public struct MissedTasksBanner: View {
                 }
                 .font(.dmCaptionBold)
                 .foregroundColor(Color.white)
-                .padding(.horizontal, DMSpacing.sm + 2)
+                .padding(.horizontal, DMSpacing.mdSm)
                 .padding(.vertical, 6)
                 .background(Color.dmWarning)
                 .clipShape(Capsule())
             }
             .padding(DMSpacing.md)
-            .background(Color.dmWarning.opacity(0.12))
-            .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
+            .background(Color.dmWarning.opacity(0.10))
+            .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
             .overlay(
-                RoundedRectangle(cornerRadius: DMRadius.md)
-                    .stroke(Color.dmWarning.opacity(0.3), lineWidth: 1)
+                RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                    .stroke(Color.dmWarning.opacity(0.3), lineWidth: 0.5)
             )
             .padding(.horizontal, DMSpacing.md)
         }

@@ -29,43 +29,45 @@ public struct EveningPlanningSheet: View {
     public var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: DMSpacing.lg) {
-                    VStack(alignment: .leading, spacing: DMSpacing.xs) {
-                        Text("PREVIEW TOMORROW")
+                VStack(alignment: .leading, spacing: DMSpacing.md + 4) {
+                    VStack(alignment: .leading, spacing: DMSpacing.xxs) {
+                        Text("Preview Tomorrow")
                             .font(.dmCaptionBold)
                             .foregroundColor(Color.dmAccent)
-                            .tracking(1.0)
 
                         Text(tomorrowFormatted)
                             .font(.dmHero)
                             .foregroundColor(Color.dmTextPrimary)
 
                         Text("Review tomorrow's proposed commitments before heading to sleep so you wake up with complete clarity.")
-                            .font(.dmBody)
+                            .font(.dmSubheadline)
                             .foregroundColor(Color.dmTextSecondary)
                     }
                     .padding(.horizontal, DMSpacing.md)
-                    .padding(.top, DMSpacing.sm)
+                    .padding(.top, DMSpacing.xs)
 
                     // Work commitment notice
                     HStack(spacing: DMSpacing.sm) {
                         Image(systemName: "briefcase.fill")
-                            .foregroundColor(Color.dmHighlight)
+                            .foregroundColor(Color.dmAccent)
                         Text("Work hours (9:00 AM – 6:00 PM) are protected for Smile Media.")
                             .font(.dmCaption)
                             .foregroundColor(Color.dmTextSecondary)
                     }
                     .padding(DMSpacing.md)
-                    .background(Color.dmHighlight.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
+                    .background(Color.dmCard)
+                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                            .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                    )
                     .padding(.horizontal, DMSpacing.md)
 
                     // Scheduled tasks section
-                    VStack(alignment: .leading, spacing: DMSpacing.sm) {
-                        Text("PROPOSED TASKS (\(tomorrowScheduledTasks.count))")
-                            .font(.dmSectionHeader)
-                            .foregroundColor(Color.dmTextSecondary)
-                            .tracking(0.8)
+                    VStack(alignment: .leading, spacing: DMSpacing.xs + 2) {
+                        Text("Proposed Tasks (\(tomorrowScheduledTasks.count))")
+                            .font(.dmHeadline)
+                            .foregroundColor(Color.dmTextPrimary)
                             .padding(.horizontal, DMSpacing.md)
 
                         if tomorrowScheduledTasks.isEmpty {
@@ -75,32 +77,43 @@ public struct EveningPlanningSheet: View {
                                     .foregroundColor(Color.dmTextSecondary)
                                 Text("Daymark will organize your daily priorities during morning confirmation.")
                                     .font(.dmCaption)
-                                    .foregroundColor(Color.dmTextSecondary.opacity(0.8))
+                                    .foregroundColor(Color.dmTextTertiary)
                             }
                             .frame(maxWidth: .infinity)
                             .padding(DMSpacing.lg)
                             .background(Color.dmCard)
-                            .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
+                            .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                                    .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                            )
                             .padding(.horizontal, DMSpacing.md)
                         } else {
-                            ForEach(tomorrowScheduledTasks) { task in
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(task.title)
-                                            .font(.dmBodyBold)
-                                            .foregroundColor(Color.dmTextPrimary)
-                                        Text("\(task.estimatedDurationMinutes) minutes")
-                                            .font(.dmCaption)
-                                            .foregroundColor(Color.dmTextSecondary)
+                            VStack(spacing: DMSpacing.xs) {
+                                ForEach(tomorrowScheduledTasks) { task in
+                                    HStack {
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(task.title)
+                                                .font(.dmBody)
+                                                .foregroundColor(Color.dmTextPrimary)
+                                            Text("\(task.estimatedDurationMinutes) minutes")
+                                                .font(.dmCaption)
+                                                .foregroundColor(Color.dmTextTertiary)
+                                        }
+                                        Spacer()
+                                        DaymarkBadge(title: task.importance.displayName, variant: .accent)
                                     }
-                                    Spacer()
-                                    DaymarkBadge(title: task.importance.displayName, variant: .accent)
+                                    .padding(.horizontal, DMSpacing.md)
+                                    .padding(.vertical, DMSpacing.sm + 2)
+                                    .background(Color.dmCard)
+                                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                                            .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                                    )
                                 }
-                                .padding(DMSpacing.md)
-                                .background(Color.dmCard)
-                                .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
-                                .padding(.horizontal, DMSpacing.md)
                             }
+                            .padding(.horizontal, DMSpacing.md)
                         }
                     }
 
@@ -110,11 +123,11 @@ public struct EveningPlanningSheet: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, DMSpacing.md)
-                    .padding(.top, DMSpacing.md)
+                    .padding(.top, DMSpacing.xs)
 
                     Spacer(minLength: 40)
                 }
-                .padding(.vertical, DMSpacing.md)
+                .padding(.vertical, DMSpacing.sm)
             }
             .background(Color.dmBackground)
             .navigationTitle("Evening Planning")
@@ -124,6 +137,8 @@ public struct EveningPlanningSheet: View {
                     Button("Close") {
                         dismiss()
                     }
+                    .font(.dmBody)
+                    .foregroundColor(Color.dmTextSecondary)
                 }
             }
         }

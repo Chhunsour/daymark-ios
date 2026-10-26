@@ -24,50 +24,33 @@ public struct TodayView: View {
 
     public var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottomTrailing) {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: DMSpacing.lg) {
-                        DailyOverviewHeader()
+            ScrollView {
+                VStack(alignment: .leading, spacing: DMSpacing.lg) {
+                    DailyOverviewHeader()
 
-                        MissedTasksBanner {
-                            showingMissedTasksResolution = true
-                        }
-
-                        CurrentTaskCard { task in
-                            selectedTaskToEdit = task
-                        }
-
-                        DailyPrioritiesSection { task in
-                            selectedTaskToEdit = task
-                        }
-
-                        TimelineSection { task in
-                            selectedTaskToEdit = task
-                        }
-
-                        Spacer(minLength: 80)
+                    MissedTasksBanner {
+                        showingMissedTasksResolution = true
                     }
-                    .padding(.vertical, DMSpacing.sm)
-                }
-                .background(Color.dmBackground)
-                .refreshable {
-                    await appState.loadData()
-                }
 
-                // Floating Quick Capture Button
-                Button {
-                    showingQuickCapture = true
-                } label: {
-                    Image(systemName: "plus")
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(.white)
-                        .frame(width: 54, height: 54)
-                        .background(Color.dmAccent)
-                        .clipShape(Circle())
-                        .shadow(color: Color.black.opacity(0.18), radius: 6, x: 0, y: 3)
+                    CurrentTaskCard { task in
+                        selectedTaskToEdit = task
+                    }
+
+                    DailyPrioritiesSection { task in
+                        selectedTaskToEdit = task
+                    }
+
+                    TimelineSection { task in
+                        selectedTaskToEdit = task
+                    }
+
+                    Spacer(minLength: 90)
                 }
-                .padding(.trailing, DMSpacing.lg)
-                .padding(.bottom, DMSpacing.lg)
+                .padding(.vertical, DMSpacing.xs)
+            }
+            .background(Color.dmBackground)
+            .refreshable {
+                await appState.loadData()
             }
             .navigationTitle("Daymark")
             .navigationBarTitleDisplayMode(.inline)
@@ -86,27 +69,27 @@ public struct TodayView: View {
                             Label("Evening Review", systemImage: "moon.stars")
                         }
                     } label: {
-                        Image(systemName: "sparkles.rectangle.stack")
-                            .font(.system(size: 15))
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 15, weight: .medium))
                             .foregroundColor(Color.dmTextSecondary)
                     }
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
-                    HStack(spacing: DMSpacing.sm) {
+                    HStack(spacing: DMSpacing.mdSm) {
                         Button {
                             showingSettings = true
                         } label: {
                             Image(systemName: "gearshape")
-                                .font(.system(size: 15))
+                                .font(.system(size: 15, weight: .regular))
                                 .foregroundColor(Color.dmTextSecondary)
                         }
 
                         Button {
                             showingQuickCapture = true
                         } label: {
-                            Image(systemName: "square.and.pencil")
-                                .font(.system(size: 15, weight: .semibold))
+                            Image(systemName: "plus")
+                                .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(Color.dmAccent)
                         }
                     }

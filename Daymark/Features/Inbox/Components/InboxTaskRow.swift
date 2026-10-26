@@ -12,61 +12,87 @@ public struct InboxTaskRow: View {
         self.onDelete = onDelete
     }
 
-    private var projectName: String? {
+    private var project: DaymarkProject? {
         guard let pId = task.projectId else { return nil }
-        return appState.projects.first(where: { $0.id == pId })?.name
+        return appState.projects.first(where: { $0.id == pId })
     }
 
     public var body: some View {
-        HStack(spacing: DMSpacing.sm) {
-            // Checkmark button (completes directly from inbox if user wants)
-            Button {
-                Task { try? await appState.completeTask(task) }
-            } label: {
-                Image(systemName: "circle")
-                    .font(.system(size: 20))
-                    .foregroundColor(Color.dmBorder)
-            }
-            .buttonStyle(.plain)
+        Button(action: onSelect) {
+            HStack(alignment: .center, spacing: DMSpacing.mdSm) {
+                // Interactive Checkbox
+                DaymarkCheckbox(isChecked: task.status == .completed) {
+                    Task { try? await appState.completeTask(task) }
+                }
 
-            VStack(alignment: .leading, spacing: 3) {
-                Text(task.title)
-                    .font(.dmBodyBold)
-                    .foregroundColor(Color.dmTextPrimary)
-                    .lineLimit(2)
+                // Task Details
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(task.title)
+                        .font(.dmBody)
+                        .foregroundColor(Color.dmTextPrimary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
 
-                HStack(spacing: DMSpacing.xs) {
-                    if let project = projectName {
-                        DaymarkBadge(title: project, icon: "folder", variant: .neutral)
-                    }
+                    HStack(spacing: DMSpacing.xs + 2) {
+                        if let proj = project {
+                            HStack(spacing: 4) {
+                                Circle()
+                                    .fill(Color(hex: proj.colorHex))
+                                    .frame(width: 6, height: 6)
+                                Text(proj.name)
+                                    .font(.dmCaption)
+                                    .foregroundColor(Color.dmTextSecondary)
+                            }
+                        }
 
-                    DaymarkBadge(title: "\(task.estimatedDurationMinutes)m", variant: .neutral)
+                        HStack(spacing: 2) {
+                            Image(systemName: "clock")
+                                .font(.system(size: 10))
+                                .foregroundColor(Color.dmTextTertiary)
+                            Text("\(task.estimatedDurationMinutes)m")
+                                .font(.dmCaption)
+                                .foregroundColor(Color.dmTextTertiary)
+                        }
 
-                    if task.importance >= .high {
-                        DaymarkBadge(title: task.importance.displayName, icon: task.importance.iconName, variant: .accent)
-                    }
+                        if task.importance >= .high {
+                            HStack(spacing: 2) {
+                                Image(systemName: task.importance.iconName)
+                                    .font(.system(size: 10))
+                                Text(task.importance.displayName)
+                                    .font(.dmCaption)
+                            }
+                            .foregroundColor(Color.dmAccent)
+                        }
 
-                    if let due = task.dueDate {
-                        DaymarkBadge(title: DateFormatter.localizedString(from: due, dateStyle: .short, timeStyle: .none), icon: "calendar", variant: .warning)
+                        if let due = task.dueDate {
+                            HStack(spacing: 2) {
+                                Image(systemName: "calendar")
+                                    .font(.system(size: 10))
+                                Text(DateFormatter.localizedString(from: due, dateStyle: .short, timeStyle: .none))
+                                    .font(.dmCaption)
+                            }
+                            .foregroundColor(Color.dmWarning)
+                        }
                     }
                 }
+
+                Spacer(minLength: 4)
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundColor(Color.dmTextTertiary.opacity(0.6))
             }
-
-            Spacer()
-
-            Image(systemName: "chevron.right")
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundColor(Color.dmTextSecondary.opacity(0.4))
+            .padding(.horizontal, DMSpacing.md)
+            .padding(.vertical, DMSpacing.mdSm)
+            .background(Color.dmCard)
+            .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                    .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+            )
         }
-        .padding(DMSpacing.md)
-        .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
-        .overlay(RoundedRectangle(cornerRadius: DMRadius.md).stroke(Color.dmBorder.opacity(0.6), lineWidth: 1))
-        .contentShape(Rectangle())
-        .onTapGesture {
-            onSelect()
-        }
-        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+        .buttonStyle(.plain)
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
             Button(role: .destructive) {
                 onDelete()
             } label: {
@@ -81,7 +107,7 @@ public struct InboxTaskRow: View {
                     try? await appState.saveTask(scheduled)
                 }
             } label: {
-                Label("Do Today", systemImage: "calendar.badge.plus")
+                Label("Do Today", systemImage: "sun.max.fill")
             }
             .tint(Color.dmAccent)
         }

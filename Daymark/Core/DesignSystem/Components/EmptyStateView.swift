@@ -23,30 +23,44 @@ public struct EmptyStateView: View {
 
     public var body: some View {
         VStack(spacing: DMSpacing.md) {
-            Image(systemName: icon)
-                .font(.system(size: 38, weight: .light))
-                .foregroundColor(Color.dmTextSecondary.opacity(0.7))
-                .padding(.bottom, DMSpacing.xs)
+            ZStack {
+                Circle()
+                    .fill(Color.dmSecondaryCard)
+                    .frame(width: 64, height: 64)
 
-            VStack(spacing: DMSpacing.xs) {
+                Image(systemName: icon)
+                    .font(.system(size: 26, weight: .regular))
+                    .foregroundColor(Color.dmTextSecondary)
+            }
+            .padding(.bottom, DMSpacing.xs)
+
+            VStack(spacing: DMSpacing.xs + 2) {
                 Text(title)
                     .font(.dmTitle)
                     .foregroundColor(Color.dmTextPrimary)
+                    .multilineTextAlignment(.center)
 
                 Text(message)
                     .font(.dmBody)
                     .foregroundColor(Color.dmTextSecondary)
                     .multilineTextAlignment(.center)
                     .lineLimit(3)
-                    .frame(maxWidth: 280)
+                    .frame(maxWidth: 300)
             }
 
             if let actionTitle = actionTitle, let action = action {
-                DaymarkButton(title: actionTitle, icon: "plus", style: .secondary, action: action)
-                    .padding(.top, DMSpacing.xs)
+                DaymarkButton(
+                    title: actionTitle,
+                    icon: "plus",
+                    style: .secondary,
+                    size: .standard,
+                    action: action
+                )
+                .padding(.top, DMSpacing.xs)
             }
         }
         .padding(DMSpacing.xl)
         .frame(maxWidth: .infinity, alignment: .center)
+        .accessibilityElement(children: .combine)
     }
 }

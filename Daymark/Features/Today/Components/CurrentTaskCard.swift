@@ -8,9 +8,9 @@ public struct CurrentTaskCard: View {
         self.onSelectTask = onSelectTask
     }
 
-    private var projectName: String? {
+    private var project: DaymarkProject? {
         guard let task = appState.currentTask ?? appState.nextTask, let pId = task.projectId else { return nil }
-        return appState.projects.first(where: { $0.id == pId })?.name
+        return appState.projects.first(where: { $0.id == pId })
     }
 
     private var timeFormatted: String {
@@ -24,107 +24,139 @@ public struct CurrentTaskCard: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: DMSpacing.sm) {
-            let isCurrentActive = appState.currentTask != nil
-            let activeOrNextTask = appState.currentTask ?? appState.nextTask
+        let isCurrentActive = appState.currentTask != nil
+        let activeOrNextTask = appState.currentTask ?? appState.nextTask
 
-            // Top Status Bar
-            HStack {
-                HStack(spacing: DMSpacing.xs) {
-                    Circle()
-                        .fill(isCurrentActive ? Color.dmAccent : Color.dmHighlight)
-                        .frame(width: 8, height: 8)
-
-                    Text(isCurrentActive ? "IN PROGRESS" : "UP NEXT")
-                        .font(.dmCaptionBold)
-                        .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmHighlight)
-                        .tracking(0.8)
-                }
-
-                Spacer()
-
-                if let project = projectName {
-                    DaymarkBadge(title: project, icon: "folder", variant: .neutral)
-                }
-            }
-
+        Group {
             if let task = activeOrNextTask {
-                VStack(alignment: .leading, spacing: DMSpacing.xs) {
-                    Text(task.title)
-                        .font(.dmTitle)
-                        .foregroundColor(Color.dmTextPrimary)
-                        .lineLimit(2)
+                VStack(alignment: .leading, spacing: DMSpacing.sm) {
+                    // Header Status Row
+                    HStack(alignment: .center) {
+                        HStack(spacing: DMSpacing.xs + 1) {
+                            Circle()
+                                .fill(isCurrentActive ? Color.dmAccent : Color.dmHighlight)
+                                .frame(width: 7, height: 7)
 
-                    if let notes = task.notes, !notes.isEmpty {
-                        Text(notes)
-                            .font(.dmBody)
-                            .foregroundColor(Color.dmTextSecondary)
+                            Text(isCurrentActive ? "Focus" : "Up Next")
+                                .font(.dmCaptionBold)
+                                .foregroundColor(isCurrentActive ? Color.dmAccent : Color.dmHighlight)
+                        }
+                        .padding(.horizontal, DMSpacing.sm)
+                        .padding(.vertical, 3)
+                        .background(isCurrentActive ? Color.dmAccent.opacity(0.10) : Color.dmHighlight.opacity(0.10))
+                        .clipShape(Capsule())
+
+                        Spacer()
+
+                        if let proj = project {
+                            HStack(spacing: DMSpacing.xs) {
+                                Image(systemName: proj.iconName)
+                                    .font(.system(size: 11, weight: .semibold))
+                                    .foregroundColor(Color(hex: proj.colorHex))
+                                Text(proj.name)
+                                    .font(.dmCaptionBold)
+                                    .foregroundColor(Color.dmTextSecondary)
+                            }
+                            .padding(.horizontal, DMSpacing.sm)
+                            .padding(.vertical, 3)
+                            .background(Color.dmSecondaryCard)
+                            .clipShape(Capsule())
+                        }
+                    }
+
+                    // Task Title & Optional Notes
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(task.title)
+                            .font(.dmTitle)
+                            .foregroundColor(Color.dmTextPrimary)
                             .lineLimit(2)
-                    }
+                            .fixedSize(horizontal: false, vertical: true)
 
-                    // Metadata Row
-                    HStack(spacing: DMSpacing.md) {
-                        if !timeFormatted.isEmpty {
-                            Label(timeFormatted, systemImage: "clock")
-                                .font(.dmTime)
+                        if let notes = task.notes, !notes.isEmpty {
+                            Text(notes)
+                                .font(.dmSubheadline)
                                 .foregroundColor(Color.dmTextSecondary)
+                                .lineLimit(1)
+                        }
+                    }
+
+                    // Metadata & Actions Bar
+                    VStack(alignment: .leading, spacing: DMSpacing.sm) {
+                        HStack(spacing: DMSpacing.mdSm) {
+                            if !timeFormatted.isEmpty {
+                                HStack(spacing: 3) {
+                                    Image(systemName: "clock")
+                                        .font(.system(size: 11))
+                                    Text(timeFormatted)
+                                        .font(.dmCaption)
+                                }
+                                .foregroundColor(Color.dmTextSecondary)
+                            }
+
+                            HStack(spacing: 3) {
+                                Image(systemName: "hourglass")
+                                    .font(.system(size: 11))
+                                Text("\(task.estimatedDurationMinutes) min")
+                                    .font(.dmCaption)
+                            }
+                            .foregroundColor(Color.dmTextTertiary)
+
+                            Spacer()
                         }
 
-                        Label("\(task.estimatedDurationMinutes) min", systemImage: "hourglass")
-                            .font(.dmTime)
-                            .foregroundColor(Color.dmTextSecondary)
+                        // Action Buttons
+                        HStack(spacing: DMSpacing.sm) {
+                            if task.status == .inProgress {
+                                DaymarkButton(title: "Pause", icon: "pause.fill", style: .secondary, size: .compact, isFullWidth: true) {
+                                    Task { try? await appState.pauseTask(task) }
+                                }
+                            } else {
+                                DaymarkButton(title: "Start Focus", icon: "play.fill", style: .tinted, size: .compact, isFullWidth: true) {
+                                    Task { try? await appState.startTask(task) }
+                                }
+                            }
 
-                        Spacer()
+                            DaymarkButton(title: "Done", icon: "checkmark", style: .primary, size: .compact, isFullWidth: true) {
+                                Task { try? await appState.completeTask(task) }
+                            }
+                        }
                     }
+                    .padding(.top, DMSpacing.xxs)
                     .padding(.top, 2)
-
-                    // Actions Row with full comfortable width
-                    HStack(spacing: DMSpacing.sm) {
-                        if task.status == .inProgress {
-                            DaymarkButton(title: "Pause", icon: "pause.fill", style: .secondary) {
-                                Task { try? await appState.pauseTask(task) }
-                            }
-                            .fixedSize()
-                        } else {
-                            DaymarkButton(title: "Start Focus", icon: "play.fill", style: .secondary) {
-                                Task { try? await appState.startTask(task) }
-                            }
-                            .fixedSize()
-                        }
-
-                        DaymarkButton(title: "Complete", icon: "checkmark", style: .primary) {
-                            Task { try? await appState.completeTask(task) }
-                        }
-                        .fixedSize()
-
-                        Spacer()
-                    }
-                    .padding(.top, DMSpacing.xs)
                 }
+                .padding(DMSpacing.md)
+                .background(Color.dmCard)
+                .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                        .stroke(isCurrentActive ? Color.dmAccent.opacity(0.8) : Color.dmBorder.opacity(0.6), lineWidth: isCurrentActive ? 1.5 : 0.5)
+                )
+                .shadow(color: Color.black.opacity(isCurrentActive ? 0.05 : 0.02), radius: 6, x: 0, y: 2)
                 .contentShape(Rectangle())
                 .onTapGesture {
                     onSelectTask?(task)
                 }
             } else {
                 HStack(spacing: DMSpacing.sm) {
-                    Image(systemName: "checkmark.circle")
+                    Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(Color.dmSuccess)
-                        .font(.system(size: 20))
+                        .font(.system(size: 18))
 
-                    Text("All caught up. No tasks currently scheduled.")
+                    Text("All caught up. No tasks scheduled right now.")
                         .font(.dmBody)
                         .foregroundColor(Color.dmTextSecondary)
+
+                    Spacer()
                 }
-                .padding(.vertical, DMSpacing.xs)
+                .padding(DMSpacing.md)
+                .background(Color.dmCard)
+                .clipShape(RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous)
+                        .stroke(Color.dmBorder.opacity(0.5), lineWidth: 0.5)
+                )
             }
         }
-        .padding(DMSpacing.md)
-        .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous)
-                .stroke(appState.currentTask != nil ? Color.dmAccent.opacity(0.8) : Color.dmBorder, lineWidth: appState.currentTask != nil ? 1.5 : 1)
-        )
         .padding(.horizontal, DMSpacing.md)
     }
 }

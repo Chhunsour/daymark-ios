@@ -15,13 +15,12 @@ public struct TimelineSection: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: DMSpacing.md) {
+        VStack(alignment: .leading, spacing: DMSpacing.sm) {
             // Header with Auto-Schedule option
             HStack {
-                Text("TIMELINE")
+                Text("Timeline")
                     .font(.dmSectionHeader)
                     .foregroundColor(Color.dmTextSecondary)
-                    .tracking(0.8)
 
                 Spacer()
 
@@ -29,11 +28,12 @@ public struct TimelineSection: View {
                     Button {
                         Task { try? await appState.autoScheduleToday() }
                     } label: {
-                        HStack(spacing: DMSpacing.xxs) {
+                        HStack(spacing: DMSpacing.xs) {
                             Image(systemName: "sparkles")
+                                .font(.system(size: 11, weight: .semibold))
                             Text("Auto-Schedule")
+                                .font(.dmCaptionBold)
                         }
-                        .font(.dmCaptionBold)
                         .foregroundColor(Color.dmAccent)
                     }
                 }
@@ -43,65 +43,83 @@ public struct TimelineSection: View {
             if appState.plannedTasksToday.isEmpty && appState.unscheduledTodayTasks.isEmpty && appState.completedTasksToday.isEmpty {
                 VStack(spacing: DMSpacing.xs) {
                     Image(systemName: "calendar.badge.clock")
-                        .font(.system(size: 28))
-                        .foregroundColor(Color.dmTextSecondary.opacity(0.6))
-                    Text("No timeline items for today")
-                        .font(.dmBody)
+                        .font(.system(size: 26))
+                        .foregroundColor(Color.dmTextTertiary)
+                    Text("No schedule for today")
+                        .font(.dmHeadline)
+                        .foregroundColor(Color.dmTextPrimary)
+                    Text("Capture a task or assign planned items to build your schedule.")
+                        .font(.dmCaption)
                         .foregroundColor(Color.dmTextSecondary)
+                        .multilineTextAlignment(.center)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(DMSpacing.lg)
-                .background(Color.dmCard.opacity(0.6))
-                .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
+                .background(Color.dmCard)
+                .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous).stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5))
                 .padding(.horizontal, DMSpacing.md)
             } else {
-                VStack(spacing: DMSpacing.sm) {
-                    // Scheduled items
-                    ForEach(appState.plannedTasksToday) { task in
-                        timelineItemRow(task: task)
-                    }
+                VStack(spacing: 0) {
+                    // Scheduled items in unified card
+                    if !appState.plannedTasksToday.isEmpty {
+                        VStack(spacing: 0) {
+                            ForEach(Array(appState.plannedTasksToday.enumerated()), id: \.element.id) { index, task in
+                                timelineRow(task: task, isLast: index == appState.plannedTasksToday.count - 1 && appState.unscheduledTodayTasks.isEmpty)
 
-                    // Completed items today
-                    if !appState.completedTasksToday.isEmpty {
-                        VStack(alignment: .leading, spacing: DMSpacing.xs) {
-                            Text("COMPLETED TODAY")
-                                .font(.dmSectionHeader)
-                                .foregroundColor(Color.dmTextSecondary.opacity(0.7))
-                                .tracking(0.6)
-                                .padding(.top, DMSpacing.xs)
-
-                            ForEach(appState.completedTasksToday) { task in
-                                completedItemRow(task: task)
+                                if index < appState.plannedTasksToday.count - 1 {
+                                    Divider()
+                                        .background(Color.dmBorder.opacity(0.6))
+                                        .padding(.leading, 76)
+                                }
                             }
                         }
+                        .background(Color.dmCard)
+                        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous).stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5))
+                        .shadow(color: Color.black.opacity(0.02), radius: 4, x: 0, y: 1.5)
+                        .padding(.horizontal, DMSpacing.md)
                     }
 
-                    // Unscheduled tasks for today drawer
+                    // Unscheduled tasks tray
                     if !appState.unscheduledTodayTasks.isEmpty {
                         VStack(alignment: .leading, spacing: DMSpacing.xs) {
-                            Text("UNSCHEDULED FOR TODAY")
-                                .font(.dmSectionHeader)
-                                .foregroundColor(Color.dmTextSecondary.opacity(0.7))
-                                .tracking(0.6)
-                                .padding(.top, DMSpacing.xs)
+                            Text("Unscheduled for Today")
+                                .font(.dmCaptionBold)
+                                .foregroundColor(Color.dmTextSecondary)
+                                .padding(.horizontal, DMSpacing.md)
+                                .padding(.top, DMSpacing.md)
 
-                            ForEach(appState.unscheduledTodayTasks) { task in
-                                unscheduledItemRow(task: task)
+                            VStack(spacing: 0) {
+                                ForEach(Array(appState.unscheduledTodayTasks.enumerated()), id: \.element.id) { index, task in
+                                    unscheduledRow(task: task)
+
+                                    if index < appState.unscheduledTodayTasks.count - 1 {
+                                        Divider()
+                                            .background(Color.dmBorder.opacity(0.6))
+                                            .padding(.leading, 48)
+                                    }
+                                }
                             }
+                            .background(Color.dmCard)
+                            .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                            .overlay(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous).stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5))
+                            .shadow(color: Color.black.opacity(0.02), radius: 4, x: 0, y: 1.5)
+                            .padding(.horizontal, DMSpacing.md)
                         }
                     }
                 }
-                .padding(.horizontal, DMSpacing.md)
             }
         }
     }
 
-    private func timelineItemRow(task: DaymarkTask) -> some View {
-        let isCurrent = appState.currentTask?.id == task.id
-        let projectName = appState.projects.first(where: { $0.id == task.projectId })?.name
+    private func timelineRow(task: DaymarkTask, isLast: Bool) -> some View {
+        let isCurrent = task.status == .inProgress
+        let isCompleted = task.status == .completed
+        let project = appState.projects.first(where: { $0.id == task.projectId })
 
         return HStack(alignment: .top, spacing: DMSpacing.sm) {
-            // Time column
+            // Time Column
             VStack(alignment: .trailing, spacing: 2) {
                 if let start = task.scheduledStartTime {
                     Text(timeString(from: start))
@@ -110,120 +128,131 @@ public struct TimelineSection: View {
                 }
                 Text("\(task.estimatedDurationMinutes)m")
                     .font(.dmCaption)
-                    .foregroundColor(Color.dmTextSecondary)
+                    .foregroundColor(Color.dmTextTertiary)
             }
-            .frame(width: 65, alignment: .trailing)
+            .frame(width: 64, alignment: .trailing)
 
-            // Timeline line & indicator dot
-            VStack(spacing: 0) {
+            // Timeline Node Indicator
+            ZStack {
                 Circle()
-                    .fill(isCurrent ? Color.dmAccent : Color.dmHighlight)
+                    .fill(isCurrent ? Color.dmAccent : (isCompleted ? Color.dmSuccess : Color.dmBorder))
                     .frame(width: 10, height: 10)
-                    .padding(.top, 4)
 
-                Rectangle()
-                    .fill(Color.dmBorder.opacity(0.5))
-                    .frame(width: 1.5)
+                if isCurrent {
+                    Circle()
+                        .stroke(Color.dmAccent.opacity(0.3), lineWidth: 4)
+                        .frame(width: 18, height: 18)
+                }
             }
+            .frame(width: 18)
+            .padding(.top, 4)
 
-            // Task content card
-            VStack(alignment: .leading, spacing: DMSpacing.xxs) {
+            // Task Content
+            VStack(alignment: .leading, spacing: 3) {
                 Text(task.title)
-                    .font(.dmBodyBold)
-                    .foregroundColor(Color.dmTextPrimary)
+                    .font(.dmHeadline)
+                    .foregroundColor(isCompleted ? Color.dmTextTertiary : Color.dmTextPrimary)
+                    .strikethrough(isCompleted, color: Color.dmTextTertiary)
                     .lineLimit(2)
 
                 HStack(spacing: DMSpacing.xs) {
-                    if let project = projectName {
-                        DaymarkBadge(title: project, icon: "folder", variant: .neutral)
+                    if let proj = project {
+                        HStack(spacing: 3) {
+                            Circle()
+                                .fill(Color(hex: proj.colorHex))
+                                .frame(width: 6, height: 6)
+                            Text(proj.name)
+                                .font(.dmCaptionBold)
+                                .foregroundColor(Color.dmTextSecondary)
+                        }
                     }
+
                     if task.importance >= .high {
-                        DaymarkBadge(title: task.importance.displayName, icon: task.importance.iconName, variant: .accent)
+                        Text("•")
+                            .font(.dmCaption)
+                            .foregroundColor(Color.dmTextTertiary)
+
+                        Text(task.importance.displayName)
+                            .font(.dmCaptionBold)
+                            .foregroundColor(task.importance == .critical ? Color.dmDanger : Color.dmWarning)
                     }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(DMSpacing.sm)
-            .background(Color.dmCard)
-            .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm))
-            .overlay(
-                RoundedRectangle(cornerRadius: DMRadius.sm)
-                    .stroke(isCurrent ? Color.dmAccent.opacity(0.6) : Color.dmBorder.opacity(0.4), lineWidth: 1)
-            )
 
-            // Complete button
-            Button {
-                Task { try? await appState.completeTask(task) }
-            } label: {
-                Image(systemName: "circle")
-                    .font(.system(size: 20))
-                    .foregroundColor(Color.dmBorder)
+            Spacer()
+
+            // Completion toggle
+            DaymarkCheckbox(isChecked: isCompleted) {
+                Task {
+                    if isCompleted {
+                        try? await appState.reopenTask(task)
+                    } else {
+                        try? await appState.completeTask(task)
+                    }
+                }
             }
-            .buttonStyle(.plain)
-            .padding(.top, 4)
         }
+        .padding(.horizontal, DMSpacing.md)
+        .padding(.vertical, DMSpacing.sm + 2)
         .contentShape(Rectangle())
         .onTapGesture {
             onSelectTask?(task)
         }
     }
 
-    private func completedItemRow(task: DaymarkTask) -> some View {
-        HStack(spacing: DMSpacing.sm) {
-            Image(systemName: "checkmark.circle.fill")
-                .foregroundColor(Color.dmSuccess)
-                .font(.system(size: 18))
+    private func unscheduledRow(task: DaymarkTask) -> some View {
+        let isCompleted = task.status == .completed
+        let project = appState.projects.first(where: { $0.id == task.projectId })
 
-            Text(task.title)
-                .font(.dmBody)
-                .foregroundColor(Color.dmTextSecondary)
-                .strikethrough()
-                .lineLimit(1)
-
-            Spacer()
-
-            Button("Reopen") {
-                Task { try? await appState.reopenTask(task) }
+        return HStack(spacing: DMSpacing.sm) {
+            DaymarkCheckbox(isChecked: isCompleted) {
+                Task {
+                    if isCompleted {
+                        try? await appState.reopenTask(task)
+                    } else {
+                        try? await appState.completeTask(task)
+                    }
+                }
             }
-            .font(.dmCaption)
-            .foregroundColor(Color.dmTextSecondary)
-        }
-        .padding(DMSpacing.sm)
-        .background(Color.dmCard.opacity(0.5))
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm))
-    }
-
-    private func unscheduledItemRow(task: DaymarkTask) -> some View {
-        HStack(spacing: DMSpacing.sm) {
-            Image(systemName: "clock.badge.questionmark")
-                .foregroundColor(Color.dmTextSecondary)
-                .font(.system(size: 16))
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(task.title)
-                    .font(.dmBody)
-                    .foregroundColor(Color.dmTextPrimary)
+                    .font(.dmHeadline)
+                    .foregroundColor(isCompleted ? Color.dmTextTertiary : Color.dmTextPrimary)
+                    .strikethrough(isCompleted, color: Color.dmTextTertiary)
                     .lineLimit(1)
 
-                Text("\(task.estimatedDurationMinutes)m • \(task.importance.displayName)")
-                    .font(.dmCaption)
-                    .foregroundColor(Color.dmTextSecondary)
+                HStack(spacing: DMSpacing.xs) {
+                    if let proj = project {
+                        Text(proj.name)
+                            .font(.dmCaptionBold)
+                            .foregroundColor(Color.dmTextSecondary)
+                    }
+
+                    Text("• \(task.estimatedDurationMinutes)m")
+                        .font(.dmCaption)
+                        .foregroundColor(Color.dmTextTertiary)
+                }
             }
 
             Spacer()
 
             Button {
-                Task { try? await appState.completeTask(task) }
+                Task {
+                    try? await appState.autoScheduleToday()
+                }
             } label: {
-                Image(systemName: "circle")
-                    .foregroundColor(Color.dmBorder)
+                Text("Slot")
+                    .font(.dmCaptionBold)
+                    .foregroundColor(Color.dmAccent)
+                    .padding(.horizontal, DMSpacing.sm)
+                    .padding(.vertical, 3)
+                    .background(Color.dmAccent.opacity(0.1))
+                    .clipShape(Capsule())
             }
-            .buttonStyle(.plain)
         }
-        .padding(DMSpacing.sm)
-        .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm))
-        .overlay(RoundedRectangle(cornerRadius: DMRadius.sm).stroke(Color.dmBorder.opacity(0.3), lineWidth: 1))
+        .padding(.horizontal, DMSpacing.md)
+        .padding(.vertical, DMSpacing.sm)
         .contentShape(Rectangle())
         .onTapGesture {
             onSelectTask?(task)

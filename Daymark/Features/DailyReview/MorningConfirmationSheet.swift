@@ -9,30 +9,28 @@ public struct MorningConfirmationSheet: View {
     public var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: DMSpacing.lg) {
-                    VStack(alignment: .leading, spacing: DMSpacing.xs) {
-                        Text("MORNING KICKOFF")
+                VStack(alignment: .leading, spacing: DMSpacing.md + 4) {
+                    VStack(alignment: .leading, spacing: DMSpacing.xxs) {
+                        Text("Morning Kickoff")
                             .font(.dmCaptionBold)
                             .foregroundColor(Color.dmAccent)
-                            .tracking(1.0)
 
                         Text("Lock In Today")
                             .font(.dmHero)
                             .foregroundColor(Color.dmTextPrimary)
 
                         Text("Confirm today's commitments and enter the day with a focused, calm plan.")
-                            .font(.dmBody)
+                            .font(.dmSubheadline)
                             .foregroundColor(Color.dmTextSecondary)
                     }
                     .padding(.horizontal, DMSpacing.md)
-                    .padding(.top, DMSpacing.sm)
+                    .padding(.top, DMSpacing.xs)
 
                     // Current top priorities
-                    VStack(alignment: .leading, spacing: DMSpacing.sm) {
-                        Text("TODAY'S PRIORITIES (\(appState.todayPriorities.count)/5)")
-                            .font(.dmSectionHeader)
-                            .foregroundColor(Color.dmTextSecondary)
-                            .tracking(0.8)
+                    VStack(alignment: .leading, spacing: DMSpacing.xs + 2) {
+                        Text("Today's Priorities (\(appState.todayPriorities.count)/5)")
+                            .font(.dmHeadline)
+                            .foregroundColor(Color.dmTextPrimary)
                             .padding(.horizontal, DMSpacing.md)
 
                         if appState.todayPriorities.isEmpty {
@@ -41,40 +39,46 @@ public struct MorningConfirmationSheet: View {
                                 .foregroundColor(Color.dmTextSecondary)
                                 .padding(.horizontal, DMSpacing.md)
                         } else {
-                            ForEach(Array(appState.todayPriorities.enumerated()), id: \.element.id) { idx, task in
-                                HStack {
-                                    Text("\(idx + 1)")
-                                        .font(.dmCaptionBold)
-                                        .foregroundColor(Color.dmAccent)
-                                        .frame(width: 22, height: 22)
-                                        .background(Color.dmAccent.opacity(0.15))
-                                        .clipShape(Circle())
+                            VStack(spacing: DMSpacing.xs) {
+                                ForEach(Array(appState.todayPriorities.enumerated()), id: \.element.id) { idx, task in
+                                    HStack(spacing: DMSpacing.sm) {
+                                        Text("\(idx + 1)")
+                                            .font(.dmCaptionBold)
+                                            .foregroundColor(Color.dmAccent)
+                                            .frame(width: 22, height: 22)
+                                            .background(Color.dmAccent.opacity(0.12))
+                                            .clipShape(Circle())
 
-                                    Text(task.title)
-                                        .font(.dmBodyBold)
-                                        .foregroundColor(Color.dmTextPrimary)
-                                        .lineLimit(1)
+                                        Text(task.title)
+                                            .font(.dmBody)
+                                            .foregroundColor(Color.dmTextPrimary)
+                                            .lineLimit(1)
 
-                                    Spacer()
+                                        Spacer()
 
-                                    Text("\(task.estimatedDurationMinutes)m")
-                                        .font(.dmCaption)
-                                        .foregroundColor(Color.dmTextSecondary)
+                                        Text("\(task.estimatedDurationMinutes)m")
+                                            .font(.dmCaption)
+                                            .foregroundColor(Color.dmTextTertiary)
+                                    }
+                                    .padding(.horizontal, DMSpacing.md)
+                                    .padding(.vertical, DMSpacing.sm + 2)
+                                    .background(Color.dmCard)
+                                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                                            .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                                    )
                                 }
-                                .padding(DMSpacing.md)
-                                .background(Color.dmCard)
-                                .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
-                                .padding(.horizontal, DMSpacing.md)
                             }
+                            .padding(.horizontal, DMSpacing.md)
                         }
                     }
 
                     // Scheduled timeline summary
-                    VStack(alignment: .leading, spacing: DMSpacing.sm) {
-                        Text("SCHEDULED TIMELINE (\(appState.plannedTasksToday.count) TASKS)")
-                            .font(.dmSectionHeader)
-                            .foregroundColor(Color.dmTextSecondary)
-                            .tracking(0.8)
+                    VStack(alignment: .leading, spacing: DMSpacing.xs + 2) {
+                        Text("Scheduled Timeline (\(appState.plannedTasksToday.count) Tasks)")
+                            .font(.dmHeadline)
+                            .foregroundColor(Color.dmTextPrimary)
                             .padding(.horizontal, DMSpacing.md)
 
                         if appState.plannedTasksToday.isEmpty {
@@ -83,27 +87,38 @@ public struct MorningConfirmationSheet: View {
                                 .foregroundColor(Color.dmTextSecondary)
                                 .padding(.horizontal, DMSpacing.md)
                         } else {
-                            ForEach(appState.plannedTasksToday) { task in
-                                HStack {
-                                    if let start = task.scheduledStartTime {
-                                        Text(DateFormatter.localizedString(from: start, dateStyle: .none, timeStyle: .short))
-                                            .font(.dmTime)
+                            VStack(spacing: DMSpacing.xs) {
+                                ForEach(appState.plannedTasksToday) { task in
+                                    HStack(spacing: DMSpacing.sm) {
+                                        if let start = task.scheduledStartTime {
+                                            Text(DateFormatter.localizedString(from: start, dateStyle: .none, timeStyle: .short))
+                                                .font(.dmTime)
+                                                .foregroundColor(Color.dmTextPrimary)
+                                                .frame(width: 64, alignment: .leading)
+                                        }
+
+                                        Text(task.title)
+                                            .font(.dmBody)
                                             .foregroundColor(Color.dmTextPrimary)
+                                            .lineLimit(1)
+
+                                        Spacer()
+
+                                        Text("\(task.estimatedDurationMinutes)m")
+                                            .font(.dmCaption)
+                                            .foregroundColor(Color.dmTextTertiary)
                                     }
-                                    Text(task.title)
-                                        .font(.dmBody)
-                                        .foregroundColor(Color.dmTextPrimary)
-                                        .lineLimit(1)
-                                    Spacer()
-                                    Text("\(task.estimatedDurationMinutes)m")
-                                        .font(.dmCaption)
-                                        .foregroundColor(Color.dmTextSecondary)
+                                    .padding(.horizontal, DMSpacing.md)
+                                    .padding(.vertical, DMSpacing.sm + 2)
+                                    .background(Color.dmCard)
+                                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                                            .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                                    )
                                 }
-                                .padding(DMSpacing.sm + 4)
-                                .background(Color.dmCard)
-                                .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm))
-                                .padding(.horizontal, DMSpacing.md)
                             }
+                            .padding(.horizontal, DMSpacing.md)
                         }
                     }
 
@@ -113,11 +128,11 @@ public struct MorningConfirmationSheet: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, DMSpacing.md)
-                    .padding(.top, DMSpacing.sm)
+                    .padding(.top, DMSpacing.xs)
 
                     Spacer(minLength: 40)
                 }
-                .padding(.vertical, DMSpacing.md)
+                .padding(.vertical, DMSpacing.sm)
             }
             .background(Color.dmBackground)
             .navigationTitle("Morning Confirmation")
@@ -127,6 +142,8 @@ public struct MorningConfirmationSheet: View {
                     Button("Close") {
                         dismiss()
                     }
+                    .font(.dmBody)
+                    .foregroundColor(Color.dmTextSecondary)
                 }
             }
         }

@@ -38,16 +38,16 @@ public struct ProjectDetailView: View {
         Group {
             if let project = project {
                 ScrollView {
-                    VStack(alignment: .leading, spacing: DMSpacing.lg) {
+                    VStack(alignment: .leading, spacing: DMSpacing.md + 4) {
                         // Project Overview Header Card
-                        VStack(alignment: .leading, spacing: DMSpacing.sm) {
+                        VStack(alignment: .leading, spacing: DMSpacing.sm + 2) {
                             HStack(spacing: DMSpacing.sm) {
                                 Image(systemName: project.iconName)
-                                    .font(.system(size: 20, weight: .semibold))
+                                    .font(.system(size: 18, weight: .semibold))
                                     .foregroundColor(Color(hex: project.colorHex))
-                                    .frame(width: 40, height: 40)
+                                    .frame(width: 44, height: 44)
                                     .background(Color(hex: project.colorHex).opacity(0.12))
-                                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm))
+                                    .clipShape(RoundedRectangle(cornerRadius: DMRadius.md, style: .continuous))
 
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(project.name)
@@ -56,7 +56,7 @@ public struct ProjectDetailView: View {
 
                                     if let desc = project.description, !desc.isEmpty {
                                         Text(desc)
-                                            .font(.dmBody)
+                                            .font(.dmCaption)
                                             .foregroundColor(Color.dmTextSecondary)
                                     }
                                 }
@@ -68,11 +68,11 @@ public struct ProjectDetailView: View {
 
                             // Progress Summary
                             let progress = appState.projectProgressRatio(for: project.id)
-                            VStack(alignment: .leading, spacing: 4) {
+                            VStack(alignment: .leading, spacing: 6) {
                                 GeometryReader { geo in
                                     ZStack(alignment: .leading) {
                                         Capsule()
-                                            .fill(Color.dmBorder.opacity(0.5))
+                                            .fill(Color.dmSecondaryCard)
                                             .frame(height: 6)
 
                                         Capsule()
@@ -83,7 +83,7 @@ public struct ProjectDetailView: View {
                                 .frame(height: 6)
 
                                 HStack {
-                                    Text("\(completedTasks.count) of \(associatedTasks.count) tasks completed (\(Int(progress * 100))%)")
+                                    Text("\(completedTasks.count) of \(associatedTasks.count) tasks done (\(Int(progress * 100))%)")
                                         .font(.dmCaption)
                                         .foregroundColor(Color.dmTextSecondary)
 
@@ -92,33 +92,36 @@ public struct ProjectDetailView: View {
                                     let completedMilestones = milestones.filter { $0.isCompleted }.count
                                     Text("\(completedMilestones)/\(milestones.count) milestones")
                                         .font(.dmCaption)
-                                        .foregroundColor(Color.dmTextSecondary)
+                                        .foregroundColor(Color.dmTextTertiary)
                                 }
                             }
-                            .padding(.top, DMSpacing.xs)
+                            .padding(.top, DMSpacing.xxs)
                         }
                         .padding(DMSpacing.md)
                         .background(Color.dmCard)
-                        .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
-                        .overlay(RoundedRectangle(cornerRadius: DMRadius.md).stroke(Color.dmBorder.opacity(0.6), lineWidth: 1))
+                        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                                .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+                        )
                         .padding(.horizontal, DMSpacing.md)
 
                         // Milestones Section
-                        VStack(alignment: .leading, spacing: DMSpacing.sm) {
+                        VStack(alignment: .leading, spacing: DMSpacing.xs + 2) {
                             HStack {
-                                Text("KEY MILESTONES")
-                                    .font(.dmSectionHeader)
-                                    .foregroundColor(Color.dmTextSecondary)
-                                    .tracking(0.8)
+                                Text("Strategic Milestones")
+                                    .font(.dmHeadline)
+                                    .foregroundColor(Color.dmTextPrimary)
 
                                 Spacer()
 
                                 Button {
                                     showingAddMilestone = true
                                 } label: {
-                                    HStack(spacing: DMSpacing.xxs) {
+                                    HStack(spacing: 3) {
                                         Image(systemName: "plus")
-                                        Text("Add Milestone")
+                                            .font(.system(size: 11, weight: .bold))
+                                        Text("Add")
                                     }
                                     .font(.dmCaptionBold)
                                     .foregroundColor(Color.dmAccent)
@@ -127,10 +130,11 @@ public struct ProjectDetailView: View {
                             .padding(.horizontal, DMSpacing.md)
 
                             if milestones.isEmpty {
-                                Text("No milestones added yet. Add meaningful milestones to track strategic outcomes.")
+                                Text("No milestones yet. Add strategic milestones to measure progress.")
                                     .font(.dmCaption)
                                     .foregroundColor(Color.dmTextSecondary)
                                     .padding(.horizontal, DMSpacing.md)
+                                    .padding(.vertical, DMSpacing.xs)
                             } else {
                                 VStack(spacing: DMSpacing.xs) {
                                     ForEach(milestones) { milestone in
@@ -144,21 +148,21 @@ public struct ProjectDetailView: View {
                         }
 
                         // Associated Tasks Section
-                        VStack(alignment: .leading, spacing: DMSpacing.sm) {
+                        VStack(alignment: .leading, spacing: DMSpacing.xs + 2) {
                             HStack {
-                                Text("ASSOCIATED TASKS")
-                                    .font(.dmSectionHeader)
-                                    .foregroundColor(Color.dmTextSecondary)
-                                    .tracking(0.8)
+                                Text("Workspace Tasks")
+                                    .font(.dmHeadline)
+                                    .foregroundColor(Color.dmTextPrimary)
 
                                 Spacer()
 
                                 Button {
                                     showingAddTask = true
                                 } label: {
-                                    HStack(spacing: DMSpacing.xxs) {
+                                    HStack(spacing: 3) {
                                         Image(systemName: "plus")
-                                        Text("Add Task")
+                                            .font(.system(size: 11, weight: .bold))
+                                        Text("New Task")
                                     }
                                     .font(.dmCaptionBold)
                                     .foregroundColor(Color.dmAccent)
@@ -171,6 +175,7 @@ public struct ProjectDetailView: View {
                                     .font(.dmCaption)
                                     .foregroundColor(Color.dmTextSecondary)
                                     .padding(.horizontal, DMSpacing.md)
+                                    .padding(.vertical, DMSpacing.xs)
                             } else {
                                 VStack(spacing: DMSpacing.xs) {
                                     ForEach(activeTasks) { task in
@@ -178,9 +183,9 @@ public struct ProjectDetailView: View {
                                     }
 
                                     if !completedTasks.isEmpty {
-                                        Text("COMPLETED")
+                                        Text("Completed")
                                             .font(.dmCaptionBold)
-                                            .foregroundColor(Color.dmTextSecondary.opacity(0.6))
+                                            .foregroundColor(Color.dmTextTertiary)
                                             .padding(.top, DMSpacing.xs)
                                             .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -193,9 +198,9 @@ public struct ProjectDetailView: View {
                             }
                         }
 
-                        Spacer(minLength: 40)
+                        Spacer(minLength: 90)
                     }
-                    .padding(.vertical, DMSpacing.md)
+                    .padding(.vertical, DMSpacing.sm)
                 }
                 .background(Color.dmBackground)
                 .navigationTitle(project.name)
@@ -206,7 +211,7 @@ public struct ProjectDetailView: View {
                             showingEditProject = true
                         } label: {
                             Text("Edit")
-                                .font(.dmBodyBold)
+                                .font(.dmHeadline)
                                 .foregroundColor(Color.dmAccent)
                         }
                     }
@@ -235,8 +240,8 @@ public struct ProjectDetailView: View {
     }
 
     private func taskRow(task: DaymarkTask) -> some View {
-        HStack(spacing: DMSpacing.sm) {
-            Button {
+        HStack(spacing: DMSpacing.mdSm) {
+            DaymarkCheckbox(isChecked: task.status == .completed) {
                 Task {
                     if task.status == .completed {
                         try? await appState.reopenTask(task)
@@ -244,32 +249,42 @@ public struct ProjectDetailView: View {
                         try? await appState.completeTask(task)
                     }
                 }
-            } label: {
-                Image(systemName: task.status == .completed ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 18))
-                    .foregroundColor(task.status == .completed ? Color.dmSuccess : Color.dmBorder)
             }
-            .buttonStyle(.plain)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(task.title)
-                    .font(.dmBodyBold)
-                    .foregroundColor(task.status == .completed ? Color.dmTextSecondary : Color.dmTextPrimary)
+                    .font(.dmBody)
+                    .foregroundColor(task.status == .completed ? Color.dmTextTertiary : Color.dmTextPrimary)
                     .strikethrough(task.status == .completed)
+                    .lineLimit(2)
 
-                HStack(spacing: DMSpacing.xs) {
-                    Text("\(task.estimatedDurationMinutes)m")
-                        .font(.dmCaption)
-                        .foregroundColor(Color.dmTextSecondary)
+                HStack(spacing: DMSpacing.xs + 2) {
+                    HStack(spacing: 2) {
+                        Image(systemName: "clock")
+                            .font(.system(size: 10))
+                        Text("\(task.estimatedDurationMinutes)m")
+                    }
+                    .font(.dmCaption)
+                    .foregroundColor(Color.dmTextTertiary)
 
                     if task.isDailyPriority {
-                        DaymarkBadge(title: "Priority", icon: "star.fill", variant: .accent)
+                        HStack(spacing: 2) {
+                            Image(systemName: "star.fill")
+                                .font(.system(size: 10))
+                            Text("Priority")
+                        }
+                        .font(.dmCaption)
+                        .foregroundColor(Color.dmWarning)
                     }
 
                     if let due = task.dueDate {
-                        Text("• Due \(DateFormatter.localizedString(from: due, dateStyle: .short, timeStyle: .none))")
-                            .font(.dmCaption)
-                            .foregroundColor(Color.dmWarning)
+                        HStack(spacing: 2) {
+                            Image(systemName: "calendar")
+                                .font(.system(size: 10))
+                            Text(DateFormatter.localizedString(from: due, dateStyle: .short, timeStyle: .none))
+                        }
+                        .font(.dmCaption)
+                        .foregroundColor(Color.dmWarning)
                     }
                 }
             }
@@ -277,13 +292,17 @@ public struct ProjectDetailView: View {
             Spacer()
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 12))
-                .foregroundColor(Color.dmTextSecondary.opacity(0.4))
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(Color.dmTextTertiary.opacity(0.6))
         }
-        .padding(DMSpacing.sm + 2)
+        .padding(.horizontal, DMSpacing.md)
+        .padding(.vertical, DMSpacing.sm + 2)
         .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm))
-        .overlay(RoundedRectangle(cornerRadius: DMRadius.sm).stroke(Color.dmBorder.opacity(0.4), lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+        )
         .contentShape(Rectangle())
         .onTapGesture {
             editingTask = task

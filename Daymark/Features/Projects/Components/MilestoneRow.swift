@@ -11,23 +11,18 @@ public struct MilestoneRow: View {
     }
 
     public var body: some View {
-        HStack(alignment: .top, spacing: DMSpacing.sm) {
+        HStack(alignment: .top, spacing: DMSpacing.mdSm) {
             // Checkbox
-            Button {
+            DaymarkCheckbox(isChecked: milestone.isCompleted) {
                 Task { try? await appState.toggleMilestone(milestone) }
-            } label: {
-                Image(systemName: milestone.isCompleted ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 20))
-                    .foregroundColor(milestone.isCompleted ? Color.dmSuccess : Color.dmBorder)
             }
-            .buttonStyle(.plain)
-            .padding(.top, 2)
+            .padding(.top, 1)
 
             // Content
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(milestone.title)
-                    .font(.dmBodyBold)
-                    .foregroundColor(milestone.isCompleted ? Color.dmTextSecondary : Color.dmTextPrimary)
+                    .font(.dmBody)
+                    .foregroundColor(milestone.isCompleted ? Color.dmTextTertiary : Color.dmTextPrimary)
                     .strikethrough(milestone.isCompleted)
 
                 if let outcome = milestone.outcomeDescription, !outcome.isEmpty {
@@ -38,13 +33,13 @@ public struct MilestoneRow: View {
                 }
 
                 if let targetDate = milestone.targetDate {
-                    HStack(spacing: DMSpacing.xxs) {
-                        Image(systemName: "flag")
-                            .font(.system(size: 10))
+                    HStack(spacing: 3) {
+                        Image(systemName: "flag.fill")
+                            .font(.system(size: 9))
                         Text("Target: \(DateFormatter.localizedString(from: targetDate, dateStyle: .short, timeStyle: .none))")
                     }
                     .font(.dmCaption)
-                    .foregroundColor(Color.dmHighlight)
+                    .foregroundColor(Color.dmAccent)
                     .padding(.top, 1)
                 }
             }
@@ -54,16 +49,20 @@ public struct MilestoneRow: View {
             Button {
                 onEdit()
             } label: {
-                Image(systemName: "pencil")
-                    .font(.system(size: 13))
-                    .foregroundColor(Color.dmTextSecondary.opacity(0.6))
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 14))
+                    .foregroundColor(Color.dmTextTertiary)
+                    .frame(width: 24, height: 24)
             }
             .buttonStyle(.plain)
-            .padding(.top, 2)
         }
-        .padding(DMSpacing.sm + 2)
+        .padding(.horizontal, DMSpacing.md)
+        .padding(.vertical, DMSpacing.sm + 2)
         .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm))
-        .overlay(RoundedRectangle(cornerRadius: DMRadius.sm).stroke(Color.dmBorder.opacity(0.4), lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+        )
     }
 }

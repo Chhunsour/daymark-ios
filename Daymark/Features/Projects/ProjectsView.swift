@@ -10,12 +10,7 @@ public struct ProjectsView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: DMSpacing.md) {
-                    Text("Workspaces organize your ongoing business ventures, startup experiments, and personal life operations.")
-                        .font(.dmBody)
-                        .foregroundColor(Color.dmTextSecondary)
-                        .padding(.horizontal, DMSpacing.md)
-                        .padding(.top, DMSpacing.xs)
-
+                    // Workspaces Grid/List
                     LazyVStack(spacing: DMSpacing.sm) {
                         ForEach(appState.projects) { project in
                             NavigationLink {
@@ -27,43 +22,46 @@ public struct ProjectsView: View {
                         }
                     }
                     .padding(.horizontal, DMSpacing.md)
+                    .padding(.top, DMSpacing.xs)
 
-                    // Add project button
+                    // Add Workspace Button
                     Button {
                         showingAddProject = true
                     } label: {
                         HStack(spacing: DMSpacing.xs) {
-                            Image(systemName: "plus.circle.fill")
-                            Text("Add Workspace")
+                            Image(systemName: "plus")
+                                .font(.system(size: 13, weight: .semibold))
+                            Text("New Workspace")
+                                .font(.dmHeadline)
                         }
-                        .font(.dmBodyBold)
                         .foregroundColor(Color.dmAccent)
                         .frame(maxWidth: .infinity)
-                        .padding(DMSpacing.md)
+                        .padding(.vertical, DMSpacing.md)
                         .background(Color.dmCard)
-                        .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
+                        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
                         .overlay(
-                            RoundedRectangle(cornerRadius: DMRadius.md)
-                                .stroke(Color.dmBorder.opacity(0.6), style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                            RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                                .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
                         )
                     }
+                    .buttonStyle(.plain)
                     .padding(.horizontal, DMSpacing.md)
                     .padding(.top, DMSpacing.xs)
 
-                    Spacer(minLength: 40)
+                    Spacer(minLength: 90)
                 }
                 .padding(.vertical, DMSpacing.sm)
             }
             .background(Color.dmBackground)
             .navigationTitle("Workspaces")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showingAddProject = true
                     } label: {
                         Image(systemName: "plus")
-                            .font(.system(size: 15, weight: .semibold))
+                            .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(Color.dmAccent)
                     }
                 }

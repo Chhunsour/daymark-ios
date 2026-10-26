@@ -12,11 +12,10 @@ public struct DailyOverviewHeader: View {
     public init() {}
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: DMSpacing.xs) {
-            Text(dateFormatted.uppercased())
-                .font(.dmCaptionBold)
+        VStack(alignment: .leading, spacing: DMSpacing.xxs) {
+            Text(dateFormatted)
+                .font(.dmSubheadline)
                 .foregroundColor(Color.dmTextSecondary)
-                .tracking(1.2)
 
             HStack(alignment: .firstTextBaseline) {
                 Text("Today")
@@ -25,22 +24,32 @@ public struct DailyOverviewHeader: View {
 
                 Spacer()
 
-                // Progress Badge
-                HStack(spacing: DMSpacing.xs) {
-                    Circle()
-                        .trim(from: 0, to: CGFloat(appState.todayProgressRatio))
-                        .stroke(Color.dmAccent, style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                        .frame(width: 14, height: 14)
-                        .rotationEffect(.degrees(-90))
+                // Calm Progress Indicator
+                let completed = appState.completedTasksToday.count
+                let total = appState.todayTasks.count
 
-                    let completed = appState.completedTasksToday.count
-                    let total = appState.todayTasks.count
-                    Text("\(completed) of \(total) done")
-                        .font(.dmCaption)
+                HStack(spacing: DMSpacing.xs + 2) {
+                    ZStack {
+                        Circle()
+                            .stroke(Color.dmBorder, lineWidth: 2.5)
+                            .frame(width: 16, height: 16)
+
+                        Circle()
+                            .trim(from: 0, to: CGFloat(appState.todayProgressRatio))
+                            .stroke(
+                                appState.todayProgressRatio >= 1.0 ? Color.dmSuccess : Color.dmAccent,
+                                style: StrokeStyle(lineWidth: 2.5, lineCap: .round)
+                            )
+                            .frame(width: 16, height: 16)
+                            .rotationEffect(.degrees(-90))
+                    }
+
+                    Text(total == 0 ? "No tasks" : "\(completed) of \(total) done")
+                        .font(.dmCaptionBold)
                         .foregroundColor(Color.dmTextSecondary)
                 }
                 .padding(.horizontal, DMSpacing.sm + 2)
-                .padding(.vertical, 4)
+                .padding(.vertical, 5)
                 .background(Color.dmSecondaryCard)
                 .clipShape(Capsule())
             }

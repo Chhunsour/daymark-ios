@@ -7,6 +7,7 @@ public enum BadgeVariant {
     case success
     case warning
     case danger
+    case custom(Color)
 }
 
 public struct DaymarkBadge: View {
@@ -28,11 +29,27 @@ public struct DaymarkBadge: View {
         case .success: return Color.dmSuccess
         case .warning: return Color.dmWarning
         case .danger: return Color.dmDanger
+        case .custom(let color): return color
         }
     }
 
     private var backgroundColor: Color {
-        foregroundColor.opacity(0.12)
+        switch variant {
+        case .neutral:
+            return Color.dmSecondaryCard
+        case .accent:
+            return Color.dmAccent.opacity(0.10)
+        case .highlight:
+            return Color.dmHighlight.opacity(0.10)
+        case .success:
+            return Color.dmSuccess.opacity(0.12)
+        case .warning:
+            return Color.dmWarning.opacity(0.12)
+        case .danger:
+            return Color.dmDanger.opacity(0.12)
+        case .custom(let color):
+            return color.opacity(0.12)
+        }
     }
 
     public var body: some View {
@@ -43,9 +60,10 @@ public struct DaymarkBadge: View {
             }
             Text(title)
                 .font(.dmCaptionBold)
+                .lineLimit(1)
         }
         .padding(.horizontal, DMSpacing.sm)
-        .padding(.vertical, 3)
+        .padding(.vertical, 3.5)
         .foregroundColor(foregroundColor)
         .background(backgroundColor)
         .clipShape(Capsule())

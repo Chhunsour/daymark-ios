@@ -25,7 +25,7 @@ public struct SettingsView: View {
     public var body: some View {
         NavigationStack {
             Form {
-                Section("Daily Schedule Defaults") {
+                Section {
                     Stepper("Wake Up: \(wakeHour):00 AM", value: $wakeHour, in: 5...11)
                     Stepper("Work Starts: \(workStartHour):00 AM (Smile Media)", value: $workStartHour, in: 7...12)
                     Stepper("Work Ends: \(workEndHour - 12):00 PM", value: $workEndHour, in: 13...22)
@@ -35,17 +35,21 @@ public struct SettingsView: View {
                     Button("Save Schedule Preferences") {
                         saveProfile()
                     }
-                    .font(.dmBodyBold)
+                    .font(.dmHeadline)
                     .foregroundColor(Color.dmAccent)
+                } header: {
+                    Text("Daily Schedule Defaults")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
-                Section("Daily Routines & Checklists") {
+                Section {
                     NavigationLink {
                         RoutinesView()
                     } label: {
                         HStack {
                             Image(systemName: "checklist")
-                                .foregroundColor(Color.dmHighlight)
+                                .foregroundColor(Color.dmAccent)
                             Text("Manage Routines")
                                 .font(.dmBody)
                             Spacer()
@@ -54,9 +58,13 @@ public struct SettingsView: View {
                                 .foregroundColor(Color.dmTextSecondary)
                         }
                     }
+                } header: {
+                    Text("Daily Routines & Checklists")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
-                Section("Notifications & Alerts") {
+                Section {
                     HStack {
                         Image(systemName: "bell.badge.fill")
                             .foregroundColor(Color.dmWarning)
@@ -77,19 +85,23 @@ public struct SettingsView: View {
                                 notificationStatus = await appState.notificationManager.checkAuthorizationStatus()
                             }
                         }
-                        .font(.dmBodyBold)
+                        .font(.dmHeadline)
                         .foregroundColor(Color.dmAccent)
                     }
+                } header: {
+                    Text("Notifications & Alerts")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
-                Section("Backend & Synchronization") {
+                Section {
                     VStack(alignment: .leading, spacing: DMSpacing.xs) {
                         HStack {
                             Circle()
                                 .fill(Color.dmSuccess)
                                 .frame(width: 8, height: 8)
                             Text(SupabaseConfig.currentStatus.rawValue)
-                                .font(.dmBodyBold)
+                                .font(.dmHeadline)
                                 .foregroundColor(Color.dmTextPrimary)
                         }
 
@@ -98,7 +110,7 @@ public struct SettingsView: View {
                             .foregroundColor(Color.dmTextSecondary)
 
                         Text("Supabase Synchronization Readiness")
-                            .font(.dmBodyBold)
+                            .font(.dmHeadline)
                             .foregroundColor(Color.dmTextPrimary)
                             .padding(.top, DMSpacing.xs)
 
@@ -107,9 +119,13 @@ public struct SettingsView: View {
                             .foregroundColor(Color.dmTextSecondary)
                     }
                     .padding(.vertical, 4)
+                } header: {
+                    Text("Backend & Synchronization")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
-                Section("About Daymark") {
+                Section {
                     HStack {
                         Text("Version")
                             .font(.dmBody)
@@ -127,10 +143,17 @@ public struct SettingsView: View {
                             .font(.dmCaption)
                             .foregroundColor(Color.dmTextSecondary)
                     }
+                } header: {
+                    Text("About Daymark")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.dmBackground)
+            .tint(Color.dmAccent)
             .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.large)
             .onAppear {
                 let p = appState.scheduleProfile
                 wakeHour = p.wakeTimeHour

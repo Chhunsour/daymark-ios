@@ -37,20 +37,32 @@ public struct TaskDetailEditorSheet: View {
     public var body: some View {
         NavigationStack {
             Form {
-                Section("Task Title & Notes") {
+                Section {
                     TextField("Title", text: $title)
-                        .font(.dmBodyBold)
-
-                    TextField("Notes", text: $notes, axis: .vertical)
-                        .lineLimit(3...8)
                         .font(.dmBody)
+                        .padding(.vertical, 2)
+
+                    TextField("Notes & context (optional)", text: $notes, axis: .vertical)
+                        .lineLimit(3...8)
+                        .font(.dmSubheadline)
+                        .foregroundColor(Color.dmTextSecondary)
+                } header: {
+                    Text("Task Details")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
-                Section("Project & Status") {
-                    Picker("Project", selection: $projectId) {
-                        Text("None (Standalone)").tag(nil as UUID?)
+                Section {
+                    Picker("Workspace", selection: $projectId) {
+                        Text("Standalone (No Project)").tag(nil as UUID?)
                         ForEach(appState.projects) { project in
-                            Text(project.name).tag(project.id as UUID?)
+                            HStack {
+                                Circle()
+                                    .fill(Color(hex: project.colorHex))
+                                    .frame(width: 8, height: 8)
+                                Text(project.name)
+                            }
+                            .tag(project.id as UUID?)
                         }
                     }
 
@@ -66,21 +78,40 @@ public struct TaskDetailEditorSheet: View {
                         }
                     }
 
-                    Toggle("Daily Priority", isOn: $isDailyPriority)
+                    Toggle(isOn: $isDailyPriority) {
+                        Label("Top Daily Priority", systemImage: "star.fill")
+                            .foregroundColor(isDailyPriority ? Color.dmWarning : Color.dmTextPrimary)
+                    }
+                } header: {
+                    Text("Organization")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
-                Section("Planning & Schedule") {
-                    Stepper("Estimated Duration: \(durationMinutes) min", value: $durationMinutes, in: 5...480, step: 15)
+                Section {
+                    HStack {
+                        Text("Duration")
+                        Spacer()
+                        Text("\(durationMinutes) min")
+                            .font(.dmTime)
+                            .foregroundColor(Color.dmTextSecondary)
+                        Stepper("", value: $durationMinutes, in: 5...480, step: 15)
+                            .labelsHidden()
+                    }
 
-                    Toggle("Schedule for Specific Time", isOn: $isScheduled)
+                    Toggle("Scheduled Time", isOn: $isScheduled)
                     if isScheduled {
-                        DatePicker("Start Time", selection: $scheduledStart, displayedComponents: [.date, .hourAndMinute])
+                        DatePicker("Start", selection: $scheduledStart, displayedComponents: [.date, .hourAndMinute])
                     }
 
                     Toggle("Has Deadline", isOn: $hasDueDate)
                     if hasDueDate {
                         DatePicker("Deadline", selection: $dueDate, displayedComponents: [.date, .hourAndMinute])
                     }
+                } header: {
+                    Text("Time & Schedule")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
                 Section {
@@ -89,13 +120,17 @@ public struct TaskDetailEditorSheet: View {
                     } label: {
                         HStack {
                             Spacer()
-                            Text("Delete Task")
-                                .font(.dmBodyBold)
+                            Label("Delete Task", systemImage: "trash")
+                                .font(.dmHeadline)
+                                .foregroundColor(Color.dmDanger)
                             Spacer()
                         }
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.dmBackground)
+            .tint(Color.dmAccent)
             .navigationTitle("Edit Task")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -103,12 +138,15 @@ public struct TaskDetailEditorSheet: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .font(.dmBody)
+                    .foregroundColor(Color.dmTextSecondary)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         saveChanges()
                     }
-                    .font(.dmBodyBold)
+                    .font(.dmHeadline)
+                    .foregroundColor(title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.dmTextTertiary : Color.dmAccent)
                     .disabled(title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }

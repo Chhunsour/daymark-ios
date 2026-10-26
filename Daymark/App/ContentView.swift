@@ -33,6 +33,10 @@ public struct ContentView: View {
             NavigationStack {
                 RoutinesView()
             }
+        } else if CommandLine.arguments.contains("-ShowSettings") {
+            NavigationStack {
+                SettingsView()
+            }
         } else {
             TabView(selection: $selectedTab) {
                 TodayView()

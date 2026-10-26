@@ -10,31 +10,25 @@ public struct RoutinesView: View {
     public var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: DMSpacing.lg) {
-                    Text("Routines are lightweight checklists that keep your daily rituals and habits on track without rigid micromanagement.")
-                        .font(.dmBody)
-                        .foregroundColor(Color.dmTextSecondary)
-                        .padding(.horizontal, DMSpacing.md)
-                        .padding(.top, DMSpacing.xs)
-
+                VStack(alignment: .leading, spacing: DMSpacing.md) {
                     ForEach(appState.routines) { routine in
                         routineCard(routine: routine)
                     }
 
-                    Spacer(minLength: 40)
+                    Spacer(minLength: 90)
                 }
-                .padding(.vertical, DMSpacing.md)
+                .padding(.vertical, DMSpacing.sm)
             }
             .background(Color.dmBackground)
             .navigationTitle("Routines")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showingAddRoutine = true
                     } label: {
                         Image(systemName: "plus")
-                            .font(.system(size: 15, weight: .semibold))
+                            .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(Color.dmAccent)
                     }
                 }
@@ -53,12 +47,13 @@ public struct RoutinesView: View {
 
     private func routineCard(routine: DaymarkRoutine) -> some View {
         let isFullyDone = routine.isFullyCompleted(on: Date())
+        let completedCount = routine.checklist.filter { routine.isItemCompleted(itemId: $0.id, on: Date()) }.count
 
         return VStack(alignment: .leading, spacing: DMSpacing.sm) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(routine.title)
-                        .font(.dmBodyBold)
+                        .font(.dmHeadline)
                         .foregroundColor(Color.dmTextPrimary)
 
                     if let desc = routine.description, !desc.isEmpty {
@@ -70,8 +65,15 @@ public struct RoutinesView: View {
 
                 Spacer()
 
-                if let time = routine.targetTimeOfDay {
-                    DaymarkBadge(title: time, icon: "clock", variant: isFullyDone ? .success : .neutral)
+                HStack(spacing: DMSpacing.xs) {
+                    if let time = routine.targetTimeOfDay {
+                        DaymarkBadge(title: time, icon: "clock", variant: .neutral)
+                    }
+
+                    DaymarkBadge(
+                        title: "\(completedCount)/\(routine.checklist.count)",
+                        variant: isFullyDone ? .success : .neutral
+                    )
                 }
             }
 
@@ -79,24 +81,19 @@ public struct RoutinesView: View {
                 .background(Color.dmBorder.opacity(0.5))
 
             // Checklist items
-            VStack(alignment: .leading, spacing: DMSpacing.xs) {
+            VStack(alignment: .leading, spacing: DMSpacing.xs + 2) {
                 ForEach(routine.checklist) { item in
                     let isChecked = routine.isItemCompleted(itemId: item.id, on: Date())
-                    HStack(spacing: DMSpacing.sm) {
-                        Button {
+                    HStack(spacing: DMSpacing.mdSm) {
+                        DaymarkCheckbox(isChecked: isChecked) {
                             Task {
                                 try? await appState.toggleRoutineItem(routineId: routine.id, itemId: item.id, on: Date())
                             }
-                        } label: {
-                            Image(systemName: isChecked ? "checkmark.square.fill" : "square")
-                                .font(.system(size: 18))
-                                .foregroundColor(isChecked ? Color.dmSuccess : Color.dmBorder)
                         }
-                        .buttonStyle(.plain)
 
                         Text(item.title)
                             .font(.dmBody)
-                            .foregroundColor(isChecked ? Color.dmTextSecondary : Color.dmTextPrimary)
+                            .foregroundColor(isChecked ? Color.dmTextTertiary : Color.dmTextPrimary)
                             .strikethrough(isChecked)
 
                         Spacer()
@@ -107,8 +104,11 @@ public struct RoutinesView: View {
         }
         .padding(DMSpacing.md)
         .background(Color.dmCard)
-        .clipShape(RoundedRectangle(cornerRadius: DMRadius.md))
-        .overlay(RoundedRectangle(cornerRadius: DMRadius.md).stroke(Color.dmBorder.opacity(0.6), lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: DMRadius.lg, style: .continuous)
+                .stroke(Color.dmBorder.opacity(0.6), lineWidth: 0.5)
+        )
         .padding(.horizontal, DMSpacing.md)
     }
 

@@ -26,37 +26,58 @@ public struct EditMilestoneSheet: View {
     public var body: some View {
         NavigationStack {
             Form {
-                Section("Milestone Objective") {
+                Section {
                     TextField("Milestone Title", text: $title)
-                        .font(.dmBodyBold)
+                        .font(.dmBody)
+                        .padding(.vertical, 2)
 
                     TextField("Target Outcome (What does success look like?)", text: $outcomeDescription, axis: .vertical)
                         .lineLimit(3...5)
-                        .font(.dmBody)
+                        .font(.dmSubheadline)
+                        .foregroundColor(Color.dmTextSecondary)
+                } header: {
+                    Text("Milestone Objective")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
-                Section("Schedule & Status") {
+                Section {
                     Toggle("Set Target Date", isOn: $hasTargetDate)
                     if hasTargetDate {
                         DatePicker("Target Date", selection: $targetDate, displayedComponents: [.date])
                     }
 
                     Toggle("Completed", isOn: $isCompleted)
+                } header: {
+                    Text("Schedule & Status")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
                 if existingMilestone != nil {
                     Section {
-                        Button("Delete Milestone", role: .destructive) {
+                        Button(role: .destructive) {
                             if let m = existingMilestone {
                                 Task {
                                     try? await appState.deleteMilestone(id: m.id)
                                     dismiss()
                                 }
                             }
+                        } label: {
+                            HStack {
+                                Spacer()
+                                Label("Delete Milestone", systemImage: "trash")
+                                    .font(.dmHeadline)
+                                    .foregroundColor(Color.dmDanger)
+                                Spacer()
+                            }
                         }
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.dmBackground)
+            .tint(Color.dmAccent)
             .navigationTitle(existingMilestone == nil ? "New Milestone" : "Edit Milestone")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -64,12 +85,15 @@ public struct EditMilestoneSheet: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .font(.dmBody)
+                    .foregroundColor(Color.dmTextSecondary)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         saveMilestone()
                     }
-                    .font(.dmBodyBold)
+                    .font(.dmHeadline)
+                    .foregroundColor(title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.dmTextTertiary : Color.dmAccent)
                     .disabled(title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }

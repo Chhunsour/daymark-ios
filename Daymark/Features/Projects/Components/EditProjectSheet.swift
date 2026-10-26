@@ -29,23 +29,29 @@ public struct EditProjectSheet: View {
     public var body: some View {
         NavigationStack {
             Form {
-                Section("Project Details") {
+                Section {
                     TextField("Workspace Name", text: $name)
-                        .font(.dmBodyBold)
-
-                    TextField("Description", text: $descriptionText, axis: .vertical)
-                        .lineLimit(2...4)
                         .font(.dmBody)
+                        .padding(.vertical, 2)
+
+                    TextField("Description (optional)", text: $descriptionText, axis: .vertical)
+                        .lineLimit(2...4)
+                        .font(.dmSubheadline)
+                        .foregroundColor(Color.dmTextSecondary)
 
                     Picker("Status", selection: $status) {
                         ForEach(ProjectStatus.allCases, id: \.self) { st in
                             Text(st.displayName).tag(st)
                         }
                     }
+                } header: {
+                    Text("Workspace Details")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
-                Section("Color") {
-                    HStack(spacing: DMSpacing.md) {
+                Section {
+                    HStack(spacing: DMSpacing.mdSm) {
                         ForEach(availableColors, id: \.self) { hex in
                             Circle()
                                 .fill(Color(hex: hex))
@@ -61,23 +67,31 @@ public struct EditProjectSheet: View {
                         }
                     }
                     .padding(.vertical, 4)
+                } header: {
+                    Text("Venture Color")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
-                Section("Icon") {
-                    HStack(spacing: DMSpacing.md) {
+                Section {
+                    HStack(spacing: DMSpacing.sm) {
                         ForEach(availableIcons, id: \.self) { icon in
                             Image(systemName: icon)
-                                .font(.system(size: 16))
+                                .font(.system(size: 15))
                                 .foregroundColor(iconName == icon ? .white : Color.dmTextPrimary)
-                                .frame(width: 32, height: 32)
+                                .frame(width: 34, height: 34)
                                 .background(iconName == icon ? Color(hex: colorHex) : Color.dmSecondaryCard)
-                                .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm))
+                                .clipShape(RoundedRectangle(cornerRadius: DMRadius.sm, style: .continuous))
                                 .onTapGesture {
                                     iconName = icon
                                 }
                         }
                     }
                     .padding(.vertical, 4)
+                } header: {
+                    Text("Icon")
+                        .font(.dmCaptionBold)
+                        .foregroundColor(Color.dmTextSecondary)
                 }
 
                 if existingProject != nil {
@@ -87,14 +101,18 @@ public struct EditProjectSheet: View {
                         } label: {
                             HStack {
                                 Spacer()
-                                Text("Delete Workspace")
-                                    .font(.dmBodyBold)
+                                Label("Delete Workspace", systemImage: "trash")
+                                    .font(.dmHeadline)
+                                    .foregroundColor(Color.dmDanger)
                                 Spacer()
                             }
                         }
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.dmBackground)
+            .tint(Color.dmAccent)
             .navigationTitle(existingProject == nil ? "New Workspace" : "Edit Workspace")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -102,12 +120,15 @@ public struct EditProjectSheet: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .font(.dmBody)
+                    .foregroundColor(Color.dmTextSecondary)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         saveProject()
                     }
-                    .font(.dmBodyBold)
+                    .font(.dmHeadline)
+                    .foregroundColor(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.dmTextTertiary : Color.dmAccent)
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
